@@ -2354,6 +2354,11 @@
     "shebang-command" "^2.0.0"
     "which" "^2.0.1"
 
+"css-mediaquery@^0.1.2":
+  "integrity" "sha1-aiw3NEkoYYYxxUvTPO3TAdoYvqA="
+  "resolved" "https://registry.npmjs.org/css-mediaquery/-/css-mediaquery-0.1.2.tgz"
+  "version" "0.1.2"
+
 "cssom@^0.4.4":
   "integrity" "sha512-p3pvU7r1MyyqbTk+WbNJIgJjG2VmTIaB10rI93LzVPrmDJKkzKYMtxxyAvQXR/NS6otuzveI7+7BBq3SjBS2mw=="
   "resolved" "https://registry.npmjs.org/cssom/-/cssom-0.4.4.tgz"
@@ -5341,6 +5346,11 @@
   "resolved" "https://registry.npmjs.org/object-keys/-/object-keys-1.1.1.tgz"
   "version" "1.1.1"
 
+"object-resolve-path@^1.1.0":
+  "integrity" "sha1-p/j5Poogr4DkQhe6fbVDFtnRIjI="
+  "resolved" "https://registry.npmjs.org/object-resolve-path/-/object-resolve-path-1.1.1.tgz"
+  "version" "1.1.1"
+
 "object-visit@^1.0.0":
   "integrity" "sha1-95xEk68MU3e1n+OdOV5BBC3QRbs="
   "resolved" "https://registry.npmjs.org/object-visit/-/object-visit-1.0.1.tgz"
@@ -5805,6 +5815,14 @@
     "flow-parser" "^0.121.0"
     "jscodeshift" "^0.11.0"
     "nullthrows" "^1.1.1"
+
+"react-native-extended-stylesheet@^0.12.0":
+  "integrity" "sha512-y4MEI+a9F8qtAKEjxKbwqotJg1FqKfl6vaiF25ULZ/VGkWI4GNTnsFunU9x6B3XJ6ly1E8O9fybO63u6UazL/A=="
+  "resolved" "https://registry.npmjs.org/react-native-extended-stylesheet/-/react-native-extended-stylesheet-0.12.0.tgz"
+  "version" "0.12.0"
+  dependencies:
+    "css-mediaquery" "^0.1.2"
+    "object-resolve-path" "^1.1.0"
 
 "react-native@>=0.64.0-rc.0 || 0.0.0-*", "react-native@0.64.2":
   "integrity" "sha512-Ty/fFHld9DcYsFZujXYdeVjEhvSeQcwuTGXezyoOkxfiGEGrpL/uwUZvMzwShnU4zbbTKDu2PAm/uwuOittRGA=="

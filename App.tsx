@@ -27,6 +27,16 @@ import {
   ReloadInstructions,
 } from 'react-native/Libraries/NewAppScreen'
 
+import EStyleSheet from 'react-native-extended-stylesheet'
+import appTheme from './appTheme'
+
+EStyleSheet.build({
+  ...appTheme.colors,
+  ...appTheme.spacings,
+  ...appTheme.fontSizes,
+  ...appTheme.dimensions,
+})
+
 const Section: React.FC<{
   title: string
 }> = ({ children, title }) => {
@@ -93,7 +103,7 @@ const App = () => {
   )
 }
 
-const styles = StyleSheet.create({
+const styles = EStyleSheet.create({
   sectionContainer: {
     marginTop: 32,
     paddingHorizontal: 24,
