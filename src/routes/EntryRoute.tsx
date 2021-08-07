@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import type { FC } from 'react'
 
-import Home from '../screens/Home'
-import ReviewReport from '../screens/ReviewReport'
-import { RootStackParamList } from './types'
+import Home from '@screens/Home'
+import ReviewReport from '@screens/ReviewReport'
+import { RootStackParamList } from '@routes/types'
 
 const EntryRoute: FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()

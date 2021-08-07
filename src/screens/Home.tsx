@@ -4,7 +4,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '../routes/types'
+import { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/native'
 
 type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
