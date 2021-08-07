@@ -67,7 +67,10 @@ const Login: FC<Props> = (props) => {
       {currentStep === WizardStep.ConfirmCustodianCode && (
         <View style={styles.userInfoContainer}>
           <HorizontalLabel title="Name" subtitle="Johnny Cash " />
-          <HorizontalLabel title="Position" subtitle="Sales" />
+          <HorizontalLabel
+            title="Assignment"
+            subtitle="Mindanao Sales & Marketing"
+          />
           <HorizontalLabel title="Area" subtitle="Manila" />
           <HorizontalLabel title="Contact No." subtitle="0906123456" />
 
@@ -106,8 +109,8 @@ const styles = EStyleSheet.create({
     marginRight: '$spacingXs',
   },
   userInfoContainer: {
-    width: '50%',
-    marginBottom: '$spacingSm',
+    width: '80%',
+    marginBottom: '$spacingMd',
     marginTop: '$spacingSm',
   },
 })
