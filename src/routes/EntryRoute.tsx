@@ -19,7 +19,11 @@ const EntryRoute: FC = () => {
         options={{ headerShown: false }}
         component={Login}
       />
-      <Stack.Screen name="Home" component={Home} />
+      <Stack.Screen
+        name="Home"
+        options={{ title: 'Welcome, Johnny' }}
+        component={Home}
+      />
       <Stack.Screen name="ReviewReport" component={ReviewReport} />
     </Stack.Navigator>
   )
