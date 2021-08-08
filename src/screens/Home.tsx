@@ -1,5 +1,12 @@
 import React, { useCallback } from 'react'
-import { View, Button, ScrollView } from 'react-native'
+import {
+  View,
+  Button,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Text,
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { DateTime } from 'luxon'
 
@@ -14,6 +21,8 @@ import HomeFooter from '@components/HomeFooter'
 import HorizontalSwitch from '@components/HorizontalSwitch'
 import ExpensePicker from '@components/ExpensePicker'
 import HorizontalInput from '@components/HorizontalInput'
+
+import uploadIcon from '@images/outline_add_a_photo_black_24dp.png'
 
 type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
 type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>
@@ -55,6 +64,7 @@ const Home: FC<Props> = (props) => {
           <HorizontalSwitch title="VATable" />
           <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
           <ExpensePicker />
+          <HorizontalInput title="Expense Amount" placeholder="P100.00" />
           <HorizontalInput title="Supplier TIN #" placeholder="32125242-0000" />
           <HorizontalInput title="Supplier Name" placeholder="Shell" />
           <HorizontalInput
@@ -65,11 +75,16 @@ const Home: FC<Props> = (props) => {
             title="Supplier Street/Brgy"
             placeholder="Brgy. 250"
           />
-
           <HorizontalInput
             title="Supplier Bldg"
             placeholder="Waypark Garden Bldg"
           />
+          <TouchableOpacity style={styles.uploadButton}>
+            <>
+              <Image style={styles.uploadIcon} source={uploadIcon} />
+              <Text style={styles.uploadLabel}>Upload image</Text>
+            </>
+          </TouchableOpacity>
           <HomeFooter
             onNext={onNextPress}
             onEnd={onEndPress}
@@ -95,6 +110,21 @@ const styles = EStyleSheet.create({
     flex: 1,
     width: '100%',
     padding: '$spacingMd',
+  },
+  uploadIcon: {
+    height: 30,
+    width: 30,
+  },
+  uploadButton: {
+    flex: 1,
+    alignSelf: 'center',
+    margin: '$spacingXl',
+    alignItems: 'center',
+  },
+  uploadLabel: {
+    fontSize: '$sm',
+    color: '$darkGray',
+    marginTop: '$spacingXs',
   },
 })
 

@@ -20,6 +20,7 @@ module.exports = {
           '@routes': './src/routes',
           '@screens': './src/screens',
           '@components': './src/components',
+          '@images': './assets/images',
         },
       },
     ],
