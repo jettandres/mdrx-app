@@ -35,10 +35,7 @@ type Props = {
 const Home: FC<Props> = (props) => {
   const { navigation } = props
 
-  const onNextPress = useCallback(
-    () => navigation.navigate('ReviewReport'),
-    [navigation],
-  )
+  const onNextPress = useCallback(() => {}, [navigation])
 
   const onEndPress = useCallback(
     () => navigation.navigate('ReviewReport'),
@@ -66,7 +63,7 @@ const Home: FC<Props> = (props) => {
           <ExpensePicker />
           <HorizontalInput title="Expense Amount" placeholder="P100.00" />
           <HorizontalInput title="Supplier TIN #" placeholder="32125242-0000" />
-          <HorizontalInput title="Supplier Name" placeholder="Shell" />
+          <HorizontalInput title="Supplier Name" placeholder="HPG Securities" />
           <HorizontalInput
             title="Supplier Address"
             placeholder="2312 Ford St, Malate"

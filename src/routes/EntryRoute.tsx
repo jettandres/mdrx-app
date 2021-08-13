@@ -24,7 +24,11 @@ const EntryRoute: FC = () => {
         options={{ title: 'Welcome, Johnny' }}
         component={Home}
       />
-      <Stack.Screen name="ReviewReport" component={ReviewReport} />
+      <Stack.Screen
+        name="ReviewReport"
+        options={{ title: 'Review Report' }}
+        component={ReviewReport}
+      />
     </Stack.Navigator>
   )
 }
