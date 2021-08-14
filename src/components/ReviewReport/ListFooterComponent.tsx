@@ -1,11 +1,17 @@
 import React from 'react'
-import { View, Text } from 'react-native'
+import { View, Text, Button } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import HorizontalLabel from '@components/HorizontalLabel'
 
 import type { FC } from 'react'
 
-const ListFooterComponent: FC = () => {
+type Props = {
+  onSubmit: () => void
+}
+
+const ListFooterComponent: FC<Props> = (props) => {
+  const { onSubmit } = props
+
   return (
     <View style={styles.listFooter}>
       <HorizontalLabel title="Total Replenishable" subtitle="P5,000.00" />
@@ -24,6 +30,8 @@ const ListFooterComponent: FC = () => {
       <View style={styles.listFooterTotalYearContainer}>
         <HorizontalLabel title="Total Year" subtitle="P50,000.00" bold />
       </View>
+
+      <Button onPress={onSubmit} title="Submit Report" />
     </View>
   )
 }
@@ -56,6 +64,7 @@ const styles = EStyleSheet.create({
   },
   listFooterTotalYearContainer: {
     marginTop: '$spacingSm',
+    marginBottom: '$spacingXl',
   },
 })
 

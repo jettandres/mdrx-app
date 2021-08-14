@@ -113,6 +113,8 @@ const ReviewReport: FC = () => {
     })
   }, [])
 
+  const onSubmitReport = useCallback(() => {}, [])
+
   return (
     <View style={styles.container}>
       <SectionList
@@ -150,7 +152,7 @@ const ReviewReport: FC = () => {
             </View>
           )
         }}
-        ListFooterComponent={<ListFooterComponent />}
+        ListFooterComponent={<ListFooterComponent onSubmit={onSubmitReport} />}
       />
     </View>
   )
