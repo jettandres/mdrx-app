@@ -21,6 +21,7 @@ module.exports = {
           '@screens': './src/screens',
           '@components': './src/components',
           '@images': './assets/images',
+          '@utils': './src/utils',
         },
       },
     ],

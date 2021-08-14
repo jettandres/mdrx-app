@@ -7,14 +7,17 @@ import type { FC } from 'react'
 type Props = {
   title: string
   subtitle: string
+  bold?: boolean
 }
 
 const HorizontalLabel: FC<Props> = (props) => {
-  const { title, subtitle } = props
+  const { title, subtitle, bold = false } = props
+  const fontStyle = bold ? styles.labelHighlight : null
+
   return (
     <View style={styles.container}>
-      <Text>{title}</Text>
-      <Text>{subtitle}</Text>
+      <Text style={fontStyle}>{title}</Text>
+      <Text style={fontStyle}>{subtitle}</Text>
     </View>
   )
 }
@@ -24,6 +27,9 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
+  },
+  labelHighlight: {
+    fontWeight: 'bold',
   },
 })
 
