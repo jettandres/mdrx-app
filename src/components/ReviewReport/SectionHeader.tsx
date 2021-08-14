@@ -1,5 +1,5 @@
-import React from 'react'
-import { View, Text } from 'react-native'
+import React, { useCallback } from 'react'
+import { Text, TouchableOpacity } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -7,15 +7,20 @@ import type { FC } from 'react'
 type Props = {
   title: string
   subtitle: string
+  onPress: (title: string) => void
 }
 
 const SectionHeader: FC<Props> = (props) => {
-  const { title, subtitle } = props
+  const { title, subtitle, onPress } = props
+  const onHeaderPress = useCallback(() => onPress(title), [onPress, title])
+
   return (
-    <View style={styles.sectionHeaderContainer}>
+    <TouchableOpacity
+      onPress={onHeaderPress}
+      style={styles.sectionHeaderContainer}>
       <Text style={styles.sectionHeaderTitle}>{title}</Text>
       <Text style={styles.sectionHeaderTitle}>{subtitle}</Text>
-    </View>
+    </TouchableOpacity>
   )
 }
 

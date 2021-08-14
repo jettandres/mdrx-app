@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { View, Text, SectionList } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -24,7 +24,6 @@ type Sections = {
   title: {
     label: string
     total: string
-    collapsed: boolean
   }
   data: Array<SectionData>
 }
@@ -34,7 +33,6 @@ const DATA: Array<Sections> = [
     title: {
       label: 'Office Supplies',
       total: 'P600.00',
-      collapsed: false,
     },
     data: [
       {
@@ -55,7 +53,6 @@ const DATA: Array<Sections> = [
     title: {
       label: 'Gas',
       total: 'P2,500.00',
-      collapsed: true,
     },
     data: [
       {
@@ -85,7 +82,6 @@ const DATA: Array<Sections> = [
     title: {
       label: 'Representation Meals',
       total: 'P1,900.00',
-      collapsed: true,
     },
     data: [
       {
@@ -105,6 +101,18 @@ const DATA: Array<Sections> = [
 ]
 
 const ReviewReport: FC = () => {
+  const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
+  const onSectionHeaderPress = useCallback((sectionTitle: string) => {
+    setCollapsedHeaders((collapsedList) => {
+      const alreadyCollapsed = collapsedList.find((v) => v === sectionTitle)
+      if (alreadyCollapsed) {
+        return collapsedList.filter((v) => v !== sectionTitle)
+      }
+
+      return [...collapsedList, sectionTitle]
+    })
+  }, [])
+
   return (
     <View style={styles.container}>
       <SectionList
@@ -112,12 +120,20 @@ const ReviewReport: FC = () => {
         keyExtractor={(item, index) => item.seriesNo.toString()}
         ListHeaderComponent={<ListHeaderComponent />}
         renderSectionHeader={({ section: { title } }) => (
-          <SectionHeader title={title.label} subtitle={title.total} />
+          <SectionHeader
+            onPress={onSectionHeaderPress}
+            title={title.label}
+            subtitle={title.total}
+          />
         )}
         renderItem={({ item, section }) => {
-          if (section.title.collapsed) {
+          const isCollapsed = collapsedHeaders.find(
+            (t) => t === section.title.label,
+          )
+          if (isCollapsed) {
             return null
           }
+
           return (
             <View style={styles.sectionItemContainer}>
               <Text style={styles.sectionItemTitle}>{item.supplierName}</Text>
