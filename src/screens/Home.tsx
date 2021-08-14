@@ -37,11 +37,6 @@ const Home: FC<Props> = (props) => {
 
   const onNextPress = useCallback(() => {}, [navigation])
 
-  const onEndPress = useCallback(
-    () => navigation.navigate('ReviewReport'),
-    [navigation],
-  )
-
   const onReviewPress = useCallback(
     () => navigation.navigate('ReviewReport'),
     [navigation],
@@ -82,11 +77,7 @@ const Home: FC<Props> = (props) => {
               <Text style={styles.uploadLabel}>Upload image</Text>
             </>
           </TouchableOpacity>
-          <HomeFooter
-            onNext={onNextPress}
-            onEnd={onEndPress}
-            onReview={onReviewPress}
-          />
+          <HomeFooter onNext={onNextPress} onReview={onReviewPress} />
         </View>
       </View>
     </ScrollView>

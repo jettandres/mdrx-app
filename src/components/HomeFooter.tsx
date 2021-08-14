@@ -6,17 +6,15 @@ import type { FC } from 'react'
 
 type Props = {
   onNext: () => void
-  onEnd: () => void
   onReview: () => void
 }
 
 const HeaderFooter: FC<Props> = (props) => {
-  const { onNext, onEnd, onReview } = props
+  const { onNext, onReview } = props
   return (
     <View style={styles.container}>
       <View style={styles.buttonsContainer}>
         <Button title="Next" onPress={onNext} />
-        <Button title="End Report" onPress={onEnd} />
         <Button title="Review Report" onPress={onReview} />
       </View>
     </View>
@@ -30,7 +28,7 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
   },
   buttonsContainer: {
-    height: 120,
+    height: 80,
     width: '40%',
     flexDirection: 'column',
     justifyContent: 'space-between',
