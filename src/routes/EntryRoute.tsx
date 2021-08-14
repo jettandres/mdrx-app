@@ -6,6 +6,7 @@ import type { FC } from 'react'
 import Home from '@screens/Home'
 import ReviewReport from '@screens/ReviewReport'
 import Login from '@screens/Login'
+import ExpensesReportForm from '@screens/ExpensesReportForm'
 
 import { RootStackParamList } from '@routes/types'
 
