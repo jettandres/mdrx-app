@@ -20,11 +20,11 @@ import { currentDate } from '@utils/date'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
-  'ExpsensesReportForm'
+  'ExpensesReportForm'
 >
 type ExpensesReportFormRouteProp = RouteProp<
   RootStackParamList,
-  'ExpsensesReportForm'
+  'ExpensesReportForm'
 >
 
 type Props = {

@@ -30,6 +30,11 @@ const EntryRoute: FC = () => {
         options={{ title: 'Review Report' }}
         component={ReviewReport}
       />
+      <Stack.Screen
+        name="ExpensesReportForm"
+        options={{ title: 'Expenses Recording' }}
+        component={ExpensesReportForm}
+      />
     </Stack.Navigator>
   )
 }

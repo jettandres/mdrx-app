@@ -19,7 +19,7 @@ const colors = {
   $teal: '#1dc7b6',
   $tealAlt: '#effbf9',
   $tealBg: '#e2fffc',
-  $blue: '#3cb4ff',
+  $blue: '#007aff',
   $lightBlueHighlight: '#dff2fe',
   $lightBlue: '#3cb4ff',
   $grayHighlight: '#f0f0f0',
