@@ -3,9 +3,10 @@ export type RootStackParamList = {
   Home: undefined
   ReviewReport: undefined
   ExpensesReportForm: undefined
+  SalesReportForm: undefined
 }
 
 export type HomeStackParamList = {
   Expenses: undefined
-  Mtp: undefined
+  Sales: undefined
 }

@@ -7,6 +7,7 @@ import Home from '@screens/Home'
 import ReviewReport from '@screens/ReviewReport'
 import Login from '@screens/Login'
 import ExpensesReportForm from '@screens/ExpensesReportForm'
+import SalesReportForm from '@screens/SalesReportForm'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -34,6 +35,11 @@ const EntryRoute: FC = () => {
         name="ExpensesReportForm"
         options={{ title: 'Expenses Recording' }}
         component={ExpensesReportForm}
+      />
+      <Stack.Screen
+        name="SalesReportForm"
+        options={{ title: 'Sales Recording' }}
+        component={SalesReportForm}
       />
     </Stack.Navigator>
   )

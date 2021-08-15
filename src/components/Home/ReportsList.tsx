@@ -6,7 +6,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import type { FC } from 'react'
 
 type Props = {
-  reportType: 'expenses' | 'mtp'
+  reportType: 'expenses' | 'sales'
 }
 
 type ReportData = {

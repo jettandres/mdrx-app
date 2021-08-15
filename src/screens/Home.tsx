@@ -1,10 +1,9 @@
 import React, { useCallback } from 'react'
 import { FloatingAction } from 'react-native-floating-action'
-import EStyleSheet from 'react-native-extended-stylesheet'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
 import ExpensesReportsList from '@screens/ExpensesReportsList'
-import MtpReportsList from '@screens/MtpReportsList'
+import SalesReportsList from '@screens/SalesReportsList'
 
 import type { FC } from 'react'
 
@@ -48,7 +47,7 @@ const Home: FC<Props> = (props) => {
       if (name === 'expenses') {
         navigation.navigate('ExpensesReportForm')
       } else if (name === 'sales') {
-        // TODO: add navigation for Sales Report Form
+        navigation.navigate('SalesReportForm')
       }
     },
     [navigation],
@@ -59,8 +58,8 @@ const Home: FC<Props> = (props) => {
       <Tab.Navigator>
         <Tab.Screen name="Expenses" component={ExpensesReportsList} />
         <Tab.Screen
-          name="Mtp"
-          component={MtpReportsList}
+          name="Sales"
+          component={SalesReportsList}
           options={{ title: 'Sales' }}
         />
       </Tab.Navigator>
@@ -72,14 +71,5 @@ const Home: FC<Props> = (props) => {
     </>
   )
 }
-
-const styles = EStyleSheet.create({
-  fabContainer: {
-    position: 'absolute',
-    bottom: 0,
-    right: 0,
-    backgroundColor: '$red',
-  },
-})
 
 export default Home

@@ -10,18 +10,18 @@ import type { FC } from 'react'
 
 type ReportsListNavigationProp = MaterialTopTabNavigationProp<
   HomeStackParamList,
-  'Mtp'
+  'Sales'
 >
 
-type ReportsListRouteProp = RouteProp<HomeStackParamList, 'Mtp'>
+type ReportsListRouteProp = RouteProp<HomeStackParamList, 'Sales'>
 
 type Props = {
   navigation: ReportsListNavigationProp
   route: ReportsListRouteProp
 }
 
-const MtpReportsList: FC<Props> = () => {
-  return <ReportsList reportType="mtp" />
+const SalesReportsList: FC<Props> = () => {
+  return <ReportsList reportType="sales" />
 }
 
-export default MtpReportsList
+export default SalesReportsList

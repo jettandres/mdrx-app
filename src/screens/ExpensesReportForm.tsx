@@ -46,6 +46,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.formContainer}>
+          <View style={styles.reportLabelContainer}>
+            <HorizontalLabel bold title="Report #" subtitle="12432" />
+          </View>
           <HorizontalLabel title="Date Reported" subtitle={currentDate} />
           <HorizontalLabel
             title="Assignment"
@@ -91,6 +94,7 @@ const styles = EStyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: '$white',
   },
   formContainer: {
     flex: 1,
@@ -111,6 +115,9 @@ const styles = EStyleSheet.create({
     fontSize: '$sm',
     color: '$darkGray',
     marginTop: '$spacingXs',
+  },
+  reportLabelContainer: {
+    marginBottom: '$spacingSm',
   },
 })
 
