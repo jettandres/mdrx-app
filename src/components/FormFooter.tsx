@@ -9,7 +9,7 @@ type Props = {
   onReview: () => void
 }
 
-const HeaderFooter: FC<Props> = (props) => {
+const FormFooter: FC<Props> = (props) => {
   const { onNext, onReview } = props
   return (
     <View style={styles.container}>
@@ -35,4 +35,4 @@ const styles = EStyleSheet.create({
   },
 })
 
-export default HeaderFooter
+export default FormFooter

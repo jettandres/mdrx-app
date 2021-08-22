@@ -9,7 +9,7 @@ import { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/native'
 
 import HorizontalLabel from '@components/HorizontalLabel'
-import HomeFooter from '@components/HomeFooter'
+import FormFooter from '@components/FormFooter'
 import HorizontalSwitch from '@components/HorizontalSwitch'
 import ExpensePicker from '@components/ExpensePicker'
 import HorizontalInput from '@components/HorizontalInput'
@@ -78,7 +78,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
               <Text style={styles.uploadLabel}>Upload image</Text>
             </>
           </TouchableOpacity>
-          <HomeFooter onNext={onNextPress} onReview={onReviewPress} />
+          <FormFooter onNext={onNextPress} onReview={onReviewPress} />
         </View>
       </View>
     </ScrollView>

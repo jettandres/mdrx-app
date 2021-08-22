@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text, ScrollView } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -17,7 +17,7 @@ import { RouteProp } from '@react-navigation/core'
 import { currentDate } from '@utils/date'
 import SalesInvoiceStatusPicker from '@components/SalesInvoiceStatusPicker'
 import ProductClassPicker from '@components/ProductClassPicker'
-import SellingPriceEvalPicker from '@components/SellingPriceEvalPicker'
+import FormFooter from '@components/FormFooter'
 
 type SalesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,7 +30,16 @@ type Props = {
   route: SalesReportFormRouteProp
 }
 
-const SalesReportForm: FC<Props> = () => {
+const SalesReportForm: FC<Props> = (props) => {
+  const { navigation } = props
+
+  const onNextPress = useCallback(() => {}, [])
+
+  const onReviewPress = useCallback(
+    () => navigation.navigate('ReviewReport'),
+    [navigation],
+  )
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
@@ -64,11 +73,12 @@ const SalesReportForm: FC<Props> = () => {
           <HorizontalInput title="Total Pcs Sold" placeholder="0" />
           <View style={styles.totalSoldLabelContainer}>
             <HorizontalLabel bold title="Total Sold" subtitle="20" />
+            <HorizontalLabel
+              title="Selling Price Evaluation"
+              subtitle="Unacceptable"
+            />
           </View>
-          <HorizontalLabel
-            title="Selling Price Evaluation"
-            subtitle="Unacceptable"
-          />
+          <FormFooter onNext={onNextPress} onReview={onReviewPress} />
         </View>
       </View>
     </ScrollView>
@@ -85,7 +95,7 @@ const styles = EStyleSheet.create({
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
-    paddingBottom: '30%',
+    paddingBottom: '$spacingLg',
   },
   formContainer: {
     flex: 1,
@@ -103,6 +113,7 @@ const styles = EStyleSheet.create({
   },
   totalSoldLabelContainer: {
     marginTop: '$spacingXl',
+    marginBottom: '$spacingXl',
   },
   seriesNoLabelContainer: {
     marginVertical: '$spacingSm',
