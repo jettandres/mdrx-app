@@ -53,6 +53,12 @@ const SalesReportForm: FC<Props> = () => {
           <View style={styles.divider} />
           <ProductClassPicker />
           <HorizontalInput title="Product Code" placeholder="373727" />
+          <View style={styles.productDescriptionLabelContainer}>
+            <HorizontalLabel
+              title="Product Description"
+              subtitle="BVI Xstar Slit Knife 2.75"
+            />
+          </View>
           <HorizontalInput title="Total Price" placeholder="P12,000.00" />
           <HorizontalInput title="Total Boxes Sold" placeholder="2" />
           <HorizontalInput title="Total Pcs Sold" placeholder="0" />
@@ -100,6 +106,11 @@ const styles = EStyleSheet.create({
   },
   seriesNoLabelContainer: {
     marginVertical: '$spacingSm',
+  },
+  productDescriptionLabelContainer: {
+    marginTop: '$spacingMd',
+    paddingRight: '$spacingSm',
+    marginBottom: '$spacingXl',
   },
 })
 
