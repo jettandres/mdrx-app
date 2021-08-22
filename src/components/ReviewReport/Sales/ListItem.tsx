@@ -7,6 +7,9 @@ import type { FC } from 'react'
 import type SalesItem from '@app/types/SalesItem'
 import HorizontalLabel from '@components/HorizontalLabel'
 
+import Carousel from 'react-native-snap-carousel'
+import CarouselItem from '@components/ReviewReport/Sales/CarouselItem'
+
 const ListItem: FC<SalesItem> = (props) => {
   const {
     code,
@@ -19,15 +22,33 @@ const ListItem: FC<SalesItem> = (props) => {
     ytd,
   } = props
 
+  const carouselData = [
+    {
+      code,
+      description,
+      pcsSold,
+      price,
+      income,
+      percentage,
+      remarks,
+    },
+    {
+      ytd,
+    },
+  ]
+
   return (
     <View style={styles.container}>
-      <Text>{code}</Text>
-      <Text>{description}</Text>
-      <HorizontalLabel title="Pcs sold" subtitle={pcsSold.toString()} />
-      <HorizontalLabel title="Price" subtitle={price} />
-      <HorizontalLabel title="Income" subtitle={income} />
-      <HorizontalLabel title="Percentage" subtitle={percentage} />
-      <HorizontalLabel title="Remarks" subtitle={remarks} />
+      <Text style={styles.codeLabel}>{code}</Text>
+      <Text style={styles.titleLabel}>{description}</Text>
+      <Carousel
+        data={carouselData}
+        itemWidth={300}
+        sliderWidth={300}
+        renderItem={({ index }) => (
+          <CarouselItem salesItem={props} index={index} />
+        )}
+      />
     </View>
   )
 }
@@ -37,6 +58,13 @@ const styles = EStyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '$white',
     padding: '$spacingSm',
+  },
+  codeLabel: {
+    color: '$blue',
+  },
+  titleLabel: {
+    fontSize: '$md',
+    marginBottom: '$spacingSm',
   },
 })
 
