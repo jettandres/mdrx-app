@@ -14,21 +14,13 @@ const ListFooterComponent: FC<Props> = (props) => {
 
   return (
     <View style={styles.listFooter}>
-      <HorizontalLabel title="Total Replenishable" subtitle="P5,000.00" />
-      <View style={styles.kmReadingContainer}>
-        <Text style={styles.kmReadingTitle}>Total Km Reading Consumption</Text>
-        <Text style={styles.kmReadingSubtitle}>480.0</Text>
-        <Text style={styles.kmReadingSubtitle}>10km/Liter</Text>
-        <Text style={styles.kmReadingTitle}>Ave. Km/liter</Text>
-      </View>
-
-      <Text style={styles.listFooterTitle}>Year to Date</Text>
-      <HorizontalLabel title="Office Supplies" subtitle="P15,000.00" />
-      <HorizontalLabel title="Gas" subtitle="P10,000.00" />
-      <HorizontalLabel title="Representation Meals" subtitle="P25,000.00" />
+      <Text style={styles.listFooterTitle}>Total</Text>
+      <HorizontalLabel title="Price" subtitle="P126,000.00" />
+      <HorizontalLabel title="Income" subtitle="P39,000.00" />
+      <HorizontalLabel title="Percentage" subtitle="31%" />
 
       <View style={styles.listFooterTotalYearContainer}>
-        <HorizontalLabel title="Total Year" subtitle="P50,000.00" bold />
+        <HorizontalLabel title="Remarks" subtitle="aceptable" bold />
       </View>
 
       <Button onPress={onSubmit} title="Submit Report" />
@@ -50,14 +42,9 @@ const styles = EStyleSheet.create({
     alignItems: 'center',
     paddingTop: '$spacingMd',
   },
-  kmReadingTitle: {
-    fontSize: '$xs',
-  },
-  kmReadingSubtitle: {
-    fontWeight: 'bold',
-  },
   listFooterTitle: {
     fontWeight: 'bold',
+    fontSize: '$sm',
     alignSelf: 'flex-start',
     marginTop: '$spacingMd',
     marginBottom: '$spacingMd',

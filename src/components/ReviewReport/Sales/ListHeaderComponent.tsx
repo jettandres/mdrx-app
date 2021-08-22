@@ -29,8 +29,6 @@ const styles = EStyleSheet.create({
     flex: 1,
     padding: '$spacingSm',
     backgroundColor: '$white',
-    borderBottomWidth: 1,
-    borderColor: '$borderColor',
   },
   listSubHeader: {
     marginTop: '$spacingSm',

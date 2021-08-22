@@ -79,9 +79,9 @@ const styles = EStyleSheet.create({
     color: '$darkGray',
   },
   titleLabel: {
-    fontSize: '$md',
+    fontSize: '$sm',
     marginBottom: '$spacingSm',
-    fontWeight: 'bold',
+    color: '$blue',
   },
   paginationContainer: {
     backgroundColor: '$white',
