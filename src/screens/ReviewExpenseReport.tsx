@@ -5,9 +5,9 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import type { FC } from 'react'
 
 import HorizontalLabel from '@components/HorizontalLabel'
-import SectionHeader from '@components/ReviewReport/SectionHeader'
-import ListHeaderComponent from '@components/ReviewReport/ListHeaderComponent'
-import ListFooterComponent from '@components/ReviewReport/ListFooterComponent'
+import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
+import ListHeaderComponent from '@components/ReviewReport/Expenses/ListHeaderComponent'
+import ListFooterComponent from '@components/ReviewReport/Expenses/ListFooterComponent'
 
 import { DateTime } from 'luxon'
 import * as faker from 'faker'
@@ -100,7 +100,7 @@ const DATA: Array<Sections> = [
   },
 ]
 
-const ReviewExpenseReport: FC = () => {
+const ReviewReport: FC = () => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
@@ -184,4 +184,4 @@ const styles = EStyleSheet.create({
   },
 })
 
-export default ReviewExpenseReport
+export default ReviewReport

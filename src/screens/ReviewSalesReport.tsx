@@ -5,9 +5,9 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import type { FC } from 'react'
 
 import HorizontalLabel from '@components/HorizontalLabel'
-import SectionHeader from '@components/ReviewReport/SectionHeader'
-import ListHeaderComponent from '@components/ReviewReport/ListHeaderComponent'
-import ListFooterComponent from '@components/ReviewReport/ListFooterComponent'
+import SectionHeader from '@components/ReviewReport/Sales/SectionHeader'
+import ListHeaderComponent from '@components/ReviewReport/Sales/ListHeaderComponent'
+import ListFooterComponent from '@components/ReviewReport/Sales/ListFooterComponent'
 
 import { DateTime } from 'luxon'
 import * as faker from 'faker'
