@@ -4,7 +4,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 import type { FC } from 'react'
 
 import Home from '@screens/Home'
-import ReviewReport from '@screens/ReviewReport'
+import ReviewExpenseReport from '@screens/ReviewExpenseReport'
 import Login from '@screens/Login'
 import ExpensesReportForm from '@screens/ExpensesReportForm'
 import SalesReportForm from '@screens/SalesReportForm'
@@ -27,9 +27,9 @@ const EntryRoute: FC = () => {
         component={Home}
       />
       <Stack.Screen
-        name="ReviewReport"
+        name="ReviewExpenseReport"
         options={{ title: 'Review Report' }}
-        component={ReviewReport}
+        component={ReviewExpenseReport}
       />
       <Stack.Screen
         name="ExpensesReportForm"

@@ -1,7 +1,7 @@
 export type RootStackParamList = {
   Login: undefined
   Home: undefined
-  ReviewReport: undefined
+  ReviewExpenseReport: undefined
   ExpensesReportForm: undefined
   SalesReportForm: undefined
 }

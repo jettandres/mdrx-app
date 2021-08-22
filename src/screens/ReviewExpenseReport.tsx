@@ -100,7 +100,7 @@ const DATA: Array<Sections> = [
   },
 ]
 
-const ReviewReport: FC = () => {
+const ReviewExpenseReport: FC = () => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
@@ -184,4 +184,4 @@ const styles = EStyleSheet.create({
   },
 })
 
-export default ReviewReport
+export default ReviewExpenseReport

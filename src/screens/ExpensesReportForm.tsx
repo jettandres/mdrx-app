@@ -38,7 +38,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
   const onNextPress = useCallback(() => {}, [])
 
   const onReviewPress = useCallback(
-    () => navigation.navigate('ReviewReport'),
+    () => navigation.navigate('ReviewExpenseReport'),
     [navigation],
   )
 
