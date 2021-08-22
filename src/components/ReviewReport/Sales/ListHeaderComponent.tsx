@@ -27,8 +27,9 @@ const ListHeaderComponent: FC = () => {
 const styles = EStyleSheet.create({
   listHeader: {
     flex: 1,
-    padding: '$spacingSm',
+    padding: '$spacingMd',
     backgroundColor: '$white',
+    marginBottom: '$spacingSm',
   },
   listSubHeader: {
     marginTop: '$spacingSm',

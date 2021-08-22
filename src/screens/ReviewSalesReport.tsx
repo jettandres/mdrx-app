@@ -69,6 +69,7 @@ const ReviewSalesReport: FC = () => {
         ListHeaderComponent={<ListHeaderComponent />}
         renderItem={({ item }) => <ListItem {...item} />}
         ListFooterComponent={<ListFooterComponent onSubmit={onSubmitReport} />}
+        ItemSeparatorComponent={() => <View style={styles.divider} />}
       />
     </View>
   )
@@ -99,10 +100,8 @@ const styles = EStyleSheet.create({
     marginTop: '$spacingSm',
   },
   divider: {
-    height: 1,
-    width: '30%',
+    marginVertical: 1,
     alignSelf: 'center',
-    backgroundColor: '$borderColor',
   },
 })
 

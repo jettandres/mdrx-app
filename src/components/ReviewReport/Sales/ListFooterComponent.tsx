@@ -33,7 +33,7 @@ const styles = EStyleSheet.create({
     flex: 1,
     padding: '$spacingSm',
     backgroundColor: '$white',
-    borderColor: '$borderColor',
+    marginTop: '$spacingSm',
     paddingBottom: '10%',
   },
   kmReadingContainer: {

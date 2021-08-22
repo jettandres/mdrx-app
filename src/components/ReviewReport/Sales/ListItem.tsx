@@ -46,6 +46,7 @@ const ListItem: FC<SalesItem> = (props) => {
     <View style={styles.container}>
       <Text style={styles.codeLabel}>{code}</Text>
       <Text style={styles.titleLabel}>{description}</Text>
+      <View style={styles.divider} />
       <Carousel
         data={carouselData}
         itemWidth={itemWidth}
@@ -73,6 +74,7 @@ const styles = EStyleSheet.create({
     flexDirection: 'column',
     backgroundColor: '$white',
     padding: '$spacingSm',
+    elevation: 2,
   },
   codeLabel: {
     paddingTop: '$spacingSm',
@@ -80,7 +82,6 @@ const styles = EStyleSheet.create({
   },
   titleLabel: {
     fontSize: '$sm',
-    marginBottom: '$spacingSm',
     color: '$blue',
   },
   paginationContainer: {
@@ -91,6 +92,13 @@ const styles = EStyleSheet.create({
     height: 6,
     borderRadius: 3,
     backgroundColor: '$blue',
+  },
+  divider: {
+    height: 1,
+    alignSelf: 'center',
+    width: '100%',
+    backgroundColor: '$borderColor',
+    marginVertical: '$spacingSm',
   },
 })
 
