@@ -22,6 +22,7 @@ module.exports = {
           '@components': './src/components',
           '@images': './assets/images',
           '@utils': './src/utils',
+          '@app/types': './src/types',
         },
       },
     ],
