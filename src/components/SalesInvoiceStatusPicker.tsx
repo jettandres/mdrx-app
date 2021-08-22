@@ -16,10 +16,6 @@ const PICKER_ITEMS: Array<PickerItem> = [
     label: 'Damaged',
     value: 'damaged',
   },
-  {
-    label: 'Sales Document',
-    value: 'sales-document',
-  },
 ]
 
 type Props = {

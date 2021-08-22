@@ -59,7 +59,10 @@ const SalesReportForm: FC<Props> = () => {
           <View style={styles.totalSoldLabelContainer}>
             <HorizontalLabel bold title="Total Sold" subtitle="20" />
           </View>
-          <SellingPriceEvalPicker />
+          <HorizontalLabel
+            title="Selling Price Evaluation"
+            subtitle="Unacceptable"
+          />
         </View>
       </View>
     </ScrollView>
