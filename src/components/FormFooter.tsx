@@ -29,7 +29,7 @@ const styles = EStyleSheet.create({
   },
   buttonsContainer: {
     height: 80,
-    width: '40%',
+    width: '100%',
     flexDirection: 'column',
     justifyContent: 'space-between',
   },

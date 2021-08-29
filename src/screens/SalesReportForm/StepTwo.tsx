@@ -1,5 +1,5 @@
 import React, { useCallback } from 'react'
-import { View, Text, ScrollView } from 'react-native'
+import { View, ScrollView, BackHandler } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -8,55 +8,39 @@ import HorizontalLabel from '@components/HorizontalLabel'
 import HorizontalInput from '@components/HorizontalInput'
 import SalesDocumentPicker from '@components/SalesDocumentPicker'
 
-import CustomerPicker from '@components/CustomerPicker'
-
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList } from '@routes/types'
-import { RouteProp } from '@react-navigation/core'
-
-import { currentDate } from '@utils/date'
-
 import SalesInvoiceStatusPicker from '@components/SalesInvoiceStatusPicker'
 import ProductClassPicker from '@components/ProductClassPicker'
 import FormFooter from '@components/FormFooter'
-import { Calendar } from 'react-native-calendars'
 import HorizontalDatePicker from '@components/HorizontalDatePicker'
-
-type SalesReportFormNavigationProp = NativeStackNavigationProp<
-  RootStackParamList,
-  'SalesReportForm'
->
-type SalesReportFormRouteProp = RouteProp<RootStackParamList, 'SalesReportForm'>
+import { useFocusEffect } from '@react-navigation/native'
 
 type Props = {
-  navigation: SalesReportFormNavigationProp
-  route: SalesReportFormRouteProp
+  onNext: () => void
+  onReview: () => void
+  onBack: () => boolean | null | undefined
 }
 
-const SalesReportForm: FC<Props> = (props) => {
-  const { navigation } = props
+const StepTwo: FC<Props> = (props) => {
+  const { onNext, onReview, onBack } = props
 
-  const onNextPress = useCallback(() => {}, [])
+  const customBackPress = useCallback(() => {
+    const onBackPress = () => {
+      onBack()
+      return true
+    }
 
-  const onReviewPress = useCallback(
-    () => navigation.navigate('ReviewSalesReport'),
-    [navigation],
-  )
+    BackHandler.addEventListener('hardwareBackPress', onBackPress)
+
+    return () =>
+      BackHandler.removeEventListener('hardwareBackPress', onBackPress)
+  }, [onBack])
+
+  useFocusEffect(customBackPress)
 
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.formContainer}>
-          <View style={styles.reportLabelContainer}>
-            <HorizontalLabel bold title="TPR #" subtitle="Min07021" />
-          </View>
-          <HorizontalLabel title="Date Reported" subtitle={currentDate} />
-          <HorizontalLabel
-            title="Assignment"
-            subtitle="Mindanao Sales & Marketing"
-          />
-          <CustomerPicker />
-          <View style={styles.divider} />
           <View style={styles.seriesNoLabelContainer}>
             <HorizontalLabel title="Sales Invoice Series #" subtitle="503" />
           </View>
@@ -82,7 +66,7 @@ const SalesReportForm: FC<Props> = (props) => {
               subtitle="Unacceptable"
             />
           </View>
-          <FormFooter onNext={onNextPress} onReview={onReviewPress} />
+          <FormFooter onNext={onNext} onReview={onReview} />
         </View>
       </View>
     </ScrollView>
@@ -106,9 +90,6 @@ const styles = EStyleSheet.create({
     width: '100%',
     padding: '$spacingMd',
   },
-  reportLabelContainer: {
-    marginBottom: '$spacingSm',
-  },
   divider: {
     marginVertical: '$spacingMd',
     width: '100%',
@@ -129,4 +110,4 @@ const styles = EStyleSheet.create({
   },
 })
 
-export default SalesReportForm
+export default StepTwo
