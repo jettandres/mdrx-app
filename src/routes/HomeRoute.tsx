@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, Image } from 'react-native'
 
 import {
@@ -46,24 +46,45 @@ const HomeRoute: FC = () => {
 }
 
 const CustomDrawerContent = (props: DrawerContentComponentProps) => {
+  const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const { navigation } = props
+
   return (
     <DrawerContentScrollView {...props}>
       <Image source={mdrxLogo} style={styles.logo} />
-      <DrawerItem label="Home" onPress={() => navigation.navigate('Home')} />
+      <DrawerItem
+        focused={selectedIndex === 0}
+        label="Home"
+        onPress={() => {
+          setSelectedIndex(0)
+          navigation.navigate('Home')
+        }}
+      />
       <Text style={styles.drawerSectionHeader}>SUMMARY REPORTS</Text>
       <View style={styles.drawerSectionContainer}>
         <DrawerItem
+          focused={selectedIndex === 1}
           label="Expense"
-          onPress={() => navigation.navigate('ExpenseReport')}
+          onPress={() => {
+            setSelectedIndex(1)
+            navigation.navigate('ExpenseReport')
+          }}
         />
         <DrawerItem
+          focused={selectedIndex === 2}
           label="Sales and Income"
-          onPress={() => navigation.navigate('SalesAndIncomeReport')}
+          onPress={() => {
+            setSelectedIndex(2)
+            navigation.navigate('SalesAndIncomeReport')
+          }}
         />
         <DrawerItem
+          focused={selectedIndex === 3}
           label="Collection"
-          onPress={() => navigation.navigate('CollectionSummaryReport')}
+          onPress={() => {
+            setSelectedIndex(3)
+            navigation.navigate('CollectionSummaryReport')
+          }}
         />
       </View>
       <DrawerItem label="Logout" onPress={() => navigation.goBack()} />
