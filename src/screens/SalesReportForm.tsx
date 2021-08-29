@@ -15,9 +15,12 @@ import { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
 
 import { currentDate } from '@utils/date'
+
 import SalesInvoiceStatusPicker from '@components/SalesInvoiceStatusPicker'
 import ProductClassPicker from '@components/ProductClassPicker'
 import FormFooter from '@components/FormFooter'
+import { Calendar } from 'react-native-calendars'
+import HorizontalDatePicker from '@components/HorizontalDatePicker'
 
 type SalesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -57,6 +60,7 @@ const SalesReportForm: FC<Props> = (props) => {
           <View style={styles.seriesNoLabelContainer}>
             <HorizontalLabel title="Sales Invoice Series #" subtitle="503" />
           </View>
+          <HorizontalDatePicker title="Collection Date" />
           <SalesDocumentPicker />
           <SalesInvoiceStatusPicker />
           <View style={styles.divider} />
