@@ -12,6 +12,8 @@ import ReviewSalesReport from '@screens/ReviewSalesReport'
 
 import { RootStackParamList } from '@routes/types'
 
+import HomeRoute from '@routes/HomeRoute'
+
 const EntryRoute: FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()
 
@@ -23,9 +25,9 @@ const EntryRoute: FC = () => {
         component={Login}
       />
       <Stack.Screen
-        name="Home"
-        options={{ title: 'Welcome, Johnny' }}
-        component={Home}
+        name="HomeDrawer"
+        options={{ headerShown: false }}
+        component={HomeRoute}
       />
       <Stack.Screen
         name="ReviewExpenseReport"

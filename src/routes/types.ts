@@ -1,6 +1,6 @@
 export type RootStackParamList = {
   Login: undefined
-  Home: undefined
+  HomeDrawer: undefined
   ReviewExpenseReport: undefined
   ReviewSalesReport: undefined
   ExpensesReportForm: undefined
@@ -10,4 +10,11 @@ export type RootStackParamList = {
 export type HomeStackParamList = {
   Expenses: undefined
   Sales: undefined
+}
+
+export type HomeDrawerParamList = {
+  Home: undefined
+  ExpenseReport: undefined
+  SalesAndIncomeReport: undefined
+  CollectionSummaryReport: undefined
 }

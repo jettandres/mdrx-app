@@ -7,15 +7,15 @@ import SalesReportsList from '@screens/SalesReportsList'
 
 import type { FC } from 'react'
 
-import { NativeStackNavigationProp } from '@react-navigation/native-stack'
-import { RootStackParamList, HomeStackParamList } from '@routes/types'
+import { DrawerNavigationProp } from '@react-navigation/drawer'
+import { HomeDrawerParamList, HomeStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/native'
 
 import salesIcon from '@images/baseline_sell_white_24dp.png'
 import expenseIcon from '@images/baseline_payment_white_24dp.png'
 
-type HomeNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>
-type HomeRouteProp = RouteProp<RootStackParamList, 'Home'>
+type HomeNavigationProp = DrawerNavigationProp<HomeDrawerParamList, 'Home'>
+type HomeRouteProp = RouteProp<HomeDrawerParamList, 'Home'>
 
 type Props = {
   navigation: HomeNavigationProp

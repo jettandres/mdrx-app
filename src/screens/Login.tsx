@@ -46,7 +46,7 @@ const Login: FC<Props> = (props) => {
 
   const onNextButtonPress = useCallback(() => {
     if (currentStep === WizardStep.ConfirmCustodianCode) {
-      navigation.navigate('Home')
+      navigation.navigate('HomeDrawer')
     } else if (currentStep === WizardStep.InputCustodianCode) {
       // TODO: retrieve from database
       setCurrentStep(WizardStep.ConfirmCustodianCode)
