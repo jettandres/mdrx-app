@@ -31,14 +31,20 @@ const HomeRoute: FC = () => {
         screenOptions={{ drawerType: 'front' }}
         drawerContent={(props) => <CustomDrawerContent {...props} />}>
         <Drawer.Screen name="Home" component={Home} />
-        <Drawer.Screen name="ExpenseReport" component={ExpenseReport} />
+        <Drawer.Screen
+          name="ExpenseReport"
+          component={ExpenseReport}
+          options={{ headerTitle: 'Expense Report' }}
+        />
         <Drawer.Screen
           name="SalesAndIncomeReport"
           component={SalesAndIncomeReport}
+          options={{ headerTitle: 'Sales and Income Report' }}
         />
         <Drawer.Screen
           name="CollectionSummaryReport"
           component={CollectionSummaryReport}
+          options={{ headerTitle: 'Collection Summary Report' }}
         />
       </Drawer.Navigator>
     </>
