@@ -16,14 +16,24 @@ type Props = {
   onValueChange?: (value: unknown, index: number) => void
   selectedValue?: unknown
   items: Array<PickerItem>
+  borderless?: boolean
 }
 
 const HorizontalPicker: FC<Props> = (props) => {
-  const { onValueChange, selectedValue, items, title } = props
+  const {
+    onValueChange,
+    selectedValue,
+    items,
+    title,
+    borderless = false,
+  } = props
   return (
     <View style={styles.container}>
       <Text>{title}</Text>
-      <View style={styles.pickerContainer}>
+      <View
+        style={
+          borderless ? styles.pickerContainerBorderless : styles.pickerContainer
+        }>
         <Picker onValueChange={onValueChange} selectedValue={selectedValue}>
           {items.map((i) => (
             <Picker.Item key={i.label} label={i.label} value={i.value} />
@@ -44,6 +54,9 @@ const styles = EStyleSheet.create({
     width: '45%',
     borderBottomWidth: 1,
     borderColor: '$borderColor',
+  },
+  pickerContainerBorderless: {
+    width: '33%',
   },
 })
 

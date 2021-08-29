@@ -69,12 +69,15 @@ const ExpenseReport: FC<Props> = () => {
 
   return (
     <>
-      <HorizontalPicker
-        onValueChange={onPickerValueChange}
-        selectedValue={currentSelectedYear}
-        title="Report Year"
-        items={YearPickerItems}
-      />
+      <View style={styles.header}>
+        <HorizontalPicker
+          borderless
+          onValueChange={onPickerValueChange}
+          selectedValue={currentSelectedYear}
+          title="Report Year"
+          items={YearPickerItems}
+        />
+      </View>
       <Tab.Navigator
         screenOptions={{
           tabBarScrollEnabled: true,
@@ -92,6 +95,10 @@ const styles = EStyleSheet.create({
   },
   tabBarItem: {
     width: 100,
+  },
+  header: {
+    backgroundColor: '$white',
+    paddingHorizontal: '$spacingSm',
   },
 })
 
