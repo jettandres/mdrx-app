@@ -1,9 +1,11 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text } from 'react-native'
 
 import type { FC } from 'react'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
+
+import { DateTime } from 'luxon'
 
 import {
   HomeDrawerParamList,
@@ -12,8 +14,10 @@ import {
 import { RouteProp } from '@react-navigation/core'
 import { DrawerNavigationProp } from '@react-navigation/drawer'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+
 import SalesAndIncomeReportDetails from '@components/SalesAndIncomeReport/SalesAndIncomeReportDetails'
 import HorizontalLabel from '@components/HorizontalLabel'
+import HorizontalReportYearPicker from '@components/HorizontalReportYearPicker'
 
 type SalesAndIncomeReportNavigationProp = DrawerNavigationProp<
   HomeDrawerParamList,
@@ -32,8 +36,20 @@ type Props = {
 const Tab = createMaterialTopTabNavigator<SalesAndIncomeReportTabParamList>()
 
 const SalesAndIncomeReport: FC<Props> = () => {
+  const currentYear = DateTime.now().year
+  const [currentSelectedYear, setCurrentSelectedYear] =
+    useState<number>(currentYear)
+
+  const onReportYearChange = useCallback((value: number) => {
+    setCurrentSelectedYear(value)
+  }, [])
+
   return (
     <>
+      <HorizontalReportYearPicker
+        selectedValue={currentSelectedYear}
+        onPickerValueChange={onReportYearChange}
+      />
       <Tab.Navigator>
         <Tab.Screen name="Invoice" component={SalesAndIncomeReportDetails} />
         <Tab.Screen
