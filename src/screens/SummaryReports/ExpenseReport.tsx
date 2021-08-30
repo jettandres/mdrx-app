@@ -84,6 +84,7 @@ const ExpenseReport: FC<Props> = () => {
           tabBarItemStyle: styles.tabBarItem,
         }}>
         {tabScreens}
+        <Tab.Screen name="Total" component={ExpenseReportDetails} />
       </Tab.Navigator>
     </>
   )

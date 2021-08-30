@@ -3,13 +3,17 @@ import { View, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
+import { useRoute } from '@react-navigation/native'
 
-type Props = {}
+const ExpenseReportDetails: FC = () => {
+  const route = useRoute()
+  if (route.name === 'Total') {
+    // TODO: display total instead
+  }
 
-const ExpenseReportDetails = () => {
   return (
     <View style={styles.container}>
-      <Text>Expense Report Details</Text>
+      <Text>{route.name}</Text>
     </View>
   )
 }
