@@ -1,6 +1,8 @@
-import React, { useState, useCallback } from 'react'
+import React, { useCallback } from 'react'
 import { View } from 'react-native'
 import HorizontalPicker, { PickerItem } from './HorizontalPicker'
+
+import { DateTime } from 'luxon'
 
 import type { FC } from 'react'
 
@@ -11,16 +13,20 @@ type Props = {
   onPickerValueChange: (value: number) => void
 }
 
-const YearPickerItems: Array<PickerItem> = [
-  {
-    label: '2020',
-    value: 2020,
-  },
-  {
-    label: '2021',
-    value: 2021,
-  },
-]
+const generateYearPickerItems = (): Array<PickerItem> => {
+  const yearItems: Array<PickerItem> = []
+  const yearNow = DateTime.now().year
+  const yearAgo = DateTime.now().minus({ years: 4 }).year
+
+  for (let x = yearAgo; x <= yearNow; x++) {
+    yearItems.push({
+      label: x.toString(),
+      value: x,
+    })
+  }
+
+  return yearItems
+}
 
 const HorizontalReportYearPicker: FC<Props> = (props) => {
   const { onPickerValueChange, selectedValue } = props
@@ -39,7 +45,7 @@ const HorizontalReportYearPicker: FC<Props> = (props) => {
         onValueChange={onValueChange}
         selectedValue={selectedValue}
         title="Report Year"
-        items={YearPickerItems}
+        items={generateYearPickerItems()}
       />
     </View>
   )
