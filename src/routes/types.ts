@@ -18,3 +18,9 @@ export type HomeDrawerParamList = {
   SalesAndIncomeReport: undefined
   CollectionSummaryReport: undefined
 }
+
+export type SalesAndIncomeReportTabParamList = {
+  Invoice: undefined
+  DeliveryReceipt: undefined
+  Cash: undefined
+}
