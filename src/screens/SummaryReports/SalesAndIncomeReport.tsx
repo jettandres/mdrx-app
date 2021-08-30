@@ -82,6 +82,8 @@ const styles = EStyleSheet.create({
   footerContainer: {
     backgroundColor: '$white',
     padding: '$spacingSm',
+    borderColor: '$borderColor',
+    borderTopWidth: 1,
   },
   footerSubcontainer: {
     paddingVertical: '$spacingSm',
