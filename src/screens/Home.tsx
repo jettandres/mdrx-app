@@ -8,11 +8,16 @@ import SalesReportsList from '@screens/SalesReportsList'
 import type { FC } from 'react'
 
 import { DrawerNavigationProp } from '@react-navigation/drawer'
-import { HomeDrawerParamList, HomeStackParamList } from '@routes/types'
-import { RouteProp } from '@react-navigation/native'
+import {
+  HomeDrawerParamList,
+  HomeStackParamList,
+  RootStackParamList,
+} from '@routes/types'
+import { RouteProp, useNavigation } from '@react-navigation/native'
 
 import salesIcon from '@images/baseline_sell_white_24dp.png'
 import expenseIcon from '@images/baseline_payment_white_24dp.png'
+import { HomeRouteNavigationProp } from '@routes/HomeRoute'
 
 type HomeNavigationProp = DrawerNavigationProp<HomeDrawerParamList, 'Home'>
 type HomeRouteProp = RouteProp<HomeDrawerParamList, 'Home'>
@@ -39,16 +44,18 @@ const fabActions = [
   },
 ]
 
-const Home: FC<Props> = (props) => {
-  const { navigation } = props
+const Home: FC<Props> = () => {
+  const navigation = useNavigation<HomeRouteNavigationProp>()
 
   const onFabTap = useCallback(
     (name?: string | undefined) => {
+      /* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
       if (name === 'expenses') {
         navigation.navigate('ExpensesReportForm')
       } else if (name === 'sales') {
         navigation.navigate('SalesReportForm')
       }
+      /* eslint-enable */
     },
     [navigation],
   )

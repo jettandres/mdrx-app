@@ -15,15 +15,25 @@ import ExpenseReport from '@screens/SummaryReports/ExpenseReport'
 import SalesAndIncomeReport from '@screens/SummaryReports/SalesAndIncomeReport'
 import CollectionSummaryReport from '@screens/SummaryReports/CollectionSummaryReport'
 
-import { HomeDrawerParamList } from './types'
+import { HomeDrawerParamList, RootStackParamList } from './types'
 import { Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>()
 
 import mdrxLogo from '@images/mdrx-logo.png'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
-const HomeRoute: FC = () => {
+export type HomeRouteNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'HomeDrawer'
+>
+
+type Props = {
+  navigation: HomeRouteNavigationProp
+}
+
+const HomeRoute: FC<Props> = () => {
   return (
     <>
       <Drawer.Navigator
