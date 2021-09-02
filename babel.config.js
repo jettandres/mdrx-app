@@ -23,6 +23,7 @@ module.exports = {
           '@images': './assets/images',
           '@utils': './src/utils',
           '@app/types': './src/types',
+          '@app/apollo': './src/apollo/',
         },
       },
     ],

@@ -5,8 +5,10 @@ import { DateTime } from 'luxon'
 
 import type { FC } from 'react'
 
-import { useRoute } from '@react-navigation/core'
 import HorizontalLabel from '@components/HorizontalLabel'
+
+import { salesAndIncomeSelectedYear } from '@app/apollo/reactiveVariables'
+import { useReactiveVar } from '@apollo/client'
 
 type SectionData = {
   sales: string
@@ -19,9 +21,11 @@ type Sections = {
 }
 
 const SalesAndIncomeReportDetails: FC = () => {
-  const route = useRoute()
-  // TODO: if currentYear === selectedYear
-  const monthSectionsToRender = DateTime.now().month
+  const selectedYear = useReactiveVar(salesAndIncomeSelectedYear)
+  const currentYear = DateTime.now().year
+
+  const isSameYear = selectedYear === currentYear
+  const monthSectionsToRender = isSameYear ? DateTime.now().month : 12
 
   const sectionData: Array<Sections> = []
 

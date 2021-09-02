@@ -19,6 +19,8 @@ import SalesAndIncomeReportDetails from '@components/SalesAndIncomeReport/SalesA
 import HorizontalLabel from '@components/HorizontalLabel'
 import HorizontalReportYearPicker from '@components/HorizontalReportYearPicker'
 
+import { salesAndIncomeSelectedYear } from '@app/apollo/reactiveVariables'
+
 type SalesAndIncomeReportNavigationProp = DrawerNavigationProp<
   HomeDrawerParamList,
   'SalesAndIncomeReport'
@@ -42,6 +44,7 @@ const SalesAndIncomeReport: FC<Props> = () => {
 
   const onReportYearChange = useCallback((value: number) => {
     setCurrentSelectedYear(value)
+    salesAndIncomeSelectedYear(value)
   }, [])
 
   return (
