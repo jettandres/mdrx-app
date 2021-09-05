@@ -5,7 +5,7 @@ import type { FC } from 'react'
 
 const PICKER_ITEMS: Array<PickerItem> = [
   {
-    label: 'VALID',
+    label: 'Valid',
     value: 'valid',
   },
   {
@@ -15,6 +15,10 @@ const PICKER_ITEMS: Array<PickerItem> = [
   {
     label: 'Damaged',
     value: 'damaged',
+  },
+  {
+    label: 'Cancelled',
+    value: 'canceled',
   },
 ]
 
