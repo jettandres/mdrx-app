@@ -17,6 +17,7 @@ type SectionData = {
   id: number
   amount: string
   agingDays: number
+  submissionDate: string
 }
 
 type Sections = {
@@ -39,18 +40,21 @@ const DATA: Array<Sections> = [
         id: 500,
         amount: 'P323,000.00',
         agingDays: 78,
+        submissionDate: 'August 3, 2021',
       },
       {
         type: 'sales-invoice',
         id: 501,
         amount: 'P3,456.00',
         agingDays: 78,
+        submissionDate: 'August 21, 2021',
       },
       {
         type: 'sales-invoice',
         id: 502,
         amount: 'P8,990.00',
         agingDays: 30,
+        submissionDate: 'August 15, 2021',
       },
     ],
   },
@@ -65,12 +69,14 @@ const DATA: Array<Sections> = [
         id: 1155,
         amount: 'P340.00',
         agingDays: 78,
+        submissionDate: 'August 8, 2021',
       },
       {
         type: 'delivery-receipt',
         id: 1157,
         amount: 'P2,345.00',
         agingDays: 28,
+        submissionDate: 'August 12, 2021',
       },
     ],
   },
@@ -144,7 +150,16 @@ const Collections: FC<Props> = () => {
                 subtitle={item.amount}
               />
             </View>
-            <Text style={agingStyle}>{item.agingDays} days</Text>
+            <View style={styles.submissionDateLabelContainer}>
+              <Text style={styles.subtitleLabelNormal}>Submission Date</Text>
+              <Text style={styles.subtitleLabelNormal}>
+                {item.submissionDate}
+              </Text>
+            </View>
+            <View style={styles.agingDaysLabelContainer}>
+              <Text style={styles.subtitleLabelNormal}>Aging Days</Text>
+              <Text style={agingStyle}>{item.agingDays} days</Text>
+            </View>
             <View style={styles.cardFooterContainer}>
               <TouchableOpacity style={styles.collectButton}>
                 <Text style={styles.collectLabel}>COLLECT</Text>
@@ -178,7 +193,6 @@ const styles = EStyleSheet.create({
   subtitleLabelNormal: {
     color: '$darkGray',
     paddingHorizontal: '$spacingSm',
-    marginTop: '$spacingXs',
   },
   subtitleLabelAlert: {
     color: '$red',
@@ -203,6 +217,17 @@ const styles = EStyleSheet.create({
     alignItems: 'flex-end',
     borderTopWidth: 1,
     borderColor: '$borderColor',
+  },
+  submissionDateLabelContainer: {
+    marginTop: '$spacingSm',
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+  },
+  agingDaysLabelContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
 })
 
