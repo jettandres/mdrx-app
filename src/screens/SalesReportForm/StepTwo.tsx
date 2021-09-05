@@ -96,9 +96,6 @@ const styles = EStyleSheet.create({
   },
   divider: {
     marginVertical: '$spacingMd',
-    width: '100%',
-    height: 1,
-    backgroundColor: '$borderColor',
   },
   totalSoldLabelContainer: {
     marginTop: '$spacingXl',
