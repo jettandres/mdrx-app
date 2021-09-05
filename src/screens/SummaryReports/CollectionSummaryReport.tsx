@@ -5,9 +5,15 @@ import type { FC } from 'react'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 
-import { HomeDrawerParamList } from '@routes/types'
+import {
+  CollectionSummaryTabParamList,
+  HomeDrawerParamList,
+} from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
 import { DrawerNavigationProp } from '@react-navigation/drawer'
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
+import Collections from '@components/CollectionSummaryReport/Collections'
+import Remittance from '@components/CollectionSummaryReport/Remittance'
 
 type CollectionSummaryReportNavigationProp = DrawerNavigationProp<
   HomeDrawerParamList,
@@ -18,6 +24,8 @@ type CollectionSummaryReportRouteProp = RouteProp<
   'CollectionSummaryReport'
 >
 
+const Tab = createMaterialTopTabNavigator<CollectionSummaryTabParamList>()
+
 type Props = {
   navigation: CollectionSummaryReportNavigationProp
   route: CollectionSummaryReportRouteProp
@@ -25,9 +33,12 @@ type Props = {
 
 const CollectionSummaryReport: FC<Props> = () => {
   return (
-    <View style={styles.container}>
-      <Text>Collection Summary Report</Text>
-    </View>
+    <>
+      <Tab.Navigator>
+        <Tab.Screen name="Collections" component={Collections} />
+        <Tab.Screen name="Remittance" component={Remittance} />
+      </Tab.Navigator>
+    </>
   )
 }
 

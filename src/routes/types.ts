@@ -24,3 +24,8 @@ export type SalesAndIncomeReportTabParamList = {
   DeliveryReceipt: undefined
   Cash: undefined
 }
+
+export type CollectionSummaryTabParamList = {
+  Collections: undefined
+  Remittance: undefined
+}
