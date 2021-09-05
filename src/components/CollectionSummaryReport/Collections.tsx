@@ -1,5 +1,5 @@
 import React, { useState, useCallback } from 'react'
-import { View, Text, SectionList } from 'react-native'
+import { View, Text, SectionList, Button, TouchableOpacity } from 'react-native'
 
 import type { FC } from 'react'
 
@@ -50,7 +50,7 @@ const DATA: Array<Sections> = [
         type: 'sales-invoice',
         id: 502,
         amount: 'P8,990.00',
-        agingDays: 68,
+        agingDays: 30,
       },
     ],
   },
@@ -104,8 +104,11 @@ const Collections: FC<Props> = () => {
     })
   }, [])
 
+  const onCollect = useCallback((item: SectionData) => {}, [])
+
   return (
     <SectionList
+      style={styles.container}
       sections={DATA}
       keyExtractor={(item, index) => `${item.type}-${item.id}-${index}`}
       renderSectionHeader={({
@@ -127,19 +130,79 @@ const Collections: FC<Props> = () => {
           return null
         }
 
-        return <Text>{item.type}</Text>
+        const agingStyle =
+          item.agingDays > 60
+            ? styles.subtitleLabelAlert
+            : styles.subtitleLabelNormal
+
+        return (
+          <View style={styles.itemContainer}>
+            <View style={styles.itemTitleContainer}>
+              <HorizontalLabel
+                bold
+                title={`No.${item.id}`}
+                subtitle={item.amount}
+              />
+            </View>
+            <Text style={agingStyle}>{item.agingDays} days</Text>
+            <View style={styles.cardFooterContainer}>
+              <TouchableOpacity style={styles.collectButton}>
+                <Text style={styles.collectLabel}>COLLECT</Text>
+              </TouchableOpacity>
+            </View>
+          </View>
+        )
       }}
     />
   )
 }
 
 const styles = EStyleSheet.create({
-  container: {
-    flex: 1,
-  },
+  container: {},
   sectionHeaderContainer: {
     padding: '$spacingSm',
     backgroundColor: '$white',
+  },
+  itemContainer: {
+    borderRadius: 10,
+    backgroundColor: '$white',
+    elevation: 2,
+    marginHorizontal: '$spacingSm',
+    marginVertical: '$spacingXs',
+  },
+  itemTitleContainer: {
+    paddingLeft: '$spacingSm',
+    paddingTop: '$spacingSm',
+    paddingRight: '$spacingSm',
+  },
+  subtitleLabelNormal: {
+    color: '$darkGray',
+    paddingHorizontal: '$spacingSm',
+    marginTop: '$spacingXs',
+  },
+  subtitleLabelAlert: {
+    color: '$red',
+    paddingHorizontal: '$spacingSm',
+  },
+  collectButton: {
+    width: '30%',
+    height: 50,
+    justifyContent: 'center',
+    alignItems: 'center',
+    paddingVertical: '$spacingSm',
+    borderRadius: 5,
+  },
+  collectLabel: {
+    color: '$blue',
+    fontWeight: 'bold',
+    fontSize: '$sm',
+    marginLeft: '$spacingSm',
+  },
+  cardFooterContainer: {
+    marginTop: '$spacingSm',
+    alignItems: 'flex-end',
+    borderTopWidth: 1,
+    borderColor: '$borderColor',
   },
 })
 
