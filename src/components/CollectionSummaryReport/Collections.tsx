@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text, SectionList } from 'react-native'
 
 import type { FC } from 'react'
@@ -9,6 +9,8 @@ import { CollectionSummaryTabParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
 
 import CollectionType from '@app/types/CollectionType'
+import HorizontalLabel from '@components/HorizontalLabel'
+import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
 
 type SectionData = {
   type: CollectionType
@@ -90,6 +92,18 @@ type Props = {
 }
 
 const Collections: FC<Props> = () => {
+  const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
+  const onSectionHeaderPress = useCallback((sectionTitle: string) => {
+    setCollapsedHeaders((collapsedList) => {
+      const alreadyCollapsed = collapsedList.find((v) => v === sectionTitle)
+      if (alreadyCollapsed) {
+        return collapsedList.filter((v) => v !== sectionTitle)
+      }
+
+      return [...collapsedList, sectionTitle]
+    })
+  }, [])
+
   return (
     <SectionList
       sections={DATA}
@@ -99,11 +113,22 @@ const Collections: FC<Props> = () => {
           title: { label, total },
         },
       }) => (
-        <Text>
-          {label} - {total}
-        </Text>
+        <SectionHeader
+          onPress={onSectionHeaderPress}
+          title={label}
+          subtitle={total}
+        />
       )}
-      renderItem={({ item, section }) => <Text>{item.type}</Text>}
+      renderItem={({ item, section }) => {
+        const isCollapsed = collapsedHeaders.find(
+          (t) => t === section.title.label,
+        )
+        if (isCollapsed) {
+          return null
+        }
+
+        return <Text>{item.type}</Text>
+      }}
     />
   )
 }
@@ -111,6 +136,10 @@ const Collections: FC<Props> = () => {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
+  },
+  sectionHeaderContainer: {
+    padding: '$spacingSm',
+    backgroundColor: '$white',
   },
 })
 
