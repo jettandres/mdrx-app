@@ -11,8 +11,8 @@ import SalesDocumentPicker from '@components/SalesDocumentPicker'
 import SalesInvoiceStatusPicker from '@components/SalesInvoiceStatusPicker'
 import ProductClassPicker from '@components/ProductClassPicker'
 import FormFooter from '@components/FormFooter'
-import HorizontalDatePicker from '@components/HorizontalDatePicker'
 import { useFocusEffect } from '@react-navigation/native'
+import { DateTime } from 'luxon'
 
 type Props = {
   onNext: () => void
@@ -37,6 +37,10 @@ const StepTwo: FC<Props> = (props) => {
 
   useFocusEffect(customBackPress)
 
+  const collectionDate = DateTime.now()
+    .plus({ days: 30 })
+    .toLocaleString(DateTime.DATE_FULL)
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
@@ -44,7 +48,7 @@ const StepTwo: FC<Props> = (props) => {
           <View style={styles.seriesNoLabelContainer}>
             <HorizontalLabel title="Sales Invoice Series #" subtitle="503" />
           </View>
-          <HorizontalDatePicker title="Collection Date" />
+          <HorizontalLabel title="Collection Date" subtitle={collectionDate} />
           <SalesDocumentPicker />
           <SalesInvoiceStatusPicker />
           <View style={styles.divider} />
