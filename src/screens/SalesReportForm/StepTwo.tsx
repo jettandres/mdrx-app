@@ -64,6 +64,7 @@ const StepTwo: FC<Props> = (props) => {
           <HorizontalInput title="Total Boxes Sold" placeholder="2" />
           <HorizontalInput title="Total Pcs Sold" placeholder="0" />
           <View style={styles.totalSoldLabelContainer}>
+            <HorizontalLabel title="VAT" subtitle="P1,440.00" />
             <HorizontalLabel bold title="Total Sold" subtitle="20" />
             <HorizontalLabel
               title="Selling Price Evaluation"
