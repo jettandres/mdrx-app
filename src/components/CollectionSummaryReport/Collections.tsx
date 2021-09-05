@@ -1,16 +1,20 @@
 import React, { useState, useCallback } from 'react'
-import { View, Text, SectionList, Button, TouchableOpacity } from 'react-native'
+import { View, Text, SectionList, TouchableOpacity } from 'react-native'
 
 import type { FC } from 'react'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { MaterialTopTabNavigationProp } from '@react-navigation/material-top-tabs'
-import { CollectionSummaryTabParamList } from '@routes/types'
-import { RouteProp } from '@react-navigation/core'
+import {
+  CollectionSummaryTabParamList,
+  RootStackParamList,
+} from '@routes/types'
+import { RouteProp, useNavigation } from '@react-navigation/core'
 
 import CollectionType from '@app/types/CollectionType'
 import HorizontalLabel from '@components/HorizontalLabel'
 import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type SectionData = {
   type: CollectionType
@@ -97,7 +101,14 @@ type Props = {
   route: CollectionsRouteProp
 }
 
+type HomeNavigation = NativeStackNavigationProp<
+  RootStackParamList,
+  'HomeDrawer'
+>
+
 const Collections: FC<Props> = () => {
+  const navigation = useNavigation<HomeNavigation>()
+
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
@@ -110,7 +121,12 @@ const Collections: FC<Props> = () => {
     })
   }, [])
 
-  const onCollect = useCallback((item: SectionData) => {}, [])
+  const onCollect = useCallback(
+    (item: SectionData) => {
+      navigation.navigate('SalesCollectionForm', { collectionType: item.type })
+    },
+    [navigation],
+  )
 
   return (
     <SectionList
@@ -161,7 +177,9 @@ const Collections: FC<Props> = () => {
               <Text style={agingStyle}>{item.agingDays} days</Text>
             </View>
             <View style={styles.cardFooterContainer}>
-              <TouchableOpacity style={styles.collectButton}>
+              <TouchableOpacity
+                style={styles.collectButton}
+                onPress={() => onCollect(item)}>
                 <Text style={styles.collectLabel}>COLLECT</Text>
               </TouchableOpacity>
             </View>

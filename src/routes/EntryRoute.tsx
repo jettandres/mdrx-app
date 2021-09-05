@@ -13,6 +13,7 @@ import ReviewSalesReport from '@screens/ReviewSalesReport'
 import { RootStackParamList } from '@routes/types'
 
 import HomeRoute from '@routes/HomeRoute'
+import SalesCollectionForm from '@screens/SalesCollectionForm'
 
 const EntryRoute: FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -48,6 +49,11 @@ const EntryRoute: FC = () => {
         name="SalesReportForm"
         options={{ title: 'Sales Recording' }}
         component={SalesReportForm}
+      />
+      <Stack.Screen
+        name="SalesCollectionForm"
+        options={{ title: 'Sales Collection Form' }}
+        component={SalesCollectionForm}
       />
     </Stack.Navigator>
   )

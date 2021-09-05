@@ -1,3 +1,5 @@
+import CollectionType from '@app/types/CollectionType'
+
 export type RootStackParamList = {
   Login: undefined
   HomeDrawer: undefined
@@ -5,6 +7,7 @@ export type RootStackParamList = {
   ReviewSalesReport: undefined
   ExpensesReportForm: undefined
   SalesReportForm: undefined
+  SalesCollectionForm: { collectionType: CollectionType }
 }
 
 export type HomeStackParamList = {
