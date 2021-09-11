@@ -1,3 +1,3 @@
-type CollectionType = 'sales-invoice' | 'delivery-receipt'
+type CollectionType = 'sales-invoice' | 'delivery-receipt' | 'cash'
 
 export default CollectionType

@@ -84,6 +84,35 @@ const DATA: Array<Sections> = [
       },
     ],
   },
+  {
+    title: {
+      label: 'Cash',
+      total: 'P4,299.00',
+    },
+    data: [
+      {
+        type: 'cash',
+        id: 34,
+        amount: 'P300.00',
+        agingDays: 78,
+        submissionDate: 'August 8, 2021',
+      },
+      {
+        type: 'cash',
+        id: 35,
+        amount: 'P2,499.00',
+        agingDays: 28,
+        submissionDate: 'August 12, 2021',
+      },
+      {
+        type: 'cash',
+        id: 36,
+        amount: 'P1,500.00',
+        agingDays: 28,
+        submissionDate: 'August 12, 2021',
+      },
+    ],
+  },
 ]
 
 type CollectionsNavigationProp = MaterialTopTabNavigationProp<
