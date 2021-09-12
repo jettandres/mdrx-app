@@ -62,7 +62,7 @@ const Login: FC<Props> = (props) => {
 
   useEffect(() => {
     if (currentStep === WizardStep.InputCustodianCode) {
-      setNextButtonCopy('SEARCH')
+      setNextButtonCopy('LOGIN')
       setTitleCopy('Custodian Code')
     } else if (currentStep === WizardStep.ConfirmCustodianCode) {
       setNextButtonCopy('CONFIRM')
