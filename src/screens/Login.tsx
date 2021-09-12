@@ -20,6 +20,7 @@ import { RootStackParamList } from '@routes/types'
 import HorizontalLabel from '@components/HorizontalLabel'
 
 import { useLazyQuery } from '@apollo/client'
+import { employeeInfo } from '@app/apollo/reactiveVariables'
 import {
   GET_EMPLOYEES,
   GetEmployeesPayload,
@@ -71,7 +72,8 @@ const Login: FC<Props> = (props) => {
   }, [currentStep])
 
   const onNextButtonPress = useCallback(() => {
-    if (currentStep === WizardStep.ConfirmCustodianCode) {
+    if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
+      employeeInfo(employee)
       navigation.navigate('HomeDrawer')
     } else if (currentStep === WizardStep.InputCustodianCode) {
       if (custodianCode === undefined) {
@@ -81,7 +83,7 @@ const Login: FC<Props> = (props) => {
         getEmployee({ variables: { code: custodianCode } })
       }
     }
-  }, [navigation, currentStep, custodianCode, getEmployee])
+  }, [navigation, currentStep, custodianCode, getEmployee, employee])
 
   useEffect(() => {
     if (data && data.employees.length) {
