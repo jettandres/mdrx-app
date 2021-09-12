@@ -202,15 +202,23 @@ const Remittance: FC<Props> = () => {
           </View>
         )
       }}
+      ListFooterComponent={() => (
+        <View style={styles.footerContainer}>
+          <HorizontalLabel bold title="TOTAL" subtitle="P123,242,321.00" />
+        </View>
+      )}
     />
   )
 }
 
 const styles = EStyleSheet.create({
-  container: {},
   sectionHeaderContainer: {
     padding: '$spacingSm',
     backgroundColor: '$white',
+  },
+  footerContainer: {
+    backgroundColor: '$white',
+    padding: '$spacingSm',
   },
   itemContainer: {
     borderRadius: 10,
