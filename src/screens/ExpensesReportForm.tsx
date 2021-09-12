@@ -18,6 +18,9 @@ import uploadIcon from '@images/outline_add_a_photo_black_24dp.png'
 
 import { currentDate } from '@utils/date'
 
+import { useReactiveVar } from '@apollo/client'
+import { employeeInfo } from '@app/apollo/reactiveVariables'
+
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'ExpensesReportForm'
@@ -34,6 +37,7 @@ type Props = {
 
 const ExpensesReportForm: FC<Props> = (props) => {
   const { navigation } = props
+  const employeeData = useReactiveVar(employeeInfo)
 
   const onNextPress = useCallback(() => {}, [])
 
@@ -52,7 +56,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
           <HorizontalLabel title="Date Reported" subtitle={currentDate} />
           <HorizontalLabel
             title="Assignment"
-            subtitle="Mindanao Sales & Marketing"
+            subtitle={employeeData?.custodianAssignment}
           />
           <HorizontalSwitch title="VATable" />
           <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
