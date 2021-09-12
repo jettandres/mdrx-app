@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useState, useCallback, useEffect } from 'react'
 import { View, ScrollView, BackHandler } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -13,6 +13,7 @@ import ProductClassPicker from '@components/ProductClassPicker'
 import FormFooter from '@components/FormFooter'
 import { useFocusEffect } from '@react-navigation/native'
 import { DateTime } from 'luxon'
+import CollectionType from '@app/types/CollectionType'
 
 type Props = {
   onNext: () => void
@@ -22,6 +23,20 @@ type Props = {
 
 const StepTwo: FC<Props> = (props) => {
   const { onNext, onReview, onBack } = props
+  const [salesDocument, setSalesDocument] = useState<CollectionType>()
+  const [seriesNumTitle, setSeriesNumTitle] = useState<string>(
+    'Sales Invoice Series #',
+  )
+
+  useEffect(() => {
+    if (salesDocument === 'cash') {
+      setSeriesNumTitle('Cash Series #')
+    } else if (salesDocument === 'delivery-receipt') {
+      setSeriesNumTitle('Delivery Series #')
+    } else {
+      setSeriesNumTitle('Sales Invoice Series #')
+    }
+  }, [salesDocument])
 
   const customBackPress = useCallback(() => {
     const onBackPress = () => {
@@ -41,15 +56,22 @@ const StepTwo: FC<Props> = (props) => {
     .plus({ days: 30 })
     .toLocaleString(DateTime.DATE_FULL)
 
+  const onSalesDocumentChange = useCallback((value: unknown) => {
+    setSalesDocument(value as CollectionType)
+  }, [])
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
         <View style={styles.formContainer}>
-          <View style={styles.seriesNoLabelContainer}>
-            <HorizontalLabel title="Sales Invoice Series #" subtitle="503" />
+          <View style={styles.seriesNumLabelContainer}>
+            <HorizontalLabel title={seriesNumTitle} subtitle="503" />
           </View>
           <HorizontalLabel title="Collection Date" subtitle={collectionDate} />
-          <SalesDocumentPicker />
+          <SalesDocumentPicker
+            value={salesDocument}
+            onValueChange={onSalesDocumentChange}
+          />
           <SalesInvoiceStatusPicker />
           <View style={styles.divider} />
           <ProductClassPicker />
@@ -102,7 +124,7 @@ const styles = EStyleSheet.create({
     marginTop: '$spacingXl',
     marginBottom: '$spacingXl',
   },
-  seriesNoLabelContainer: {
+  seriesNumLabelContainer: {
     marginVertical: '$spacingSm',
   },
   productDescriptionLabelContainer: {
