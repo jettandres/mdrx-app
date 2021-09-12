@@ -5,6 +5,9 @@ import {
   HttpLink,
 } from '@apollo/client'
 
+// TODO: update migrate HASURA_SECRET
+import Config from 'react-native-config'
+
 type ClientType = ApolloClient<NormalizedCacheObject>
 
 let apolloClient: ClientType | null = null
