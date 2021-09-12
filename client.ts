@@ -12,9 +12,11 @@ type ClientType = ApolloClient<NormalizedCacheObject>
 
 let apolloClient: ClientType | null = null
 
+const LOCALHOST = '10.0.2.2'
+
 const createApolloCLient = (): ClientType => {
   const httpLink = new HttpLink({
-    uri: 'http://localhost:8080/v1/graphql', // process.env.GRAPHQL_API_ENDPOINT,
+    uri: `http://${LOCALHOST}:8080/v1/graphql`, // process.env.GRAPHQL_API_ENDPOINT,
     fetch,
     headers: {
       // Authorization: `Bearer ${process.env.USER_TOKEN}`,
