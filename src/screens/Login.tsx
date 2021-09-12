@@ -3,9 +3,9 @@ import {
   View,
   Text,
   TextInput,
-  Button,
   ActivityIndicator,
   TouchableOpacity,
+  Image,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -13,6 +13,8 @@ import type { FC } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type Employee from '@app/types/Employee'
+
+import mdrxLogo from '@images/mdrx-logo.png'
 
 import { RootStackParamList } from '@routes/types'
 import HorizontalLabel from '@components/HorizontalLabel'
@@ -76,7 +78,6 @@ const Login: FC<Props> = (props) => {
         setErrorLabel('Field is required')
       } else {
         setErrorLabel(undefined)
-        console.log(custodianCode)
         getEmployee({ variables: { code: custodianCode } })
       }
     }
@@ -110,7 +111,8 @@ const Login: FC<Props> = (props) => {
 
   return (
     <View style={styles.container}>
-      <Text>{titleCopy}</Text>
+      <Image source={mdrxLogo} style={styles.logo} />
+      <Text style={styles.titleLabel}>{titleCopy}</Text>
       {currentStep === WizardStep.InputCustodianCode && (
         <View style={styles.textInputContaienr}>
           <TextInput
@@ -140,9 +142,11 @@ const Login: FC<Props> = (props) => {
       )}
       <View style={styles.buttonsContainer}>
         {currentStep === WizardStep.ConfirmCustodianCode && (
-          <View style={styles.cancelButton}>
-            <Button title="Cancel" onPress={onPrevButtonPress} />
-          </View>
+          <TouchableOpacity
+            style={styles.cancelButton}
+            onPress={onPrevButtonPress}>
+            <Text style={styles.cancelButtonLabel}>CANCEL</Text>
+          </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.nextButton} onPress={onNextButtonPress}>
           {loading && (
@@ -162,10 +166,20 @@ const Login: FC<Props> = (props) => {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'center',
+    justifyContent: 'flex-start',
     alignItems: 'flex-start',
     backgroundColor: '$white',
     paddingHorizontal: '$spacingSm',
+    paddingTop: '25%',
+  },
+  logo: {
+    height: 50,
+    width: '100%',
+    resizeMode: 'contain',
+    marginBottom: '$spacingMd',
+  },
+  titleLabel: {
+    fontWeight: 'bold',
   },
   textInput: {
     borderWidth: 1,
@@ -186,6 +200,9 @@ const styles = EStyleSheet.create({
   },
   cancelButton: {
     marginRight: '$spacingXs',
+  },
+  cancelButtonLabel: {
+    color: '$red',
   },
   userInfoContainer: {
     width: '100%',
