@@ -21,6 +21,10 @@ import { currentDate } from '@utils/date'
 import { useReactiveVar } from '@apollo/client'
 import { employeeInfo } from '@app/apollo/reactiveVariables'
 
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
+
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'ExpensesReportForm'
@@ -35,11 +39,39 @@ type Props = {
   route: ExpensesReportFormRouteProp
 }
 
+type FormData = {
+  expenseAmount: string
+  supplierTin: string
+  supplierName: string
+  supplierAddress: string
+  supplierStreetBrgy: string
+  supplierBuilding: string
+}
+
+const schema = z.object({
+  expenseAmount: z
+    .string()
+    .min(1, { message: 'should not be empty' })
+    .regex(/^[0-9]*$/, 'should not contain special characters'),
+  supplierTin: z.string().nonempty('should not be empty'),
+  supplierName: z.string().nonempty('should not be empty'),
+  supplierAddress: z.string(),
+  supplierStreetBrgy: z.string(),
+  supplierBuilding: z.string(),
+})
+
 const ExpensesReportForm: FC<Props> = (props) => {
   const { navigation } = props
   const employeeData = useReactiveVar(employeeInfo)
+  const {
+    handleSubmit,
+    control,
+    formState: { errors },
+  } = useForm<FormData>({ resolver: zodResolver(schema) })
 
-  const onNextPress = useCallback(() => {}, [])
+  const onNextPress = useCallback((data) => {
+    console.log(data)
+  }, [])
 
   const onReviewPress = useCallback(
     () => navigation.navigate('ReviewExpenseReport'),
@@ -56,25 +88,54 @@ const ExpensesReportForm: FC<Props> = (props) => {
           <HorizontalLabel title="Date Reported" subtitle={currentDate} />
           <HorizontalLabel
             title="Assignment"
-            subtitle={employeeData?.custodianAssignment}
+            subtitle={employeeData?.custodianAssignment ?? ''}
           />
           <HorizontalSwitch title="VATable" />
           <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
           <ExpensePicker />
-          <HorizontalInput title="Expense Amount" placeholder="P100.00" />
-          <HorizontalInput title="Supplier TIN #" placeholder="32125242-0000" />
-          <HorizontalInput title="Supplier Name" placeholder="HPG Securities" />
+          <HorizontalInput
+            title="Expense Amount"
+            placeholder="P100.00"
+            name="expenseAmount"
+            control={control}
+            error={errors.expenseAmount}
+            keyboardType="number-pad"
+          />
+          <HorizontalInput
+            title="Supplier TIN #"
+            placeholder="32125242-0000"
+            name="supplierTin"
+            control={control}
+            error={errors.supplierTin}
+            keyboardType="number-pad"
+          />
+          <HorizontalInput
+            title="Supplier Name"
+            placeholder="HPG Securities"
+            name="supplierName"
+            control={control}
+            error={errors.supplierName}
+          />
           <HorizontalInput
             title="Supplier Address"
             placeholder="2312 Ford St, Malate"
+            name="supplierAddress"
+            control={control}
+            error={errors.supplierAddress}
           />
           <HorizontalInput
             title="Supplier Street/Brgy"
             placeholder="Brgy. 250"
+            name="supplierStreetBrgy"
+            control={control}
+            error={errors.supplierStreetBrgy}
           />
           <HorizontalInput
             title="Supplier Bldg"
             placeholder="Waypark Garden Bldg"
+            name="supplierBuilding"
+            control={control}
+            error={errors.supplierBuilding}
           />
           <TouchableOpacity style={styles.uploadButton}>
             <>
@@ -82,7 +143,10 @@ const ExpensesReportForm: FC<Props> = (props) => {
               <Text style={styles.uploadLabel}>Upload image</Text>
             </>
           </TouchableOpacity>
-          <FormFooter onNext={onNextPress} onReview={onReviewPress} />
+          <FormFooter
+            onNext={handleSubmit(onNextPress)}
+            onReview={onReviewPress}
+          />
         </View>
       </View>
     </ScrollView>
