@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.4.5",
+    "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@hookform/resolvers": "^2.8.0",
     "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-picker/picker": "^1.16.5",
@@ -18,6 +19,7 @@
     "@react-navigation/material-top-tabs": "^6.0.2",
     "@react-navigation/native": "^6.0.1",
     "@react-navigation/native-stack": "^6.0.2",
+    "dinero.js": "^2.0.0-alpha.8",
     "faker": "^5.5.3",
     "graphql": "^15.5.1",
     "intl": "^1.2.5",

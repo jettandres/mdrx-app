@@ -3,6 +3,7 @@ import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
+import type { Dinero } from 'dinero.js'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@routes/types'
@@ -25,6 +26,10 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
+import { toUnit } from 'dinero.js'
+import dineroFromFloat from '@utils/dineroFromFloat'
+import { PHP } from '@dinero.js/currencies'
+
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'ExpensesReportForm'
@@ -40,7 +45,7 @@ type Props = {
 }
 
 type FormData = {
-  expenseAmount: string
+  expenseAmount: Dinero<number>
   supplierTin: string
   supplierName: string
   supplierAddress: string
@@ -52,7 +57,9 @@ const schema = z.object({
   expenseAmount: z
     .string()
     .min(1, { message: 'should not be empty' })
-    .regex(/^[0-9]*$/, 'should not contain special characters'),
+    .regex(/^[0-9|.]*$/, 'should not contain special characters')
+    .transform((v) => parseFloat(v))
+    .transform((f) => dineroFromFloat({ amount: f, currency: PHP, scale: 2 })),
   supplierTin: z.string().nonempty('should not be empty'),
   supplierName: z.string().nonempty('should not be empty'),
   supplierAddress: z.string(),
@@ -70,7 +77,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const onNextPress = useCallback((data) => {
-    console.log(data)
+    console.log(toUnit(data.expenseAmount))
   }, [])
 
   const onReviewPress = useCallback(
