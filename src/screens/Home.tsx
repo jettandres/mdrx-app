@@ -8,11 +8,7 @@ import SalesReportsList from '@screens/SalesReportsList'
 import type { FC } from 'react'
 
 import { DrawerNavigationProp } from '@react-navigation/drawer'
-import {
-  HomeDrawerParamList,
-  HomeStackParamList,
-  RootStackParamList,
-} from '@routes/types'
+import { HomeDrawerParamList, HomeStackParamList } from '@routes/types'
 import { RouteProp, useNavigation } from '@react-navigation/native'
 
 import salesIcon from '@images/baseline_sell_white_24dp.png'
