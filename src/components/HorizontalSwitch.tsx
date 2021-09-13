@@ -3,20 +3,23 @@ import { Switch, Text, View } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
+import { Control, useController } from 'react-hook-form'
 
 type Props = {
   title: string
+  //eslint-disable-next-line @typescript-eslint/no-explicit-any
+  control: Control<any>
+  name: string
 }
 
 const HorizontalSwitch: FC<Props> = (props) => {
-  const { title } = props
-  const [isEnabled, setIsEnabled] = useState(true)
-  const onChange = useCallback(() => setIsEnabled((v) => !v), [])
+  const { title, control, name } = props
+  const { field } = useController({ control, name, defaultValue: false })
 
   return (
     <View style={styles.container}>
       <Text>{title}</Text>
-      <Switch value={isEnabled} onChange={onChange} />
+      <Switch value={field.value} onValueChange={field.onChange} />
     </View>
   )
 }

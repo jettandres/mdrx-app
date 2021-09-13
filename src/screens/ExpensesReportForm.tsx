@@ -51,6 +51,7 @@ type FormData = {
   supplierAddress: string
   supplierStreetBrgy: string
   supplierBuilding: string
+  isVatable: boolean
 }
 
 const schema = z.object({
@@ -65,6 +66,7 @@ const schema = z.object({
   supplierAddress: z.string(),
   supplierStreetBrgy: z.string(),
   supplierBuilding: z.string(),
+  isVatable: z.boolean(),
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -77,7 +79,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
   } = useForm<FormData>({ resolver: zodResolver(schema) })
 
   const onNextPress = useCallback((data) => {
-    console.log(toUnit(data.expenseAmount))
+    //console.log(toUnit(data.expenseAmount))
+    console.log(data)
   }, [])
 
   const onReviewPress = useCallback(
@@ -97,7 +100,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
             title="Assignment"
             subtitle={employeeData?.custodianAssignment ?? ''}
           />
-          <HorizontalSwitch title="VATable" />
+          <HorizontalSwitch
+            title="VATable"
+            name="isVatable"
+            control={control}
+          />
           <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
           <ExpensePicker />
           <HorizontalInput
