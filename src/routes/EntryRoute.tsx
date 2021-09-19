@@ -3,13 +3,13 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack'
 
 import type { FC } from 'react'
 
-import Home from '@screens/Home'
 import ReviewExpenseReport from '@screens/ReviewExpenseReport'
 import Login from '@screens/Login'
 import ExpensesReportForm from '@screens/ExpensesReportForm'
 import SalesReportForm from '@screens/SalesReportForm'
 import ReviewSalesReport from '@screens/ReviewSalesReport'
 import CapturePhoto from '@screens/CapturePhoto'
+import ConfirmPhoto from '@screens/ConfirmPhoto'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -60,6 +60,11 @@ const EntryRoute: FC = () => {
         name="CapturePhoto"
         options={{ title: 'Capture Photo' }}
         component={CapturePhoto}
+      />
+      <Stack.Screen
+        name="ConfirmPhoto"
+        options={{ title: 'Confirm Photo' }}
+        component={ConfirmPhoto}
       />
     </Stack.Navigator>
   )

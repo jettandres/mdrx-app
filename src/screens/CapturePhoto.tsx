@@ -19,7 +19,8 @@ type Props = {
   route: CapturePhotoRouteProp
 }
 
-const CapturePhoto: FC<Props> = () => {
+const CapturePhoto: FC<Props> = (props) => {
+  const { navigation } = props
   const [permission, setPermission] = useState<'authorized' | 'denied'>(
     'denied',
   )
@@ -45,10 +46,13 @@ const CapturePhoto: FC<Props> = () => {
       const photo = await camera.current?.takePhoto()
       // TODO: save photo.path
       console.log('success', photo)
+      if (photo) {
+        navigation.navigate('ConfirmPhoto', { path: photo.path })
+      }
     } catch (e) {
       console.log(e)
     }
-  }, [])
+  }, [navigation])
 
   if (noPermission || !device) {
     return (
