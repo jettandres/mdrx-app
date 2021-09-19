@@ -12,7 +12,7 @@ type ClientType = ApolloClient<NormalizedCacheObject>
 
 let apolloClient: ClientType | null = null
 
-const LOCALHOST = '10.0.2.2'
+const LOCALHOST = Config.LOCALHOST
 
 const createApolloCLient = (): ClientType => {
   const httpLink = new HttpLink({

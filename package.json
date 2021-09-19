@@ -3,7 +3,8 @@
   "version": "0.0.1",
   "private": true,
   "scripts": {
-    "android": "ENVFILE=.env react-native run-android",
+    "android-device": "ENVFILE=.env.device react-native run-android",
+    "android-emulator": "ENVFILE=.env.emulator react-native run-android",
     "ios": "ENVFILE=.env react-native run-ios",
     "start": "react-native start",
     "test": "jest",

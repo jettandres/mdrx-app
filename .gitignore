@@ -64,4 +64,4 @@ buck-out/
 *.sw*
 
 # env
-*.env
+*.env.*
