@@ -24,6 +24,10 @@ const ConfirmPhoto: FC<Props> = (props) => {
   const source = `file://${route.params.path}`
 
   const onRetry = useCallback(() => navigation.pop(), [navigation])
+  const onConfirm = useCallback(() => {
+    navigation.navigate('ExpensesReportForm', { imagePath: source })
+  }, [navigation, source])
+
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: source }} />
@@ -31,7 +35,7 @@ const ConfirmPhoto: FC<Props> = (props) => {
         <TouchableOpacity onPress={onRetry}>
           <Text style={styles.retryLabel}>RETRY</Text>
         </TouchableOpacity>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onConfirm}>
           <Text style={styles.confirmLabel}>CONFIRM</Text>
         </TouchableOpacity>
       </View>

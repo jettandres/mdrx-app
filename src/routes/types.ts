@@ -5,7 +5,7 @@ export type RootStackParamList = {
   HomeDrawer: undefined
   ReviewExpenseReport: undefined
   ReviewSalesReport: undefined
-  ExpensesReportForm: undefined
+  ExpensesReportForm: { imagePath?: string }
   SalesReportForm: undefined
   SalesCollectionForm: { collectionType: CollectionType }
   CapturePhoto: undefined

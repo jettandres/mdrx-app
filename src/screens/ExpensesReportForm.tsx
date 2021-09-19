@@ -74,7 +74,7 @@ const schema = z.object({
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
-  const { navigation } = props
+  const { navigation, route } = props
   const employeeData = useReactiveVar(employeeInfo)
   const {
     handleSubmit,
@@ -91,6 +91,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
       receiptSeriesNo: faker.datatype.uuid(),
     },
   })
+
+  // TODO: save imagePath in forms and camera roll
+  console.log('imagePath', route.params?.imagePath)
 
   useEffect(() => {
     if (isSubmitSuccessful) {
