@@ -1,5 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react'
-import { View, Text } from 'react-native'
+import React, { useState, useCallback, useEffect, useRef } from 'react'
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { Camera, useCameraDevices } from 'react-native-vision-camera'
 
@@ -34,10 +34,21 @@ const CapturePhoto: FC<Props> = () => {
     requestCameraPermission()
   }, [requestCameraPermission])
 
-  const noPermission = permission === 'denied'
+  const camera = useRef<Camera>(null)
+  const noPermission = permission !== 'authorized'
 
   const devices = useCameraDevices()
   const device = devices.back
+
+  const onTakePhoto = useCallback(async () => {
+    try {
+      const photo = await camera.current?.takePhoto()
+      // TODO: save photo.path
+      console.log('success', photo)
+    } catch (e) {
+      console.log(e)
+    }
+  }, [])
 
   if (noPermission || !device) {
     return (
@@ -47,7 +58,20 @@ const CapturePhoto: FC<Props> = () => {
     )
   }
 
-  return <Camera style={styles.container} device={device} isActive />
+  return (
+    <View style={styles.cameraContainer}>
+      <Camera
+        ref={camera}
+        style={StyleSheet.absoluteFill}
+        device={device}
+        isActive={true}
+        photo={true}
+      />
+      <TouchableOpacity onPress={onTakePhoto} style={styles.captureButtonOuter}>
+        <View style={styles.captureButtonInner} />
+      </TouchableOpacity>
+    </View>
+  )
 }
 
 const styles = EStyleSheet.create({
@@ -55,6 +79,27 @@ const styles = EStyleSheet.create({
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
+  },
+  cameraContainer: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'flex-end',
+  },
+  captureButtonOuter: {
+    height: 80,
+    width: 80,
+    borderColor: '$white',
+    borderRadius: 40,
+    borderWidth: 4,
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: '$spacingSm',
+  },
+  captureButtonInner: {
+    height: 40,
+    width: 40,
+    backgroundColor: '$blue',
+    borderRadius: 20,
   },
 })
 
