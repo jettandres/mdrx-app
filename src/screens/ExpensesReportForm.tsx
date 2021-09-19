@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
@@ -80,13 +80,27 @@ const ExpensesReportForm: FC<Props> = (props) => {
     handleSubmit,
     control,
     watch,
-    formState: { errors },
+    reset,
+    setValue,
+    formState: { errors, isSubmitSuccessful, submitCount },
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
+      expense: 'gas',
+      isVatable: true,
       receiptSeriesNo: faker.datatype.uuid(),
     },
   })
+
+  useEffect(() => {
+    if (isSubmitSuccessful) {
+      reset()
+      setValue('receiptSeriesNo', faker.datatype.uuid())
+      console.log('form reset!')
+    } else {
+      console.log(errors)
+    }
+  }, [isSubmitSuccessful, reset, submitCount, errors, setValue])
 
   const onNextPress = useCallback((data) => {
     //console.log(toUnit(data.expenseAmount))
