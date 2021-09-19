@@ -25,6 +25,7 @@ import { employeeInfo } from '@app/apollo/reactiveVariables'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
+import * as faker from 'faker'
 
 import dineroFromFloat from '@utils/dineroFromFloat'
 import { PHP } from '@dinero.js/currencies'
@@ -52,6 +53,7 @@ type FormData = {
   supplierBuilding: string
   isVatable: boolean
   expense: string
+  receiptSeriesNo: string
 }
 
 const schema = z.object({
@@ -68,6 +70,7 @@ const schema = z.object({
   supplierBuilding: z.string(),
   isVatable: z.boolean(),
   expense: z.string(),
+  receiptSeriesNo: z.string(),
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -76,8 +79,14 @@ const ExpensesReportForm: FC<Props> = (props) => {
   const {
     handleSubmit,
     control,
+    watch,
     formState: { errors },
-  } = useForm<FormData>({ resolver: zodResolver(schema) })
+  } = useForm<FormData>({
+    resolver: zodResolver(schema),
+    defaultValues: {
+      receiptSeriesNo: faker.datatype.uuid(),
+    },
+  })
 
   const onNextPress = useCallback((data) => {
     //console.log(toUnit(data.expenseAmount))
@@ -98,7 +107,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
       <View style={styles.container}>
         <View style={styles.formContainer}>
           <View style={styles.reportLabelContainer}>
-            <HorizontalLabel bold title="Report #" subtitle="12432" />
+            <HorizontalLabel
+              bold
+              title="Report #"
+              subtitle={faker.datatype.number(99999).toString()}
+            />
           </View>
           <HorizontalLabel title="Date Reported" subtitle={currentDate} />
           <HorizontalLabel
@@ -110,7 +123,10 @@ const ExpensesReportForm: FC<Props> = (props) => {
             name="isVatable"
             control={control}
           />
-          <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
+          <HorizontalLabel
+            title="Receipt Series #"
+            subtitle={watch('receiptSeriesNo').split('-')[4]}
+          />
           <ExpensePicker name="expense" control={control} />
           <HorizontalInput
             title="Expense Amount"
