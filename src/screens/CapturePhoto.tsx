@@ -1,7 +1,7 @@
 import React, { useState, useCallback, useEffect } from 'react'
 import { View, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { Camera } from 'react-native-vision-camera'
+import { Camera, useCameraDevices } from 'react-native-vision-camera'
 
 import type { FC } from 'react'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -23,6 +23,7 @@ const CapturePhoto: FC<Props> = () => {
   const [permission, setPermission] = useState<'authorized' | 'denied'>(
     'denied',
   )
+
   const requestCameraPermission = useCallback(async () => {
     const cameraPermission = await Camera.requestCameraPermission()
     setPermission(cameraPermission)
@@ -33,11 +34,20 @@ const CapturePhoto: FC<Props> = () => {
     requestCameraPermission()
   }, [requestCameraPermission])
 
-  return (
-    <View style={styles.container}>
-      <Text>{permission}</Text>
-    </View>
-  )
+  const noPermission = permission === 'denied'
+
+  const devices = useCameraDevices()
+  const device = devices.back
+
+  if (noPermission || !device) {
+    return (
+      <View style={styles.container}>
+        {noPermission && <Text>Please enable camera permission</Text>}
+      </View>
+    )
+  }
+
+  return <Camera style={styles.container} device={device} isActive />
 }
 
 const styles = EStyleSheet.create({
