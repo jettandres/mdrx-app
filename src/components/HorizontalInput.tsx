@@ -54,6 +54,7 @@ const styles = EStyleSheet.create({
     borderBottomWidth: 1,
     borderColor: '$borderColor',
     width: '45%',
+    color: '$dark',
   },
   textInputError: {
     borderBottomWidth: 1,

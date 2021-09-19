@@ -184,6 +184,7 @@ const styles = EStyleSheet.create({
     fontWeight: 'bold',
   },
   textInput: {
+    color: '$dark',
     borderWidth: 1,
     borderColor: '$borderColor',
     borderRadius: 8,
