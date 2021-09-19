@@ -37,6 +37,7 @@ const HorizontalInput: FC<Props> = (props) => {
           style={textInputStyle}
           placeholder={placeholder}
           keyboardType={keyboardType}
+          placeholderTextColor="#D0D0D0"
         />
       </View>
       {error && <Text style={styles.errorLabel}>{error.message}</Text>}
