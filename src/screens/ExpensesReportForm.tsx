@@ -26,7 +26,6 @@ import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 
-import { toUnit } from 'dinero.js'
 import dineroFromFloat from '@utils/dineroFromFloat'
 import { PHP } from '@dinero.js/currencies'
 
@@ -52,6 +51,7 @@ type FormData = {
   supplierStreetBrgy: string
   supplierBuilding: string
   isVatable: boolean
+  expense: string
 }
 
 const schema = z.object({
@@ -67,6 +67,7 @@ const schema = z.object({
   supplierStreetBrgy: z.string(),
   supplierBuilding: z.string(),
   isVatable: z.boolean(),
+  expense: z.string(),
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -106,7 +107,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
             control={control}
           />
           <HorizontalLabel title="Receipt Series #" subtitle="12E2A1" />
-          <ExpensePicker />
+          <ExpensePicker name="expense" control={control} />
           <HorizontalInput
             title="Expense Amount"
             placeholder="P100.00"
