@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text, Image, TouchableOpacity } from 'react-native'
 
 import type { FC } from 'react'
@@ -20,13 +20,15 @@ type Props = {
 }
 
 const ConfirmPhoto: FC<Props> = (props) => {
-  const { route } = props
+  const { route, navigation } = props
   const source = `file://${route.params.path}`
+
+  const onRetry = useCallback(() => navigation.pop(), [navigation])
   return (
     <View style={styles.container}>
       <Image style={styles.image} source={{ uri: source }} />
       <View style={styles.buttonsContainer}>
-        <TouchableOpacity>
+        <TouchableOpacity onPress={onRetry}>
           <Text style={styles.retryLabel}>RETRY</Text>
         </TouchableOpacity>
         <TouchableOpacity>

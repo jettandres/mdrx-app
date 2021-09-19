@@ -9,7 +9,9 @@ export type RootStackParamList = {
   SalesReportForm: undefined
   SalesCollectionForm: { collectionType: CollectionType }
   CapturePhoto: undefined
-  ConfirmPhoto: { path: string }
+  ConfirmPhoto: {
+    path: string
+  }
 }
 
 export type HomeStackParamList = {

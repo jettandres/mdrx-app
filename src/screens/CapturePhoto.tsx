@@ -7,6 +7,7 @@ import type { FC } from 'react'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
+import { useIsFocused } from '@react-navigation/native'
 
 type CapturePhotoNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -21,9 +22,15 @@ type Props = {
 
 const CapturePhoto: FC<Props> = (props) => {
   const { navigation } = props
+  const isFocused = useIsFocused()
   const [permission, setPermission] = useState<'authorized' | 'denied'>(
     'denied',
   )
+  const [isActive, setIsActive] = useState<boolean>(true)
+
+  useEffect(() => {
+    setIsActive(isFocused)
+  }, [isFocused])
 
   const requestCameraPermission = useCallback(async () => {
     const cameraPermission = await Camera.requestCameraPermission()
@@ -44,10 +51,11 @@ const CapturePhoto: FC<Props> = (props) => {
   const onTakePhoto = useCallback(async () => {
     try {
       const photo = await camera.current?.takePhoto()
-      // TODO: save photo.path
-      console.log('success', photo)
       if (photo) {
-        navigation.navigate('ConfirmPhoto', { path: photo.path })
+        setIsActive(false)
+        navigation.navigate('ConfirmPhoto', {
+          path: photo.path,
+        })
       }
     } catch (e) {
       console.log(e)
@@ -68,7 +76,7 @@ const CapturePhoto: FC<Props> = (props) => {
         ref={camera}
         style={StyleSheet.absoluteFill}
         device={device}
-        isActive={true}
+        isActive={isActive}
         photo={true}
       />
       <TouchableOpacity onPress={onTakePhoto} style={styles.captureButtonOuter}>
