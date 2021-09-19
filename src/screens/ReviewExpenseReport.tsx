@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { View, Text, SectionList } from 'react-native'
+import { View, Text, SectionList, TouchableOpacity } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -9,7 +9,6 @@ import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
 import ListHeaderComponent from '@components/ReviewReport/Expenses/ListHeaderComponent'
 import ListFooterComponent from '@components/ReviewReport/Expenses/ListFooterComponent'
 
-import { DateTime } from 'luxon'
 import * as faker from 'faker'
 
 type SectionData = {
@@ -149,6 +148,14 @@ const ReviewReport: FC = () => {
                   subtitle={item.kmReading.toString()}
                 />
               )}
+              <View style={styles.itemButtonsContainer}>
+                <TouchableOpacity>
+                  <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>
+                </TouchableOpacity>
+                <TouchableOpacity>
+                  <Text style={styles.deletePhotoLabel}>DELETE</Text>
+                </TouchableOpacity>
+              </View>
             </View>
           )
         }}
@@ -181,6 +188,20 @@ const styles = EStyleSheet.create({
   },
   listFooterTotalYearContainer: {
     marginTop: '$spacingSm',
+  },
+  itemButtonsContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '$spacingXs',
+  },
+  viewPhotoLabel: {
+    color: '$blue',
+    marginRight: '$spacingXs',
+    fontSize: '$xs',
+  },
+  deletePhotoLabel: {
+    color: '$red',
+    fontSize: '$xs',
   },
 })
 
