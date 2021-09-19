@@ -168,11 +168,11 @@ const Login: FC<Props> = (props) => {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
+    justifyContent: 'center',
+    alignItems: 'center',
     backgroundColor: '$white',
     paddingHorizontal: '$spacingSm',
-    paddingTop: '25%',
+    paddingBottom: '25%',
   },
   logo: {
     height: 50,
