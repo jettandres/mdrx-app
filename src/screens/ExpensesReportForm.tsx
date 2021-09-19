@@ -89,6 +89,10 @@ const ExpensesReportForm: FC<Props> = (props) => {
     [navigation],
   )
 
+  const onUploadButtonPress = useCallback(() => {
+    navigation.navigate('CapturePhoto')
+  }, [navigation])
+
   return (
     <ScrollView style={styles.scrollView}>
       <View style={styles.container}>
@@ -152,7 +156,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
             control={control}
             error={errors.supplierBuilding}
           />
-          <TouchableOpacity style={styles.uploadButton}>
+          <TouchableOpacity
+            onPress={onUploadButtonPress}
+            style={styles.uploadButton}>
             <>
               <Image style={styles.uploadIcon} source={uploadIcon} />
               <Text style={styles.uploadLabel}>Upload image</Text>

@@ -8,6 +8,7 @@ export type RootStackParamList = {
   ExpensesReportForm: undefined
   SalesReportForm: undefined
   SalesCollectionForm: { collectionType: CollectionType }
+  CapturePhoto: undefined
 }
 
 export type HomeStackParamList = {

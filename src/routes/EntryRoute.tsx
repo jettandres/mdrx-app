@@ -9,6 +9,7 @@ import Login from '@screens/Login'
 import ExpensesReportForm from '@screens/ExpensesReportForm'
 import SalesReportForm from '@screens/SalesReportForm'
 import ReviewSalesReport from '@screens/ReviewSalesReport'
+import CapturePhoto from '@screens/CapturePhoto'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -54,6 +55,11 @@ const EntryRoute: FC = () => {
         name="SalesCollectionForm"
         options={{ title: 'Sales Collection Form' }}
         component={SalesCollectionForm}
+      />
+      <Stack.Screen
+        name="CapturePhoto"
+        options={{ title: 'Capture Photo' }}
+        component={CapturePhoto}
       />
     </Stack.Navigator>
   )
