@@ -53,5 +53,9 @@
 	<false/>
         <key>NSCameraUsageDescription</key>
 	<string>Mdrx needs access to your Camera.</string>
+        <key>NSPhotoLibraryUsageDescription</key>
+        <string>Mdrx would like to request access to your gallery to save photos</string>
+        <key>NSPhotoLibraryAddUsageDescription</key>
+        <string>This is for saving photos of receipts</string>
 </dict>
 </plist>

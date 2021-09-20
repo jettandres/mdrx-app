@@ -14,6 +14,7 @@
     "@apollo/client": "^3.4.5",
     "@dinero.js/currencies": "^2.0.0-alpha.8",
     "@hookform/resolvers": "^2.8.0",
+    "@react-native-community/cameraroll": "^4.0.4",
     "@react-native-community/datetimepicker": "^3.5.2",
     "@react-native-picker/picker": "^1.16.5",
     "@react-navigation/drawer": "^6.1.4",

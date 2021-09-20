@@ -54,6 +54,7 @@ type FormData = {
   isVatable: boolean
   expense: string
   receiptSeriesNo: string
+  imagePath: string
 }
 
 const schema = z.object({
@@ -71,6 +72,7 @@ const schema = z.object({
   isVatable: z.boolean(),
   expense: z.string(),
   receiptSeriesNo: z.string(),
+  imagePath: z.string(),
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -92,8 +94,12 @@ const ExpensesReportForm: FC<Props> = (props) => {
     },
   })
 
-  // TODO: save imagePath in forms and camera roll
-  console.log('imagePath', route.params?.imagePath)
+  const imagePath = route.params?.imagePath
+  useEffect(() => {
+    if (imagePath) {
+      setValue('imagePath', imagePath)
+    }
+  }, [imagePath, setValue])
 
   useEffect(() => {
     if (isSubmitSuccessful) {
