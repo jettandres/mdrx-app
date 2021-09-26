@@ -36,13 +36,11 @@ const ConfirmPhoto: FC<Props> = (props) => {
 
   const checkPermission = useCallback(async () => {
     const hasPermission = await PermissionsAndroid.check(permission)
-    console.log('hasPermission', hasPermission)
     if (hasPermission) {
       setCanWrite(true)
     }
 
     const status = await PermissionsAndroid.request(permission)
-    console.log('status', status)
     setCanWrite(status === 'granted')
   }, [permission])
 

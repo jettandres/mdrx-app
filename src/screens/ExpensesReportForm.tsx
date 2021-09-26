@@ -141,16 +141,16 @@ const ExpensesReportForm: FC<Props> = (props) => {
             title="Assignment"
             subtitle={employeeData?.custodianAssignment ?? ''}
           />
-          <HorizontalSwitch
-            title="VATable"
-            name="isVatable"
-            control={control}
-          />
           <HorizontalLabel
             title="Receipt Series #"
             subtitle={watch('receiptSeriesNo').split('-')[4]}
           />
           <ExpensePicker name="expense" control={control} />
+          <HorizontalSwitch
+            title="VATable"
+            name="isVatable"
+            control={control}
+          />
           <HorizontalInput
             title="Expense Amount"
             placeholder="P100.00"
