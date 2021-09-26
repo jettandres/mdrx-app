@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import { View, Text } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import HorizontalLabel from '@components/HorizontalLabel'
@@ -11,7 +11,7 @@ import type { Control } from 'react-hook-form'
 import { useController } from 'react-hook-form'
 
 import { useQuery } from '@apollo/client'
-import { GET_EXPENSE, GetExpenseResponse } from '@app/apollo/gql/expense'
+import { QUERY_EXPENSE, QueryExpenseResponse } from '@app/apollo/gql/expense'
 import Expense from '@app/types/Expense'
 
 type Props = {
@@ -22,7 +22,7 @@ type Props = {
 
 const ExpensePicker: FC<Props> = (props) => {
   const { control, name } = props
-  const { data } = useQuery<GetExpenseResponse>(GET_EXPENSE)
+  const { data } = useQuery<QueryExpenseResponse>(QUERY_EXPENSE)
   const { field } = useController({
     control,
     name,

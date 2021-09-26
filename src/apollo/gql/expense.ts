@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
 
-const GET_EXPENSE = gql`
+const QUERY_EXPENSE = gql`
   query expense {
     expense {
       id
@@ -12,7 +12,7 @@ const GET_EXPENSE = gql`
   }
 `
 
-export interface GetExpenseResponse {
+export interface QueryExpenseResponse {
   expense: Array<Expense>
 }
 
@@ -40,4 +40,4 @@ export interface NewExpenseReportResponse {
   }
 }
 
-export { GET_EXPENSE, MUTATION_NEW_EXPENSE_REPORT }
+export { QUERY_EXPENSE, MUTATION_NEW_EXPENSE_REPORT }
