@@ -39,8 +39,8 @@ const ExpensePicker: FC<Props> = (props) => {
         <Text>Expense</Text>
         <View style={styles.pickerContainer}>
           <Picker
-            onValueChange={(v: Expense) => field.onChange(v.id)}
-            selectedValue={data.expense.find((e) => e.id === field.value)}>
+            onValueChange={(v: Expense) => field.onChange(v)}
+            selectedValue={field.value}>
             {data.expense.map((e) => (
               <Picker.Item key={e.id} label={e.name} value={e} />
             ))}
@@ -49,7 +49,7 @@ const ExpensePicker: FC<Props> = (props) => {
       </View>
       <HorizontalLabel
         title="Class"
-        subtitle={(field.value as Expense).birClass ?? ''}
+        subtitle={(field.value as Expense)?.birClass ?? ''}
       />
     </View>
   )

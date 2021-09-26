@@ -70,7 +70,14 @@ const schema = z.object({
   supplierStreetBrgy: z.string(),
   supplierBuilding: z.string(),
   isVatable: z.boolean(),
-  expense: z.string(),
+  expense: z
+    .object({
+      id: z.string(),
+      name: z.string(),
+      birClass: z.string().optional(),
+      vatable: z.boolean(),
+    })
+    .transform((o) => o.id),
   receiptSeriesNo: z.string(),
   imagePath: z.string(),
 })
@@ -88,7 +95,6 @@ const ExpensesReportForm: FC<Props> = (props) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      expense: 'gas',
       isVatable: true,
       receiptSeriesNo: faker.datatype.uuid(),
     },
