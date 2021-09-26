@@ -4,11 +4,13 @@ import Employee from '@app/types/Employee'
 const GET_EMPLOYEES = gql`
   query getEmployees($code: String!) {
     employees(where: { code: { _eq: $code } }) {
+      id
       name
       custodianAssignment: custodian_assignment
       email
       contactNumber: contact_number
       area
+      code
     }
   }
 `

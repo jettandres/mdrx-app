@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react'
+import React, { useCallback, useEffect } from 'react'
 import { FloatingAction } from 'react-native-floating-action'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
 
@@ -14,6 +14,15 @@ import { RouteProp, useNavigation } from '@react-navigation/native'
 import salesIcon from '@images/baseline_sell_white_24dp.png'
 import expenseIcon from '@images/baseline_payment_white_24dp.png'
 import { HomeRouteNavigationProp } from '@routes/HomeRoute'
+
+import { useMutation, useReactiveVar } from '@apollo/client'
+import {
+  MUTATION_NEW_EXPENSE_REPORT,
+  NewExpenseReportPayload,
+  NewExpenseReportResponse,
+} from '@app/apollo/gql/expense'
+import { DateTime } from 'luxon'
+import { employeeInfo } from '@app/apollo/reactiveVariables'
 
 type HomeNavigationProp = DrawerNavigationProp<HomeDrawerParamList, 'Home'>
 type HomeRouteProp = RouteProp<HomeDrawerParamList, 'Home'>
@@ -42,18 +51,44 @@ const fabActions = [
 
 const Home: FC<Props> = () => {
   const navigation = useNavigation<HomeRouteNavigationProp>()
+  const employeeData = useReactiveVar(employeeInfo)
+  const [newExpense, { data, error }] = useMutation<
+    NewExpenseReportResponse,
+    NewExpenseReportPayload
+  >(MUTATION_NEW_EXPENSE_REPORT)
+
+  useEffect(() => {
+    if (data) {
+      navigation.navigate('ExpensesReportForm', {
+        id: data.data.id,
+        reportNumber: data.data.reportNumber,
+      })
+    } else if (error) {
+      console.log(error)
+    }
+  }, [data, error, navigation])
 
   const onFabTap = useCallback(
-    (name?: string | undefined) => {
-      /* eslint-disable @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access */
+    async (name?: string | undefined) => {
       if (name === 'expenses') {
-        navigation.navigate('ExpensesReportForm')
+        const epochTime: string = DateTime.now().toSeconds().toFixed(0)
+        const employeeId = employeeData?.id ?? ''
+        const employeeCode: string = employeeData?.code ?? ''
+        const reportNumber = `${employeeCode}-${epochTime}`
+        const payload: NewExpenseReportPayload = {
+          expenseReport: {
+            status: 'DRAFT',
+            employee_id: employeeId,
+            report_number: reportNumber,
+          },
+        }
+
+        await newExpense({ variables: payload })
       } else if (name === 'sales') {
         navigation.navigate('SalesReportForm')
       }
-      /* eslint-enable */
     },
-    [navigation],
+    [employeeData?.code, employeeData?.id, navigation, newExpense],
   )
 
   return (

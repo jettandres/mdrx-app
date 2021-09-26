@@ -16,6 +16,8 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import { RouteProp } from '@react-navigation/native'
 import { RootStackParamList } from '@routes/types'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import { useReactiveVar } from '@apollo/client'
+import { viewedExpenseReport } from '@app/apollo/reactiveVariables'
 
 type ConfirmPhotoNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -30,6 +32,7 @@ type Props = {
 
 const ConfirmPhoto: FC<Props> = (props) => {
   const { route, navigation } = props
+  const expenseReportDraft = useReactiveVar(viewedExpenseReport)
   const source = `file://${route.params.path}`
   const permission = PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE
   const [canWrite, setCanWrite] = useState<boolean>(false)
@@ -55,12 +58,25 @@ const ConfirmPhoto: FC<Props> = (props) => {
   const onRetry = useCallback(() => navigation.pop(), [navigation])
   const onConfirm = useCallback(async () => {
     if (canWrite) {
+      const id = expenseReportDraft?.id ?? ''
+      const reportNumber = expenseReportDraft?.reportNumber ?? ''
       await CameraRoll.save(source, { type: 'photo' })
-      navigation.navigate('ExpensesReportForm', { imagePath: source })
+      navigation.navigate('ExpensesReportForm', {
+        imagePath: source,
+        id,
+        reportNumber,
+      })
     } else {
       await checkPermission()
     }
-  }, [canWrite, checkPermission, navigation, source])
+  }, [
+    canWrite,
+    checkPermission,
+    expenseReportDraft?.id,
+    expenseReportDraft?.reportNumber,
+    navigation,
+    source,
+  ])
 
   return (
     <View style={styles.container}>

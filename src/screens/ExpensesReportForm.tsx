@@ -20,7 +20,10 @@ import uploadIcon from '@images/outline_add_a_photo_black_24dp.png'
 import { currentDate } from '@utils/date'
 
 import { useReactiveVar } from '@apollo/client'
-import { employeeInfo } from '@app/apollo/reactiveVariables'
+import {
+  employeeInfo,
+  viewedExpenseReport,
+} from '@app/apollo/reactiveVariables'
 
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
@@ -45,6 +48,8 @@ type Props = {
 }
 
 type FormData = {
+  id: string
+  reportNumber: string
   expenseAmount: Dinero<number>
   supplierTin: string
   supplierName: string
@@ -58,6 +63,8 @@ type FormData = {
 }
 
 const schema = z.object({
+  id: z.string(),
+  reportNumber: z.string(),
   expenseAmount: z
     .string()
     .min(1, { message: 'should not be empty' })
@@ -95,6 +102,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
+      id: route.params.id,
+      reportNumber: route.params.reportNumber,
       isVatable: true,
       receiptSeriesNo: faker.datatype.uuid(),
     },
@@ -128,8 +137,12 @@ const ExpensesReportForm: FC<Props> = (props) => {
   )
 
   const onUploadButtonPress = useCallback(() => {
+    viewedExpenseReport({
+      id: route.params.id,
+      reportNumber: route.params.reportNumber,
+    })
     navigation.navigate('CapturePhoto')
-  }, [navigation])
+  }, [navigation, route.params.id, route.params.reportNumber])
 
   return (
     <ScrollView style={styles.scrollView}>
@@ -139,7 +152,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
             <HorizontalLabel
               bold
               title="Report #"
-              subtitle={faker.datatype.number(99999).toString()}
+              subtitle={route.params.reportNumber}
             />
           </View>
           <HorizontalLabel title="Date Reported" subtitle={currentDate} />
