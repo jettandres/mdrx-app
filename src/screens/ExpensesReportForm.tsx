@@ -3,7 +3,7 @@ import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
-import type { Dinero } from 'dinero.js'
+import { Dinero, toSnapshot } from 'dinero.js'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@routes/types'
@@ -19,7 +19,7 @@ import uploadIcon from '@images/outline_add_a_photo_black_24dp.png'
 
 import { currentDate } from '@utils/date'
 
-import { useReactiveVar } from '@apollo/client'
+import { useReactiveVar, useMutation } from '@apollo/client'
 import {
   employeeInfo,
   viewedExpenseReport,
@@ -32,6 +32,11 @@ import * as faker from 'faker'
 
 import dineroFromFloat from '@utils/dineroFromFloat'
 import { PHP } from '@dinero.js/currencies'
+import {
+  NewExpenseReceiptPayload,
+  NewExpenseReceiptResponse,
+  MUTATION_NEW_EXPENSE_RECEIPT,
+} from '@app/apollo/gql/expense'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -109,6 +114,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
     },
   })
 
+  const [insertExpenseReceipt, { data, loading, error }] = useMutation<
+    NewExpenseReceiptResponse,
+    NewExpenseReceiptPayload
+  >(MUTATION_NEW_EXPENSE_RECEIPT)
+
   const imagePath = route.params?.imagePath
   useEffect(() => {
     if (imagePath) {
@@ -117,19 +127,46 @@ const ExpensesReportForm: FC<Props> = (props) => {
   }, [imagePath, setValue])
 
   useEffect(() => {
-    if (isSubmitSuccessful) {
+    if (isSubmitSuccessful && data && !loading) {
       reset()
       setValue('receiptSeriesNo', faker.datatype.uuid())
       console.log('form reset!')
     } else {
-      console.log(errors)
+      console.log(errors, error)
     }
-  }, [isSubmitSuccessful, reset, submitCount, errors, setValue])
+  }, [
+    isSubmitSuccessful,
+    reset,
+    submitCount,
+    errors,
+    setValue,
+    data,
+    error,
+    loading,
+  ])
 
-  const onNextPress = useCallback((data) => {
-    //console.log(toUnit(data.expenseAmount))
-    console.log(data)
-  }, [])
+  const onNextPress = useCallback(
+    async (formData: FormData) => {
+      const payload: NewExpenseReceiptPayload = {
+        receipt: {
+          amount: toSnapshot(formData.expenseAmount),
+          expense_id: formData.expense,
+          expense_report_id: formData.id,
+          image_url: formData.imagePath,
+          supplier: {
+            tin: formData.supplierTin,
+            name: formData.supplierName,
+            address: formData.supplierAddress,
+            streetBrgy: formData.supplierStreetBrgy,
+            bldg: formData.supplierBuilding,
+          },
+        },
+      }
+
+      await insertExpenseReceipt({ variables: payload })
+    },
+    [insertExpenseReceipt],
+  )
 
   const onReviewPress = useCallback(
     () => navigation.navigate('ReviewExpenseReport'),

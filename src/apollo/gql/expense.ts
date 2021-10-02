@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
 import ExpenseReport from '@app/types/ExpenseReport'
+import { DineroSnapshot } from 'dinero.js'
 
 const QUERY_EXPENSE = gql`
   query expense {
@@ -62,4 +63,43 @@ export interface QueryExpenseReportsPayload {
   employeeId: string
 }
 
-export { QUERY_EXPENSE, MUTATION_NEW_EXPENSE_REPORT, QUERY_EXPENSE_REPORTS }
+const MUTATION_NEW_EXPENSE_RECEIPT = gql`
+  mutation NewExpenseReceipt($receipt: receipts_insert_input!) {
+    data: insert_receipts_one(object: $receipt) {
+      id
+      createdAt: created_at
+      expenseReportId: expense_report_id
+    }
+  }
+`
+
+export interface NewExpenseReceiptResponse {
+  data: {
+    id: string
+    createdAt: string
+    expenseReportId: string
+  }
+}
+
+export interface NewExpenseReceiptPayload {
+  receipt: {
+    amount: DineroSnapshot<number>
+    expense_id: string
+    expense_report_id: string
+    image_url: string
+    supplier: {
+      tin: string
+      name: string
+      address: string
+      streetBrgy: string
+      bldg: string
+    }
+  }
+}
+
+export {
+  QUERY_EXPENSE,
+  MUTATION_NEW_EXPENSE_REPORT,
+  QUERY_EXPENSE_REPORTS,
+  MUTATION_NEW_EXPENSE_RECEIPT,
+}
