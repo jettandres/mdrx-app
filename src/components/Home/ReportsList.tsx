@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback } from 'react'
 import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
@@ -6,6 +6,8 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import type { FC } from 'react'
 import ExpenseReport from '@app/types/ExpenseReport'
 import { DateTime } from 'luxon'
+import { useNavigation } from '@react-navigation/native'
+import { HomeRouteNavigationProp } from '@routes/HomeRoute'
 
 type Props = {
   data: Array<ExpenseReport>
@@ -13,13 +15,22 @@ type Props = {
 
 const ReportsList: FC<Props> = (props) => {
   const { data } = props
+  const navigation = useNavigation<HomeRouteNavigationProp>()
+
+  const onItemPress = useCallback(
+    (id: string, reportNumber: string) =>
+      navigation.navigate('ExpensesReportForm', { id, reportNumber }),
+    [navigation],
+  )
 
   return (
     <FlatList
       style={styles.flatList}
       data={data}
-      renderItem={({ item: { reportNumber, createdAt, status } }) => (
-        <TouchableOpacity style={styles.itemContainer}>
+      renderItem={({ item: { id, reportNumber, createdAt, status } }) => (
+        <TouchableOpacity
+          style={styles.itemContainer}
+          onPress={() => onItemPress(id, reportNumber)}>
           <Text style={styles.titleLabel}>Report {reportNumber}</Text>
           <View style={styles.subtitleContainer}>
             <Text style={styles.dateLabel}>

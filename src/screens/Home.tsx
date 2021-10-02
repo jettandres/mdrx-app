@@ -20,6 +20,7 @@ import {
   MUTATION_NEW_EXPENSE_REPORT,
   NewExpenseReportPayload,
   NewExpenseReportResponse,
+  QUERY_EXPENSE_REPORTS,
 } from '@app/apollo/gql/expense'
 import { DateTime } from 'luxon'
 import { employeeInfo } from '@app/apollo/reactiveVariables'
@@ -83,7 +84,17 @@ const Home: FC<Props> = () => {
           },
         }
 
-        await newExpense({ variables: payload })
+        await newExpense({
+          variables: payload,
+          refetchQueries: [
+            {
+              query: QUERY_EXPENSE_REPORTS,
+              variables: {
+                employeeId: employeeId,
+              },
+            },
+          ],
+        })
       } else if (name === 'sales') {
         navigation.navigate('SalesReportForm')
       }
