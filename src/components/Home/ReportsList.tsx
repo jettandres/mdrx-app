@@ -4,54 +4,36 @@ import { View, Text, FlatList, TouchableOpacity } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
+import ExpenseReport from '@app/types/ExpenseReport'
+import { DateTime } from 'luxon'
 
 type Props = {
-  reportType: 'expenses' | 'sales'
+  data: Array<ExpenseReport>
 }
-
-type ReportData = {
-  reportNumber: string
-  dateReported: string
-  submitted: boolean
-}
-
-const DATA: Array<ReportData> = [
-  {
-    reportNumber: '#12432',
-    dateReported: 'August 12, 2021',
-    submitted: true,
-  },
-  {
-    reportNumber: '#12433',
-    dateReported: 'August 13, 2021',
-    submitted: false,
-  },
-  {
-    reportNumber: '#12434',
-    dateReported: 'August 14, 2021',
-    submitted: true,
-  },
-]
 
 const ReportsList: FC<Props> = (props) => {
-  const { reportType } = props
+  const { data } = props
 
   return (
     <FlatList
       style={styles.flatList}
-      data={DATA}
-      renderItem={({ item: { reportNumber, dateReported, submitted } }) => (
+      data={data}
+      renderItem={({ item: { reportNumber, createdAt, status } }) => (
         <TouchableOpacity style={styles.itemContainer}>
           <Text style={styles.titleLabel}>Report {reportNumber}</Text>
           <View style={styles.subtitleContainer}>
-            <Text style={styles.dateLabel}>{dateReported}</Text>
-            {submitted && <Text style={styles.submittedLabel}>Submitted</Text>}
-            {!submitted && <Text style={styles.draftLabel}>Draft</Text>}
+            <Text style={styles.dateLabel}>
+              {DateTime.fromISO(createdAt).toLocaleString(
+                DateTime.DATETIME_MED,
+              )}
+            </Text>
+            {status === 'SUBMITTED' && (
+              <Text style={styles.submittedLabel}>Submitted</Text>
+            )}
+            {status === 'DRAFT' && <Text style={styles.draftLabel}>Draft</Text>}
           </View>
         </TouchableOpacity>
       )}
-      ItemSeparatorComponent={() => <View style={styles.divider} />}
-      keyExtractor={({ reportNumber }) => reportNumber}
     />
   )
 }
@@ -59,6 +41,7 @@ const ReportsList: FC<Props> = (props) => {
 const styles = EStyleSheet.create({
   flatList: {
     backgroundColor: '$white',
+    height: '100%',
   },
   itemContainer: {
     padding: '$spacingSm',

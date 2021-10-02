@@ -1,5 +1,6 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
+import ExpenseReport from '@app/types/ExpenseReport'
 
 const QUERY_EXPENSE = gql`
   query expense {
@@ -40,4 +41,25 @@ export interface NewExpenseReportResponse {
   }
 }
 
-export { QUERY_EXPENSE, MUTATION_NEW_EXPENSE_REPORT }
+const QUERY_EXPENSE_REPORTS = gql`
+  query ExpenseReports($employeeId: uuid) {
+    expenseReports: expense_report(
+      where: { employee_id: { _eq: $employeeId } }
+    ) {
+      id
+      reportNumber: report_number
+      createdAt: created_at
+      status
+    }
+  }
+`
+
+export interface QueryExpenseReportsResponse {
+  expenseReports: Array<ExpenseReport>
+}
+
+export interface QueryExpenseReportsPayload {
+  employeeId: string
+}
+
+export { QUERY_EXPENSE, MUTATION_NEW_EXPENSE_REPORT, QUERY_EXPENSE_REPORTS }

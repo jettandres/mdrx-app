@@ -7,6 +7,7 @@ import { RouteProp } from '@react-navigation/native'
 import type { HomeStackParamList } from '../routes/types'
 
 import type { FC } from 'react'
+import { ActivityIndicator } from 'react-native'
 
 type ReportsListNavigationProp = MaterialTopTabNavigationProp<
   HomeStackParamList,
@@ -21,7 +22,7 @@ type Props = {
 }
 
 const SalesReportsList: FC<Props> = () => {
-  return <ReportsList reportType="sales" />
+  return <ActivityIndicator animating color="#007aff" />
 }
 
 export default SalesReportsList
