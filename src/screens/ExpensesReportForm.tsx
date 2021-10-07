@@ -91,7 +91,7 @@ const schema = z.object({
     })
     .transform((o) => o.id),
   receiptSeriesNo: z.string(),
-  imagePath: z.string(),
+  imagePath: z.string().optional(), //TODO: make required
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -152,7 +152,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
           amount: toSnapshot(formData.expenseAmount),
           expense_id: formData.expense,
           expense_report_id: formData.id,
-          image_url: formData.imagePath,
+          image_url: formData.imagePath ?? 'Emulator', //TODO: remove default value
           supplier: {
             tin: formData.supplierTin,
             name: formData.supplierName,
