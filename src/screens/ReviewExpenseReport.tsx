@@ -1,5 +1,11 @@
 import React, { useCallback, useState } from 'react'
-import { View, Text, SectionList, TouchableOpacity } from 'react-native'
+import {
+  View,
+  Text,
+  SectionList,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -10,6 +16,31 @@ import ListHeaderComponent from '@components/ReviewReport/Expenses/ListHeaderCom
 import ListFooterComponent from '@components/ReviewReport/Expenses/ListFooterComponent'
 
 import * as faker from 'faker'
+import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+
+import type { RootStackParamList } from '@routes/types'
+import { RouteProp } from '@react-navigation/core'
+import { useQuery } from '@apollo/client'
+import {
+  QueryExpenseReportDetailsPayload,
+  QueryExpenseReportDetailsResponse,
+  QUERY_EXPENSE_REPORT_DETAILS,
+} from '@app/apollo/gql/expense'
+
+type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
+  RootStackParamList,
+  'ReviewExpenseReport'
+>
+
+type ReviewExpenseReportRouteProp = RouteProp<
+  RootStackParamList,
+  'ReviewExpenseReport'
+>
+
+type Props = {
+  navigation: ReviewExpenseReportNavigationProp
+  route: ReviewExpenseReportRouteProp
+}
 
 type SectionData = {
   seriesNo: number
@@ -99,8 +130,20 @@ const DATA: Array<Sections> = [
   },
 ]
 
-const ReviewReport: FC = () => {
+const ReviewReport: FC<Props> = (props) => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
+  const { route } = props
+  const expenseReportId = route.params.expenseReportId
+
+  const { data, loading, error } = useQuery<
+    QueryExpenseReportDetailsResponse,
+    QueryExpenseReportDetailsPayload
+  >(QUERY_EXPENSE_REPORT_DETAILS, {
+    variables: {
+      expenseReportId,
+    },
+  })
+
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
       const alreadyCollapsed = collapsedList.find((v) => v === sectionTitle)
@@ -114,12 +157,22 @@ const ReviewReport: FC = () => {
 
   const onSubmitReport = useCallback(() => {}, [])
 
+  if (!data || loading) {
+    return <ActivityIndicator animating color="#007aff" />
+  }
+
+  console.log('DATA', data)
+
+  const { createdAt } = data.expenseReport
+
   return (
     <View style={styles.container}>
       <SectionList
         sections={DATA}
         keyExtractor={(item, index) => item.seriesNo.toString()}
-        ListHeaderComponent={<ListHeaderComponent />}
+        ListHeaderComponent={
+          <ListHeaderComponent reportCreatedAt={createdAt} />
+        }
         renderSectionHeader={({ section: { title } }) => (
           <SectionHeader
             onPress={onSectionHeaderPress}

@@ -97,6 +97,8 @@ const schema = z.object({
 const ExpensesReportForm: FC<Props> = (props) => {
   const { navigation, route } = props
   const employeeData = useReactiveVar(employeeInfo)
+  const expenseReportId = route.params.id
+
   const {
     handleSubmit,
     control,
@@ -107,7 +109,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
   } = useForm<FormData>({
     resolver: zodResolver(schema),
     defaultValues: {
-      id: route.params.id,
+      id: expenseReportId,
       reportNumber: route.params.reportNumber,
       isVatable: true,
       receiptSeriesNo: faker.datatype.uuid(),
@@ -169,8 +171,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
   )
 
   const onReviewPress = useCallback(
-    () => navigation.navigate('ReviewExpenseReport'),
-    [navigation],
+    () => navigation.navigate('ReviewExpenseReport', { expenseReportId }),
+    [expenseReportId, navigation],
   )
 
   const onUploadButtonPress = useCallback(() => {

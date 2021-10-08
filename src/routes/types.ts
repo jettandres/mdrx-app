@@ -3,7 +3,7 @@ import CollectionType from '@app/types/CollectionType'
 export type RootStackParamList = {
   Login: undefined
   HomeDrawer: undefined
-  ReviewExpenseReport: undefined
+  ReviewExpenseReport: { expenseReportId: string }
   ReviewSalesReport: undefined
   ExpensesReportForm: { imagePath?: string; id: string; reportNumber: string }
   SalesReportForm: undefined
