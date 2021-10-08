@@ -1,7 +1,7 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
 import ExpenseReport from '@app/types/ExpenseReport'
-import ExpenseReportDetailedReceipt from '@app/types/ExpenseReportDetailedReceipt'
+import ExpenseReportDetails from '@app/types/ExpenseReportDetails'
 import { DineroSnapshot } from 'dinero.js'
 
 const QUERY_EXPENSE = gql`
@@ -115,13 +115,7 @@ export interface QueryExpenseReportDetailsPayload {
 }
 
 export interface QueryExpenseReportDetailsResponse {
-  expenseReport: {
-    id: string
-    createdAt: string
-    summary: {
-      data: Array<ExpenseReportDetailedReceipt>
-    }[]
-  }
+  expenseReport: ExpenseReportDetails
 }
 
 export {

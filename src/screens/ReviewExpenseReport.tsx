@@ -7,8 +7,11 @@ import {
   ActivityIndicator,
 } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
+import { toFormat, toUnit, dinero } from 'dinero.js'
 
 import type { FC } from 'react'
+import type ExpenseReportDetailedReceipt from '@app/types/ExpenseReportDetailedReceipt'
+import type Receipt from '@app/types/Receipt'
 
 import HorizontalLabel from '@components/HorizontalLabel'
 import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
@@ -43,7 +46,7 @@ type Props = {
 }
 
 type SectionData = {
-  seriesNo: number
+  seriesNo: string
   supplierName: string
   supplierTin: string
   netAmount: number
@@ -58,84 +61,12 @@ type Sections = {
   data: Array<SectionData>
 }
 
-const DATA: Array<Sections> = [
-  {
-    title: {
-      label: 'Office Supplies',
-      total: 'P600.00',
-    },
-    data: [
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 357,
-      },
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 178,
-      },
-    ],
-  },
-  {
-    title: {
-      label: 'Gas',
-      total: 'P2,500.00',
-    },
-    data: [
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 1339.29,
-        kmReading: 15000,
-      },
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 446.43,
-        kmReading: 15300,
-      },
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 446.43,
-        kmReading: 15480,
-      },
-    ],
-  },
-  {
-    title: {
-      label: 'Representation Meals',
-      total: 'P1,900.00',
-    },
-    data: [
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 535.71,
-      },
-      {
-        seriesNo: faker.datatype.number(1000),
-        supplierName: faker.company.companyName(),
-        supplierTin: faker.datatype.number().toString(),
-        netAmount: 714.29,
-      },
-    ],
-  },
-]
-
 const ReviewReport: FC<Props> = (props) => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
   const { route } = props
   const expenseReportId = route.params.expenseReportId
 
-  const { data, loading, error } = useQuery<
+  const { data, loading } = useQuery<
     QueryExpenseReportDetailsResponse,
     QueryExpenseReportDetailsPayload
   >(QUERY_EXPENSE_REPORT_DETAILS, {
@@ -164,12 +95,36 @@ const ReviewReport: FC<Props> = (props) => {
   console.log('DATA', data)
 
   const { createdAt } = data.expenseReport
+  const mappedData = data.expenseReport.summary[0].data.map(
+    (erdr: ExpenseReportDetailedReceipt) => {
+      const section: Sections = {
+        title: {
+          label: erdr.name,
+          total: toFormat(dinero(erdr.total.month), ({ amount }) =>
+            amount.toString(),
+          ),
+        },
+        data: erdr.receipts.map((rs: Receipt) => {
+          const d: SectionData = {
+            seriesNo: rs.id,
+            supplierName: rs.supplier.name,
+            supplierTin: rs.supplier.tin,
+            netAmount: toUnit(dinero(rs.amount)),
+          }
+
+          return d
+        }),
+      }
+
+      return section
+    },
+  )
 
   return (
     <View style={styles.container}>
       <SectionList
-        sections={DATA}
-        keyExtractor={(item, index) => item.seriesNo.toString()}
+        sections={mappedData}
+        keyExtractor={(item) => item.seriesNo}
         ListHeaderComponent={
           <ListHeaderComponent reportCreatedAt={createdAt} />
         }

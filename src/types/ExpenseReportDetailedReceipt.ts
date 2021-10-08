@@ -1,24 +1,12 @@
-import { Dinero } from 'dinero.js'
-
-type Receipt = {
-  id: string
-  amount: Dinero<number>
-  imageUrl: string
-  supplier: {
-    tin: string
-    bldg: string
-    name: string
-    address: string
-    streetBrgy: string
-  }
-}
+import { DineroOptions } from 'dinero.js'
+import Receipt from './Receipt'
 
 type ExpenseReportDetailedReceipt = {
   id: string
   name: string
   total: {
-    ytd: Dinero<number>
-    month: Dinero<number>
+    ytd: DineroOptions<number>
+    month: DineroOptions<number>
   }
   receipts: Array<Receipt>
 }
