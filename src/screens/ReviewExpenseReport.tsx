@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   View,
   Text,
@@ -8,28 +8,19 @@ import {
 } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { toFormat, toUnit, dinero } from 'dinero.js'
+import { toFormat, dinero } from 'dinero.js'
 
 import type { FC } from 'react'
-import type ExpenseReportDetailedReceipt from '@app/types/ExpenseReportDetailedReceipt'
-import type Receipt from '@app/types/Receipt'
 
 import HorizontalLabel from '@components/HorizontalLabel'
 import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
 import ListHeaderComponent from '@components/ReviewReport/Expenses/ListHeaderComponent'
 import ListFooterComponent from '@components/ReviewReport/Expenses/ListFooterComponent'
 
-import * as faker from 'faker'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import type { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
-import { useQuery } from '@apollo/client'
-import {
-  QueryExpenseReportDetailsPayload,
-  QueryExpenseReportDetailsResponse,
-  QUERY_EXPENSE_REPORT_DETAILS,
-} from '@app/apollo/gql/expense'
 import computeExpenseReport from 'src/services/computeExpenseReport'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<

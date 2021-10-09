@@ -1,7 +1,6 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
 import ExpenseReport from '@app/types/ExpenseReport'
-import ExpenseReportDetails from '@app/types/ExpenseReportDetails'
 import { DineroSnapshot } from 'dinero.js'
 
 const QUERY_EXPENSE = gql`
@@ -98,30 +97,9 @@ export interface NewExpenseReceiptPayload {
   }
 }
 
-const QUERY_EXPENSE_REPORT_DETAILS = gql`
-  query ExpenseReportDetails($expenseReportId: uuid!) {
-    expenseReport: expense_report_by_pk(id: $expenseReportId) {
-      id
-      createdAt: created_at
-      summary {
-        data
-      }
-    }
-  }
-`
-
-export interface QueryExpenseReportDetailsPayload {
-  expenseReportId: string
-}
-
-export interface QueryExpenseReportDetailsResponse {
-  expenseReport: ExpenseReportDetails
-}
-
 export {
   QUERY_EXPENSE,
   MUTATION_NEW_EXPENSE_REPORT,
   QUERY_EXPENSE_REPORTS,
   MUTATION_NEW_EXPENSE_RECEIPT,
-  QUERY_EXPENSE_REPORT_DETAILS,
 }
