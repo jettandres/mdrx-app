@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import {
   View,
   Text,
@@ -6,6 +6,7 @@ import {
   TouchableOpacity,
   ActivityIndicator,
 } from 'react-native'
+import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { toFormat, toUnit, dinero } from 'dinero.js'
 
@@ -29,6 +30,7 @@ import {
   QueryExpenseReportDetailsResponse,
   QUERY_EXPENSE_REPORT_DETAILS,
 } from '@app/apollo/gql/expense'
+import computeExpenseReport from 'src/services/computeExpenseReport'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -66,14 +68,7 @@ const ReviewReport: FC<Props> = (props) => {
   const { route } = props
   const expenseReportId = route.params.expenseReportId
 
-  const { data, loading } = useQuery<
-    QueryExpenseReportDetailsResponse,
-    QueryExpenseReportDetailsPayload
-  >(QUERY_EXPENSE_REPORT_DETAILS, {
-    variables: {
-      expenseReportId,
-    },
-  })
+  const asyncReport = useAsync(computeExpenseReport, [expenseReportId])
 
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
@@ -88,43 +83,18 @@ const ReviewReport: FC<Props> = (props) => {
 
   const onSubmitReport = useCallback(() => {}, [])
 
-  if (!data || loading) {
+  if (asyncReport.loading && !asyncReport.result) {
     return <ActivityIndicator animating color="#007aff" />
   }
 
-  console.log('DATA', data)
-
-  const { createdAt } = data.expenseReport
-  const mappedData = data.expenseReport.summary[0].data.map(
-    (erdr: ExpenseReportDetailedReceipt) => {
-      const section: Sections = {
-        title: {
-          label: erdr.name,
-          total: toFormat(dinero(erdr.total.month), ({ amount }) =>
-            amount.toString(),
-          ),
-        },
-        data: erdr.receipts.map((rs: Receipt) => {
-          const d: SectionData = {
-            seriesNo: rs.id,
-            supplierName: rs.supplier.name,
-            supplierTin: rs.supplier.tin,
-            netAmount: toUnit(dinero(rs.amount)),
-          }
-
-          return d
-        }),
-      }
-
-      return section
-    },
-  )
+  const data = asyncReport.result?.reportBody ?? []
+  const createdAt = asyncReport.result?.reportHeader.createdAt as string
 
   return (
     <View style={styles.container}>
       <SectionList
-        sections={mappedData}
-        keyExtractor={(item) => item.seriesNo}
+        sections={data}
+        keyExtractor={(item) => item.id}
         ListHeaderComponent={
           <ListHeaderComponent reportCreatedAt={createdAt} />
         }
@@ -132,7 +102,10 @@ const ReviewReport: FC<Props> = (props) => {
           <SectionHeader
             onPress={onSectionHeaderPress}
             title={title.label}
-            subtitle={title.total}
+            subtitle={toFormat(
+              dinero(title.total),
+              ({ amount }) => `P${amount}`,
+            )}
           />
         )}
         renderItem={({ item, section }) => {
@@ -148,7 +121,10 @@ const ReviewReport: FC<Props> = (props) => {
               <Text style={styles.sectionItemTitle}>{item.supplierName}</Text>
               <HorizontalLabel
                 title={`TIN # ${item.supplierTin}`}
-                subtitle={`P${item.netAmount.toFixed(2)}`}
+                subtitle={toFormat(
+                  dinero(item.netAmount),
+                  ({ amount }) => `P${amount}`,
+                )}
               />
               {item.kmReading && (
                 <HorizontalLabel
