@@ -26,7 +26,7 @@ type YearToDateData = {
   amount: DineroSnapshot<number>
 }
 
-type ReportFooter = {
+export type ReportFooter = {
   totalReplenishable: DineroSnapshot<number>
   yearToDate: Array<YearToDateData>
   totalYearToDate: DineroSnapshot<number>

@@ -4,17 +4,29 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 import HorizontalLabel from '@components/HorizontalLabel'
 
 import type { FC } from 'react'
+import type { ReportFooter } from '@app/services/computeExpenseReport'
+import { dinero, toFormat } from 'dinero.js'
 
 type Props = {
   onSubmit: () => void
+  reportFooter: ReportFooter
 }
 
 const ListFooterComponent: FC<Props> = (props) => {
-  const { onSubmit } = props
+  const {
+    onSubmit,
+    reportFooter: { totalReplenishable, yearToDate, totalYearToDate },
+  } = props
 
   return (
     <View style={styles.listFooter}>
-      <HorizontalLabel title="Total Replenishable" subtitle="P5,000.00" />
+      <HorizontalLabel
+        title="Total Replenishable"
+        subtitle={toFormat(
+          dinero(totalReplenishable),
+          ({ amount }) => `P${amount}`,
+        )}
+      />
       <View style={styles.kmReadingContainer}>
         <Text style={styles.kmReadingTitle}>Total Km Reading Consumption</Text>
         <Text style={styles.kmReadingSubtitle}>480.0</Text>
@@ -23,12 +35,23 @@ const ListFooterComponent: FC<Props> = (props) => {
       </View>
 
       <Text style={styles.listFooterTitle}>Year to Date</Text>
-      <HorizontalLabel title="Office Supplies" subtitle="P15,000.00" />
-      <HorizontalLabel title="Gas" subtitle="P10,000.00" />
-      <HorizontalLabel title="Representation Meals" subtitle="P25,000.00" />
+      {yearToDate.map((ytd) => (
+        <HorizontalLabel
+          key={ytd.id}
+          title={ytd.name}
+          subtitle={toFormat(dinero(ytd.amount), ({ amount }) => `P${amount}`)}
+        />
+      ))}
 
       <View style={styles.listFooterTotalYearContainer}>
-        <HorizontalLabel title="Total Year" subtitle="P50,000.00" bold />
+        <HorizontalLabel
+          title="Total Year"
+          subtitle={toFormat(
+            dinero(totalYearToDate),
+            ({ amount }) => `P${amount}`,
+          )}
+          bold
+        />
       </View>
 
       <Button onPress={onSubmit} title="Submit Report" />

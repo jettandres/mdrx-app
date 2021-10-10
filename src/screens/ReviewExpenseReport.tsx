@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { toFormat, dinero } from 'dinero.js'
+import { toFormat, dinero, DineroSnapshot } from 'dinero.js'
 
 import type { FC } from 'react'
 
@@ -21,7 +21,9 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 import type { RootStackParamList } from '@routes/types'
 import { RouteProp } from '@react-navigation/core'
-import computeExpenseReport from 'src/services/computeExpenseReport'
+import computeExpenseReport, {
+  ReportFooter,
+} from '@app/services/computeExpenseReport'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -36,22 +38,6 @@ type ReviewExpenseReportRouteProp = RouteProp<
 type Props = {
   navigation: ReviewExpenseReportNavigationProp
   route: ReviewExpenseReportRouteProp
-}
-
-type SectionData = {
-  seriesNo: string
-  supplierName: string
-  supplierTin: string
-  netAmount: number
-  kmReading?: number
-}
-
-type Sections = {
-  title: {
-    label: string
-    total: string
-  }
-  data: Array<SectionData>
 }
 
 const ReviewReport: FC<Props> = (props) => {
@@ -80,6 +66,8 @@ const ReviewReport: FC<Props> = (props) => {
 
   const data = asyncReport.result?.reportBody ?? []
   const createdAt = asyncReport.result?.reportHeader.createdAt as string
+
+  const reportFooter = asyncReport.result?.reportFooter as ReportFooter
 
   return (
     <View style={styles.container}>
@@ -134,7 +122,12 @@ const ReviewReport: FC<Props> = (props) => {
             </View>
           )
         }}
-        ListFooterComponent={<ListFooterComponent onSubmit={onSubmitReport} />}
+        ListFooterComponent={
+          <ListFooterComponent
+            reportFooter={reportFooter}
+            onSubmit={onSubmitReport}
+          />
+        }
       />
     </View>
   )
