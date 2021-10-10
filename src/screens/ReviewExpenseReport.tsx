@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { toFormat, dinero, DineroSnapshot } from 'dinero.js'
+import { dinero } from 'dinero.js'
 
 import type { FC } from 'react'
 
@@ -24,6 +24,7 @@ import { RouteProp } from '@react-navigation/core'
 import computeExpenseReport, {
   ReportFooter,
 } from '@app/services/computeExpenseReport'
+import formatCurrency from '@utils/formatCurrency'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -81,10 +82,7 @@ const ReviewReport: FC<Props> = (props) => {
           <SectionHeader
             onPress={onSectionHeaderPress}
             title={title.label}
-            subtitle={toFormat(
-              dinero(title.total),
-              ({ amount }) => `P${amount}`,
-            )}
+            subtitle={formatCurrency(dinero(title.total))}
           />
         )}
         renderItem={({ item, section }) => {
@@ -100,10 +98,7 @@ const ReviewReport: FC<Props> = (props) => {
               <Text style={styles.sectionItemTitle}>{item.supplierName}</Text>
               <HorizontalLabel
                 title={`TIN # ${item.supplierTin}`}
-                subtitle={toFormat(
-                  dinero(item.netAmount),
-                  ({ amount }) => `P${amount}`,
-                )}
+                subtitle={formatCurrency(dinero(item.netAmount))}
               />
               {item.kmReading && (
                 <HorizontalLabel

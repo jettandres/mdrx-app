@@ -5,7 +5,8 @@ import HorizontalLabel from '@components/HorizontalLabel'
 
 import type { FC } from 'react'
 import type { ReportFooter } from '@app/services/computeExpenseReport'
-import { dinero, toFormat } from 'dinero.js'
+import { dinero } from 'dinero.js'
+import formatCurrency from '@utils/formatCurrency'
 
 type Props = {
   onSubmit: () => void
@@ -22,10 +23,7 @@ const ListFooterComponent: FC<Props> = (props) => {
     <View style={styles.listFooter}>
       <HorizontalLabel
         title="Total Replenishable"
-        subtitle={toFormat(
-          dinero(totalReplenishable),
-          ({ amount }) => `P${amount}`,
-        )}
+        subtitle={formatCurrency(dinero(totalReplenishable))}
       />
       <View style={styles.kmReadingContainer}>
         <Text style={styles.kmReadingTitle}>Total Km Reading Consumption</Text>
@@ -39,17 +37,14 @@ const ListFooterComponent: FC<Props> = (props) => {
         <HorizontalLabel
           key={ytd.id}
           title={ytd.name}
-          subtitle={toFormat(dinero(ytd.amount), ({ amount }) => `P${amount}`)}
+          subtitle={formatCurrency(dinero(ytd.amount))}
         />
       ))}
 
       <View style={styles.listFooterTotalYearContainer}>
         <HorizontalLabel
           title="Total Year"
-          subtitle={toFormat(
-            dinero(totalYearToDate),
-            ({ amount }) => `P${amount}`,
-          )}
+          subtitle={formatCurrency(dinero(totalYearToDate))}
           bold
         />
       </View>
