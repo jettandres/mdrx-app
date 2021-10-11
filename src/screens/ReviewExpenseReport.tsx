@@ -87,7 +87,12 @@ const ReviewReport: FC<Props> = (props) => {
   const onSubmitReport = useCallback(() => {}, [])
 
   if (asyncReport.loading && !asyncReport.result) {
-    return <ActivityIndicator animating color="#007aff" />
+    return (
+      <View style={styles.loadingContainer}>
+        <ActivityIndicator animating color="#007aff" />
+        <Text style={styles.loadingLabel}>Loading Report</Text>
+      </View>
+    )
   }
 
   const data = asyncReport.result?.reportBody ?? []
@@ -156,6 +161,16 @@ const ReviewReport: FC<Props> = (props) => {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
+  },
+  loadingContainer: {
+    backgroundColor: '$white',
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  loadingLabel: {
+    color: '$darkGray',
+    marginTop: '$spacingSm',
   },
   header: {
     backgroundColor: '$darkGray',
