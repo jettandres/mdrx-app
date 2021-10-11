@@ -6,7 +6,7 @@ import HorizontalLabel from '@components/HorizontalLabel'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
-import type { Control } from 'react-hook-form'
+import type { Control, FieldError } from 'react-hook-form'
 
 import { useController } from 'react-hook-form'
 
@@ -18,16 +18,20 @@ type Props = {
   //eslint-disable-next-line @typescript-eslint/no-explicit-any
   control: Control<any>
   name: string
+  error?: FieldError
 }
 
 const ExpensePicker: FC<Props> = (props) => {
-  const { control, name } = props
+  const { control, name, error } = props
   const { data } = useQuery<QueryExpenseResponse>(QUERY_EXPENSE)
   const { field } = useController({
     control,
     name,
-    defaultValue: data?.expense[0],
   })
+
+  const pickerStyle = error
+    ? styles.pickerContainerError
+    : styles.pickerContainer
 
   if (!data) {
     return null
@@ -37,10 +41,11 @@ const ExpensePicker: FC<Props> = (props) => {
     <View style={styles.root}>
       <View style={styles.container}>
         <Text>Expense</Text>
-        <View style={styles.pickerContainer}>
+        <View style={pickerStyle}>
           <Picker
             onValueChange={(v: Expense) => field.onChange(v)}
             selectedValue={field.value}>
+            <Picker.Item label="Select Expense" value="" />
             {data.expense.map((e) => (
               <Picker.Item key={e.id} label={e.name} value={e} />
             ))}
@@ -51,6 +56,8 @@ const ExpensePicker: FC<Props> = (props) => {
         title="Class"
         subtitle={(field.value as Expense)?.birClass ?? ''}
       />
+
+      {error && <Text style={styles.errorLabel}>no selected expense</Text>}
     </View>
   )
 }
@@ -69,6 +76,15 @@ const styles = EStyleSheet.create({
     width: '45%',
     borderBottomWidth: 1,
     borderColor: '$borderColor',
+  },
+  pickerContainerError: {
+    width: '45%',
+    borderBottomWidth: 1,
+    borderColor: '$red',
+  },
+  errorLabel: {
+    color: '$red',
+    alignSelf: 'flex-end',
   },
 })
 

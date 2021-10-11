@@ -203,7 +203,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
             title="Receipt Series #"
             subtitle={watch('receiptSeriesNo').split('-')[4]}
           />
-          <ExpensePicker name="expense" control={control} />
+          <ExpensePicker
+            name="expense"
+            error={errors.expense}
+            control={control}
+          />
           <HorizontalSwitch
             title="VATable"
             name="isVatable"
