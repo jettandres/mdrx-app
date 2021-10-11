@@ -25,6 +25,12 @@ import computeExpenseReport, {
   ReportFooter,
 } from '@app/services/computeExpenseReport'
 import formatCurrency from '@utils/formatCurrency'
+import { useMutation } from '@apollo/client'
+import {
+  DeleteReceiptPayload,
+  DeleteReceiptResponse,
+  DELETE_RECEIPT,
+} from '@app/apollo/gql/receipts'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -46,7 +52,15 @@ const ReviewReport: FC<Props> = (props) => {
   const { route } = props
   const expenseReportId = route.params.expenseReportId
 
-  const asyncReport = useAsync(computeExpenseReport, [expenseReportId])
+  const [deleteReceipt, { data: deleteResponse }] = useMutation<
+    DeleteReceiptResponse,
+    DeleteReceiptPayload
+  >(DELETE_RECEIPT)
+
+  const asyncReport = useAsync(
+    () => computeExpenseReport(expenseReportId),
+    [expenseReportId, deleteResponse],
+  )
 
   const onSectionHeaderPress = useCallback((sectionTitle: string) => {
     setCollapsedHeaders((collapsedList) => {
@@ -58,6 +72,17 @@ const ReviewReport: FC<Props> = (props) => {
       return [...collapsedList, sectionTitle]
     })
   }, [])
+
+  const onDeletePress = useCallback(
+    async (receiptId: string) => {
+      await deleteReceipt({
+        variables: {
+          receiptId,
+        },
+      })
+    },
+    [deleteReceipt],
+  )
 
   const onSubmitReport = useCallback(() => {}, [])
 
@@ -110,7 +135,7 @@ const ReviewReport: FC<Props> = (props) => {
                 <TouchableOpacity>
                   <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>
                 </TouchableOpacity>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => onDeletePress(item.id)}>
                   <Text style={styles.deletePhotoLabel}>DELETE</Text>
                 </TouchableOpacity>
               </View>
