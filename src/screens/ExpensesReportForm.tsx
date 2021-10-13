@@ -36,7 +36,11 @@ import {
   NewExpenseReceiptPayload,
   NewExpenseReceiptResponse,
   MUTATION_NEW_EXPENSE_RECEIPT,
+  NewKmReadingResponse,
+  NewKmReadingPayload,
+  MUTATION_NEW_KM_READING,
 } from '@app/apollo/gql/expense'
+import Expense from '@app/types/Expense'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -62,9 +66,11 @@ type FormData = {
   supplierStreetBrgy: string
   supplierBuilding: string
   isVatable: boolean
-  expense: string
+  expense: Expense
   receiptSeriesNo: string
   imagePath: string
+  litersAdded?: number
+  kmReading?: number
 }
 
 const schema = z.object({
@@ -82,16 +88,24 @@ const schema = z.object({
   supplierStreetBrgy: z.string(),
   supplierBuilding: z.string(),
   isVatable: z.boolean(),
-  expense: z
-    .object({
-      id: z.string(),
-      name: z.string(),
-      birClass: z.string().optional(),
-      vatable: z.boolean(),
-    })
-    .transform((o) => o.id),
+  expense: z.object({
+    id: z.string(),
+    name: z.string(),
+    birClass: z.string().optional(),
+    vatable: z.boolean(),
+  }),
   receiptSeriesNo: z.string(),
   imagePath: z.string().optional(), //TODO: make required
+  litersAdded: z
+    .string()
+    .regex(/^[0-9|.]*$/, 'should not contain special characters')
+    .transform((v) => parseFloat(v))
+    .optional(),
+  kmReading: z
+    .string()
+    .regex(/^[0-9|.]*$/, 'should not contain special characters')
+    .transform((v) => parseFloat(v))
+    .optional(),
 })
 
 const ExpensesReportForm: FC<Props> = (props) => {
@@ -121,6 +135,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
     NewExpenseReceiptPayload
   >(MUTATION_NEW_EXPENSE_RECEIPT)
 
+  const [insertKmReading] = useMutation<
+    NewKmReadingResponse,
+    NewKmReadingPayload
+  >(MUTATION_NEW_KM_READING)
+
   const imagePath = route.params?.imagePath
   useEffect(() => {
     if (imagePath) {
@@ -147,12 +166,14 @@ const ExpensesReportForm: FC<Props> = (props) => {
     loading,
   ])
 
+  const isGas = watch('expense')?.name === 'Gas'
+
   const onNextPress = useCallback(
     async (formData: FormData) => {
       const payload: NewExpenseReceiptPayload = {
         receipt: {
           amount: toSnapshot(formData.expenseAmount),
-          expense_id: formData.expense,
+          expense_id: formData.expense.id,
           expense_report_id: formData.id,
           image_url: formData.imagePath ?? 'Emulator', //TODO: remove default value
           supplier: {
@@ -165,9 +186,28 @@ const ExpensesReportForm: FC<Props> = (props) => {
         },
       }
 
-      await insertExpenseReceipt({ variables: payload })
+      const { data: receiptData } = await insertExpenseReceipt({
+        variables: payload,
+      })
+
+      if (isGas && receiptData) {
+        const {
+          data: { id: receiptId },
+        } = receiptData
+
+        const kmPayload: NewKmReadingPayload = {
+          kmReading: {
+            expense_report_id: expenseReportId,
+            receipt_id: receiptId,
+            liters_added: formData.litersAdded as number,
+            km_reading: formData.kmReading as number,
+          },
+        }
+
+        await insertKmReading({ variables: kmPayload })
+      }
     },
-    [insertExpenseReceipt],
+    [expenseReportId, insertExpenseReceipt, insertKmReading, isGas],
   )
 
   const onReviewPress = useCallback(
@@ -208,6 +248,26 @@ const ExpensesReportForm: FC<Props> = (props) => {
             error={errors.expense}
             control={control}
           />
+          {isGas && (
+            <>
+              <HorizontalInput
+                title="Liters added"
+                name="litersAdded"
+                placeholder="15.0"
+                control={control}
+                keyboardType="number-pad"
+                error={errors.litersAdded}
+              />
+              <HorizontalInput
+                title="Current km reading"
+                name="kmReading"
+                placeholder="100"
+                control={control}
+                keyboardType="number-pad"
+                error={errors.kmReading}
+              />
+            </>
+          )}
           <HorizontalSwitch
             title="VATable"
             name="isVatable"

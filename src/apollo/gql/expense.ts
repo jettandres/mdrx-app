@@ -97,9 +97,37 @@ export interface NewExpenseReceiptPayload {
   }
 }
 
+const MUTATION_NEW_KM_READING = gql`
+  mutation NewKmReading($kmReading: expense_report_km_reading_insert_input!) {
+    kmReading: insert_expense_report_km_reading_one(object: $kmReading) {
+      createdAt: created_at
+      litersAdded: liters_added
+      kmReading: km_reading
+    }
+  }
+`
+
+export interface NewKmReadingResponse {
+  kmReading: {
+    createdAt: string
+    litersAdded: string
+    kmReading: string
+  }
+}
+
+export interface NewKmReadingPayload {
+  kmReading: {
+    expense_report_id: string
+    receipt_id: string
+    liters_added: number
+    km_reading: number
+  }
+}
+
 export {
   QUERY_EXPENSE,
   MUTATION_NEW_EXPENSE_REPORT,
   QUERY_EXPENSE_REPORTS,
   MUTATION_NEW_EXPENSE_RECEIPT,
+  MUTATION_NEW_KM_READING,
 }
