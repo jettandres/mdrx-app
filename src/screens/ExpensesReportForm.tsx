@@ -84,9 +84,9 @@ const schema = z.object({
     .transform((f) => dineroFromFloat({ amount: f, currency: PHP, scale: 2 })),
   supplierTin: z.string().nonempty('should not be empty'),
   supplierName: z.string().nonempty('should not be empty'),
-  supplierAddress: z.string(),
-  supplierStreetBrgy: z.string(),
-  supplierBuilding: z.string(),
+  supplierAddress: z.string().optional(),
+  supplierStreetBrgy: z.string().optional(),
+  supplierBuilding: z.string().optional(),
   isVatable: z.boolean(),
   expense: z.object({
     id: z.string(),
