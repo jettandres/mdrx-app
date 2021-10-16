@@ -16,7 +16,13 @@ type Props = {
 const ListFooterComponent: FC<Props> = (props) => {
   const {
     onSubmit,
-    reportFooter: { totalReplenishable, yearToDate, totalYearToDate },
+    reportFooter: {
+      totalReplenishable,
+      yearToDate,
+      totalYearToDate,
+      avgKmPerLiter,
+      totalLitersAdded,
+    },
   } = props
 
   return (
@@ -27,8 +33,10 @@ const ListFooterComponent: FC<Props> = (props) => {
       />
       <View style={styles.kmReadingContainer}>
         <Text style={styles.kmReadingTitle}>Total Km Reading Consumption</Text>
-        <Text style={styles.kmReadingSubtitle}>480.0</Text>
-        <Text style={styles.kmReadingSubtitle}>10km/Liter</Text>
+        <Text style={styles.kmReadingSubtitle}>
+          {totalLitersAdded.toFixed(2)}
+        </Text>
+        <Text style={styles.kmReadingSubtitle}>{avgKmPerLiter}</Text>
         <Text style={styles.kmReadingTitle}>Ave. Km/liter</Text>
       </View>
 
