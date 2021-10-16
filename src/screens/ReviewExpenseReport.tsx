@@ -131,10 +131,7 @@ const ReviewReport: FC<Props> = (props) => {
                 subtitle={formatCurrency(dinero(item.netAmount))}
               />
               {item.kmReading && (
-                <HorizontalLabel
-                  title="KM reading"
-                  subtitle={item.kmReading.toString()}
-                />
+                <Text>km reading: {item.kmReading.toString()}km</Text>
               )}
               <View style={styles.itemButtonsContainer}>
                 <TouchableOpacity>

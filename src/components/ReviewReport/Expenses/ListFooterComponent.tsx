@@ -29,6 +29,7 @@ const ListFooterComponent: FC<Props> = (props) => {
     <View style={styles.listFooter}>
       <HorizontalLabel
         title="Total Replenishable"
+        bold
         subtitle={formatCurrency(dinero(totalReplenishable))}
       />
       <View style={styles.kmReadingContainer}>
@@ -36,8 +37,8 @@ const ListFooterComponent: FC<Props> = (props) => {
         <Text style={styles.kmReadingSubtitle}>
           {totalLitersAdded.toFixed(2)}
         </Text>
-        <Text style={styles.kmReadingSubtitle}>{avgKmPerLiter}</Text>
         <Text style={styles.kmReadingTitle}>Ave. Km/liter</Text>
+        <Text style={styles.kmReadingSubtitle}>{avgKmPerLiter}</Text>
       </View>
 
       <Text style={styles.listFooterTitle}>Year to Date</Text>
@@ -71,13 +72,15 @@ const styles = EStyleSheet.create({
     paddingBottom: '10%',
   },
   kmReadingContainer: {
-    alignSelf: 'center',
+    alignSelf: 'flex-start',
     flexDirection: 'column',
-    alignItems: 'center',
-    paddingTop: '$spacingMd',
+    alignItems: 'flex-start',
+    paddingTop: '$spacingXs',
+    paddingBottom: '$spacingXs',
   },
   kmReadingTitle: {
     fontSize: '$xs',
+    marginTop: '$spacingSm',
   },
   kmReadingSubtitle: {
     fontWeight: 'bold',
