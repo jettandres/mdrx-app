@@ -23,7 +23,7 @@ const ListFooterComponent: FC<Props> = (props) => {
       yearToDate,
       totalYearToDate,
       avgKmPerLiter,
-      totalLitersAdded,
+      totalKmReadingConsumption,
     },
   } = props
 
@@ -47,7 +47,7 @@ const ListFooterComponent: FC<Props> = (props) => {
               Total Km Reading Consumption
             </Text>
             <Text style={styles.kmReadingSubtitle}>
-              {totalLitersAdded.toFixed(2)}
+              {totalKmReadingConsumption.toFixed(2)}
             </Text>
           </View>
         </View>

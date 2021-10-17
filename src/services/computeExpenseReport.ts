@@ -30,7 +30,7 @@ export type ReportFooter = {
   totalReplenishable: DineroSnapshot<number>
   yearToDate: Array<YearToDateData>
   totalYearToDate: DineroSnapshot<number>
-  totalLitersAdded: number
+  totalKmReadingConsumption: number
   avgKmPerLiter: string
 }
 
