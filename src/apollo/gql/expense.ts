@@ -124,10 +124,27 @@ export interface NewKmReadingPayload {
   }
 }
 
+const MUTATION_DELETE_EXPENSE_REPORT = gql`
+  mutation DeleteExpenseReport($expenseReportId: uuid!) {
+    expenseReport: delete_expense_report_by_pk(id: $expenseReportId) {
+      id
+    }
+  }
+`
+
+export interface DeleteExpenseReportPayload {
+  expenseReportId: string
+}
+
+export interface DeleteExpenseReportResponse {
+  expenseReport: { id: string }
+}
+
 export {
   QUERY_EXPENSE,
   MUTATION_NEW_EXPENSE_REPORT,
   QUERY_EXPENSE_REPORTS,
   MUTATION_NEW_EXPENSE_RECEIPT,
   MUTATION_NEW_KM_READING,
+  MUTATION_DELETE_EXPENSE_REPORT,
 }

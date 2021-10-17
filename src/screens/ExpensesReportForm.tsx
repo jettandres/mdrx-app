@@ -1,5 +1,12 @@
-import React, { useCallback, useEffect } from 'react'
-import { View, ScrollView, Image, TouchableOpacity, Text } from 'react-native'
+import React, { useCallback, useEffect, useLayoutEffect } from 'react'
+import {
+  View,
+  ScrollView,
+  Image,
+  TouchableOpacity,
+  Text,
+  Alert,
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -39,8 +46,14 @@ import {
   NewKmReadingResponse,
   NewKmReadingPayload,
   MUTATION_NEW_KM_READING,
+  DeleteExpenseReportResponse,
+  DeleteExpenseReportPayload,
+  MUTATION_DELETE_EXPENSE_REPORT,
+  QUERY_EXPENSE_REPORTS,
 } from '@app/apollo/gql/expense'
 import Expense from '@app/types/Expense'
+import DeleteButton from '@components/common/DeleteButton'
+import LoadingScreen from '@components/common/LoadingScreen'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -130,17 +143,64 @@ const ExpensesReportForm: FC<Props> = (props) => {
     },
   })
 
-  const [insertExpenseReceipt, { data, loading, error }] = useMutation<
-    NewExpenseReceiptResponse,
-    NewExpenseReceiptPayload
-  >(MUTATION_NEW_EXPENSE_RECEIPT)
+  const [insertExpenseReceipt, { data, loading: insertLoading, error }] =
+    useMutation<NewExpenseReceiptResponse, NewExpenseReceiptPayload>(
+      MUTATION_NEW_EXPENSE_RECEIPT,
+    )
 
   const [insertKmReading] = useMutation<
     NewKmReadingResponse,
     NewKmReadingPayload
   >(MUTATION_NEW_KM_READING)
 
+  const [deleteExpenseReport, { loading: deleteLoading }] = useMutation<
+    DeleteExpenseReportResponse,
+    DeleteExpenseReportPayload
+  >(MUTATION_DELETE_EXPENSE_REPORT)
+
+  const onDeleteExpenseReport = useCallback(() => {
+    Alert.alert(
+      'Delete expense report',
+      'This will completely remove all recorded receipts from the database. Are you sure?',
+      [
+        {
+          text: 'Cancel',
+          style: 'cancel',
+        },
+        {
+          text: 'Delete Report',
+          style: 'default',
+          onPress: async () => {
+            const { data: deleteResponse } = await deleteExpenseReport({
+              variables: { expenseReportId },
+              refetchQueries: [
+                {
+                  query: QUERY_EXPENSE_REPORTS,
+                  variables: {
+                    employeeId: employeeData?.id ?? '',
+                  },
+                },
+              ],
+            })
+            const isDeleted = !!deleteResponse?.expenseReport?.id
+            console.log('deleted?', isDeleted)
+            if (isDeleted) {
+              navigation.navigate('HomeDrawer')
+            }
+          },
+        },
+      ],
+    )
+  }, [deleteExpenseReport, employeeData?.id, expenseReportId, navigation])
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerRight: () => <DeleteButton onPress={onDeleteExpenseReport} />,
+    })
+  }, [navigation, onDeleteExpenseReport])
+
   const imagePath = route.params?.imagePath
+
   useEffect(() => {
     if (imagePath) {
       setValue('imagePath', imagePath)
@@ -148,7 +208,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
   }, [imagePath, setValue])
 
   useEffect(() => {
-    if (isSubmitSuccessful && data && !loading) {
+    if (isSubmitSuccessful && data && !insertLoading) {
       reset()
       setValue('receiptSeriesNo', faker.datatype.uuid())
       console.log('form reset!')
@@ -163,7 +223,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
     setValue,
     data,
     error,
-    loading,
+    insertLoading,
   ])
 
   const isGas = watch('expense')?.name === 'Gas'
@@ -222,6 +282,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
     })
     navigation.navigate('CapturePhoto')
   }, [navigation, route.params.id, route.params.reportNumber])
+
+  if (deleteLoading || insertLoading) {
+    const message = deleteLoading ? 'Deleting Report' : 'Adding Receipt'
+    return <LoadingScreen message={message} />
+  }
 
   return (
     <ScrollView style={styles.scrollView}>
