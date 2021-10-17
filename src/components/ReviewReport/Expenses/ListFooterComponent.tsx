@@ -3,6 +3,8 @@ import { View, Text, Button } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import HorizontalLabel from '@components/HorizontalLabel'
 
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+
 import type { FC } from 'react'
 import type { ReportFooter } from '@app/services/computeExpenseReport'
 import { dinero } from 'dinero.js'
@@ -33,12 +35,34 @@ const ListFooterComponent: FC<Props> = (props) => {
         subtitle={formatCurrency(dinero(totalReplenishable))}
       />
       <View style={styles.kmReadingContainer}>
-        <Text style={styles.kmReadingTitle}>Total Km Reading Consumption</Text>
-        <Text style={styles.kmReadingSubtitle}>
-          {totalLitersAdded.toFixed(2)}
-        </Text>
-        <Text style={styles.kmReadingTitle}>Ave. Km/liter</Text>
-        <Text style={styles.kmReadingSubtitle}>{avgKmPerLiter}</Text>
+        <View style={styles.kmReadingSubContainer}>
+          <Icon
+            style={styles.kmIcon}
+            name="gas-station"
+            size={25}
+            color="#202020"
+          />
+          <View>
+            <Text style={styles.kmReadingTitle}>
+              Total Km Reading Consumption
+            </Text>
+            <Text style={styles.kmReadingSubtitle}>
+              {totalLitersAdded.toFixed(2)}
+            </Text>
+          </View>
+        </View>
+        <View style={styles.kmReadingSubContainerAlt}>
+          <Icon
+            style={styles.kmIcon}
+            name="speedometer"
+            size={25}
+            color="#202020"
+          />
+          <View>
+            <Text style={styles.kmReadingTitle}>Ave. Km/liter</Text>
+            <Text style={styles.kmReadingSubtitle}>{avgKmPerLiter}</Text>
+          </View>
+        </View>
       </View>
 
       <Text style={styles.listFooterTitle}>Year to Date</Text>
@@ -75,12 +99,23 @@ const styles = EStyleSheet.create({
     alignSelf: 'flex-start',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    paddingTop: '$spacingXs',
+    paddingTop: '$spacingMd',
     paddingBottom: '$spacingXs',
+  },
+  kmReadingSubContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  kmReadingSubContainerAlt: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginTop: '$spacingXs',
+  },
+  kmIcon: {
+    marginRight: '$spacingSm',
   },
   kmReadingTitle: {
     fontSize: '$xs',
-    marginTop: '$spacingSm',
   },
   kmReadingSubtitle: {
     fontWeight: 'bold',
