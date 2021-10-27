@@ -2,7 +2,7 @@ import axios from 'axios'
 
 import type { DineroSnapshot } from 'dinero.js'
 const url =
-  'https://ilj8xn5v15.execute-api.us-east-2.amazonaws.com/v1/compute-expense-report'
+  'https://fr5fx9hv77.execute-api.us-east-2.amazonaws.com/v1/compute-expense-report'
 
 type Sections = {
   title: {

@@ -27,6 +27,9 @@ import {
   GetEmployeeResponse,
 } from '@app/apollo/gql/employees'
 
+import { Auth } from 'aws-amplify'
+import LoadingScreen from '@components/common/LoadingScreen'
+
 type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Login'
@@ -48,6 +51,7 @@ const Login: FC<Props> = (props) => {
   const [custodianCode, setCustodianCode] = useState<string | undefined>()
   const [errorLabel, setErrorLabel] = useState<string | undefined>()
   const [employee, setEmployee] = useState<Employee | undefined>()
+  const [loginLoading, setLoginLoading] = useState(false)
 
   const [currentStep, setCurrentStep] = useState<WizardStep>(
     WizardStep.InputCustodianCode,
@@ -71,10 +75,17 @@ const Login: FC<Props> = (props) => {
     }
   }, [currentStep])
 
-  const onNextButtonPress = useCallback(() => {
+  const onNextButtonPress = useCallback(async () => {
     if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
-      employeeInfo(employee)
-      navigation.navigate('HomeDrawer')
+      try {
+        setLoginLoading(true)
+        await Auth.signIn('jettrobin.andres@gmail.com', 'Passw0rd!')
+        setLoginLoading(false)
+        employeeInfo(employee)
+        navigation.navigate('HomeDrawer')
+      } catch (e) {
+        console.log('error logging in', e)
+      }
     } else if (currentStep === WizardStep.InputCustodianCode) {
       if (custodianCode === undefined) {
         setErrorLabel('Field is required')
@@ -110,6 +121,11 @@ const Login: FC<Props> = (props) => {
   const onChangeCustodianInput = useCallback((value: string | undefined) => {
     setCustodianCode(value)
   }, [])
+
+  if (loading || loginLoading) {
+    const message = loading ? 'Processing' : 'Logging in'
+    return <LoadingScreen message={message} />
+  }
 
   return (
     <View style={styles.container}>
@@ -151,13 +167,6 @@ const Login: FC<Props> = (props) => {
           </TouchableOpacity>
         )}
         <TouchableOpacity style={styles.nextButton} onPress={onNextButtonPress}>
-          {loading && (
-            <ActivityIndicator
-              style={styles.loading}
-              animating
-              color="#007aff"
-            />
-          )}
           <Text style={styles.nextButtonLabel}>{nextButtonCopy}</Text>
         </TouchableOpacity>
       </View>

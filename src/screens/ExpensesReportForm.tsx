@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useLayoutEffect } from 'react'
+import React, { useCallback, useEffect, useLayoutEffect, useState } from 'react'
 import {
   View,
   ScrollView,
@@ -11,6 +11,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
 import { Dinero, toSnapshot } from 'dinero.js'
+import { Storage } from 'aws-amplify'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import { RootStackParamList } from '@routes/types'
@@ -125,6 +126,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
   const { navigation, route } = props
   const employeeData = useReactiveVar(employeeInfo)
   const expenseReportId = route.params.id
+  const [uploadLoading, setUploadLoading] = useState(false)
+  const [uploadPercentage, setUploadPercentage] = useState('0.0%')
 
   const {
     handleSubmit,
@@ -212,8 +215,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
       reset()
       setValue('receiptSeriesNo', faker.datatype.uuid())
       console.log('form reset!')
-    } else {
-      console.log(errors, error)
+    } else if (error) {
+      console.log('errors', error)
     }
   }, [
     isSubmitSuccessful,
@@ -250,21 +253,50 @@ const ExpensesReportForm: FC<Props> = (props) => {
         variables: payload,
       })
 
-      if (isGas && receiptData) {
+      if (receiptData) {
         const {
           data: { id: receiptId },
         } = receiptData
 
-        const kmPayload: NewKmReadingPayload = {
-          kmReading: {
-            expense_report_id: expenseReportId,
-            receipt_id: receiptId,
-            liters_added: formData.litersAdded as number,
-            km_reading: formData.kmReading as number,
-          },
+        if (isGas) {
+          const kmPayload: NewKmReadingPayload = {
+            kmReading: {
+              expense_report_id: expenseReportId,
+              receipt_id: receiptId,
+              liters_added: formData.litersAdded as number,
+              km_reading: formData.kmReading as number,
+            },
+          }
+
+          await insertKmReading({ variables: kmPayload })
         }
 
-        await insertKmReading({ variables: kmPayload })
+        setUploadLoading(true)
+        const respImg = await fetch(formData.imagePath)
+        const blob = await respImg.blob()
+
+        try {
+          const res = await Storage.put(`${receiptId}.jpg`, blob, {
+            contentType: 'image/jpeg',
+            level: 'public',
+            acl: 'public-read', //TODO: move acl to sst via sid prop
+            progressCallback: ({ loaded, total }): void => {
+              const perc = ((loaded / total) * 100).toFixed(1) + '%'
+              setUploadPercentage(perc)
+
+              if (loaded === total) {
+                setUploadLoading(false)
+              }
+            },
+          })
+
+          const imageAwsS3 = await Storage.get(res.key)
+          console.log('img upload', imageAwsS3)
+          // TODO: upsert imageAwsS3 image to existing record's imagepath
+        } catch (e) {
+          console.log('upload failed', e)
+          setUploadLoading(false)
+        }
       }
     },
     [expenseReportId, insertExpenseReceipt, insertKmReading, isGas],
@@ -285,6 +317,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
 
   if (deleteLoading || insertLoading) {
     const message = deleteLoading ? 'Deleting Report' : 'Adding Receipt'
+    return <LoadingScreen message={message} />
+  }
+
+  if (uploadLoading) {
+    const message = `Uploading image ${uploadPercentage}`
     return <LoadingScreen message={message} />
   }
 

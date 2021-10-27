@@ -23,7 +23,6 @@ const HorizontalDatePicker: FC<Props> = (props) => {
     if (event.type === 'set' && DateTime.fromJSDate(date).isValid) {
       setPickerVisible(false)
       setSelectedDate(date)
-      console.log(date)
     }
   }, [])
 
