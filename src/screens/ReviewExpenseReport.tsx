@@ -49,7 +49,7 @@ type Props = {
 
 const ReviewReport: FC<Props> = (props) => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
-  const { route } = props
+  const { route, navigation } = props
   const expenseReportId = route.params.expenseReportId
 
   const [deleteReceipt, { data: deleteResponse }] = useMutation<
@@ -84,9 +84,12 @@ const ReviewReport: FC<Props> = (props) => {
     [deleteReceipt],
   )
 
-  const onViewPhoto = useCallback((imageKey: string) => {
-    console.log(imageKey)
-  }, [])
+  const onViewPhoto = useCallback(
+    (imageKey: string) => {
+      navigation.navigate('ViewPhoto', { imageKey })
+    },
+    [navigation],
+  )
 
   const onSubmitReport = useCallback(() => {}, [])
 

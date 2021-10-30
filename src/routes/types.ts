@@ -12,6 +12,7 @@ export type RootStackParamList = {
   ConfirmPhoto: {
     path: string
   }
+  ViewPhoto: { imageKey: string }
 }
 
 export type HomeStackParamList = {

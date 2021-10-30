@@ -15,6 +15,7 @@ import { RootStackParamList } from '@routes/types'
 
 import HomeRoute from '@routes/HomeRoute'
 import SalesCollectionForm from '@screens/SalesCollectionForm'
+import ViewPhoto from '@screens/ViewPhoto'
 
 const EntryRoute: FC = () => {
   const Stack = createNativeStackNavigator<RootStackParamList>()
@@ -65,6 +66,11 @@ const EntryRoute: FC = () => {
         name="ConfirmPhoto"
         options={{ title: 'Confirm Photo' }}
         component={ConfirmPhoto}
+      />
+      <Stack.Screen
+        name="ViewPhoto"
+        options={{ title: 'View Photo' }}
+        component={ViewPhoto}
       />
     </Stack.Navigator>
   )
