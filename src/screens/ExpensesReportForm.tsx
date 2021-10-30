@@ -225,6 +225,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
       reset()
       setValue('receiptSeriesNo', faker.datatype.uuid())
       console.log('form reset!')
+      setUploadLoading(false)
     } else if (error) {
       console.log('errors', error)
     }
@@ -293,10 +294,6 @@ const ExpensesReportForm: FC<Props> = (props) => {
             progressCallback: ({ loaded, total }): void => {
               const perc = ((loaded / total) * 100).toFixed(1) + '%'
               setUploadPercentage(perc)
-
-              if (loaded === total) {
-                setUploadLoading(false)
-              }
             },
           })
 
