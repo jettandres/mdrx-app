@@ -18,6 +18,7 @@ type SectionData = {
   supplierTin: string
   netAmount: DineroSnapshot<number>
   kmReading?: number
+  imageKey: string
 }
 
 type YearToDateData = {

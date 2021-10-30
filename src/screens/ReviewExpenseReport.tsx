@@ -84,6 +84,10 @@ const ReviewReport: FC<Props> = (props) => {
     [deleteReceipt],
   )
 
+  const onViewPhoto = useCallback((imageKey: string) => {
+    console.log(imageKey)
+  }, [])
+
   const onSubmitReport = useCallback(() => {}, [])
 
   if (asyncReport.loading && !asyncReport.result) {
@@ -134,7 +138,7 @@ const ReviewReport: FC<Props> = (props) => {
                 <Text>km reading: {item.kmReading.toString()}km</Text>
               )}
               <View style={styles.itemButtonsContainer}>
-                <TouchableOpacity>
+                <TouchableOpacity onPress={() => onViewPhoto(item.imageKey)}>
                   <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>
                 </TouchableOpacity>
                 <TouchableOpacity onPress={() => onDeletePress(item.id)}>

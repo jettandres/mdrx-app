@@ -3,7 +3,7 @@ import { DineroOptions } from 'dinero.js'
 type Receipt = {
   id: string
   amount: DineroOptions<number>
-  imageUrl: string
+  imageKey: string
   supplier: {
     tin: string
     bldg: string

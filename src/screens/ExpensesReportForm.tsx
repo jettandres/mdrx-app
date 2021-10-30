@@ -114,7 +114,7 @@ const schema = z.object({
     vatable: z.boolean(),
   }),
   receiptSeriesNo: z.string(),
-  imagePath: z.string().optional(), //TODO: make required
+  imagePath: z.string(),
   litersAdded: z
     .string()
     .regex(/^[0-9|.]*$/, 'should not contain special characters')
