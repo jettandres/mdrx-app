@@ -434,10 +434,26 @@ const ExpensesReportForm: FC<Props> = (props) => {
           <TouchableOpacity
             onPress={onUploadButtonPress}
             style={styles.uploadButton}>
-            <>
-              <Image style={styles.uploadIcon} source={uploadIcon} />
-              <Text style={styles.uploadLabel}>Upload image</Text>
-            </>
+            {!imagePath && (
+              <>
+                <Image style={styles.uploadIcon} source={uploadIcon} />
+                <Text style={styles.uploadLabel}>Upload image</Text>
+                {!!errors.imagePath && (
+                  <Text style={styles.errorLabel}>
+                    Receipt photo is required
+                  </Text>
+                )}
+              </>
+            )}
+            {!!imagePath && (
+              <>
+                <Image
+                  style={styles.capturedImage}
+                  source={{ uri: imagePath }}
+                />
+                <Text style={styles.uploadLabel}>Tap photo to retake</Text>
+              </>
+            )}
           </TouchableOpacity>
           <FormFooter
             onNext={handleSubmit(onNextPress)}
@@ -480,8 +496,17 @@ const styles = EStyleSheet.create({
     color: '$darkGray',
     marginTop: '$spacingXs',
   },
+  errorLabel: {
+    fontSize: '$sm',
+    color: '$red',
+    marginTop: '$spacingXs',
+  },
   reportLabelContainer: {
     marginBottom: '$spacingSm',
+  },
+  capturedImage: {
+    height: 200,
+    width: 150,
   },
 })
 
