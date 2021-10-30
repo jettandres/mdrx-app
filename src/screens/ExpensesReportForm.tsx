@@ -55,6 +55,11 @@ import {
 import Expense from '@app/types/Expense'
 import DeleteButton from '@components/common/DeleteButton'
 import LoadingScreen from '@components/common/LoadingScreen'
+import {
+  MUTATION_UPDATE_RECEIPT_IMAGE_URL,
+  UpdateReceiptImageUrlPayload,
+  UpdateReceiptImageUrlRespone,
+} from '@app/apollo/gql/receipts'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -155,6 +160,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
     NewKmReadingResponse,
     NewKmReadingPayload
   >(MUTATION_NEW_KM_READING)
+
+  const [updateReceiptImageUrl] = useMutation<
+    UpdateReceiptImageUrlRespone,
+    UpdateReceiptImageUrlPayload
+  >(MUTATION_UPDATE_RECEIPT_IMAGE_URL)
 
   const [deleteExpenseReport, { loading: deleteLoading }] = useMutation<
     DeleteExpenseReportResponse,
@@ -291,15 +301,22 @@ const ExpensesReportForm: FC<Props> = (props) => {
           })
 
           const imageAwsS3 = await Storage.get(res.key)
-          console.log('img upload', imageAwsS3)
-          // TODO: upsert imageAwsS3 image to existing record's imagepath
+          await updateReceiptImageUrl({
+            variables: { receiptId, imageUrl: imageAwsS3 },
+          })
         } catch (e) {
           console.log('upload failed', e)
           setUploadLoading(false)
         }
       }
     },
-    [expenseReportId, insertExpenseReceipt, insertKmReading, isGas],
+    [
+      expenseReportId,
+      insertExpenseReceipt,
+      insertKmReading,
+      isGas,
+      updateReceiptImageUrl,
+    ],
   )
 
   const onReviewPress = useCallback(
