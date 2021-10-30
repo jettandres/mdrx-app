@@ -50,7 +50,9 @@ const CapturePhoto: FC<Props> = (props) => {
 
   const onTakePhoto = useCallback(async () => {
     try {
-      const photo = await camera.current?.takePhoto()
+      const photo = await camera.current?.takePhoto({
+        enableAutoStabilization: true,
+      })
       if (photo) {
         setIsActive(false)
         navigation.navigate('ConfirmPhoto', {
