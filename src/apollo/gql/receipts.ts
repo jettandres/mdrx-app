@@ -18,28 +18,28 @@ export interface DeleteReceiptPayload {
   receiptId: string
 }
 
-const MUTATION_UPDATE_RECEIPT_IMAGE_URL = gql`
-  mutation UpdateReceiptImageUrl($receiptId: uuid!, $imageUrl: String!) {
+const MUTATION_UPDATE_RECEIPT_IMAGE_KEY = gql`
+  mutation UpdateReceiptImageKey($receiptId: uuid!, $imageKey: String!) {
     receipt: update_receipts_by_pk(
       pk_columns: { id: $receiptId }
-      _set: { image_url: $imageUrl }
+      _set: { image_key: $imageKey }
     ) {
       id
-      imageUrl: image_url
+      imageKey: image_key
     }
   }
 `
 
-export interface UpdateReceiptImageUrlRespone {
+export interface UpdateReceiptImageKeyResponse {
   receipt: {
     id: string
-    imageUrl: string
+    imageKey: string
   }
 }
 
-export interface UpdateReceiptImageUrlPayload {
+export interface UpdateReceiptImageKeyPayload {
   receiptId: string
-  imageUrl: string
+  imageKey: string
 }
 
-export { DELETE_RECEIPT, MUTATION_UPDATE_RECEIPT_IMAGE_URL }
+export { DELETE_RECEIPT, MUTATION_UPDATE_RECEIPT_IMAGE_KEY }

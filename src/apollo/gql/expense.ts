@@ -86,7 +86,6 @@ export interface NewExpenseReceiptPayload {
     amount: DineroSnapshot<number>
     expense_id: string
     expense_report_id: string
-    image_url: string
     supplier: {
       tin: string
       name: string

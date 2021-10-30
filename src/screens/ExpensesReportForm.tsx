@@ -56,9 +56,9 @@ import Expense from '@app/types/Expense'
 import DeleteButton from '@components/common/DeleteButton'
 import LoadingScreen from '@components/common/LoadingScreen'
 import {
-  MUTATION_UPDATE_RECEIPT_IMAGE_URL,
-  UpdateReceiptImageUrlPayload,
-  UpdateReceiptImageUrlRespone,
+  MUTATION_UPDATE_RECEIPT_IMAGE_KEY,
+  UpdateReceiptImageKeyPayload,
+  UpdateReceiptImageKeyResponse,
 } from '@app/apollo/gql/receipts'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
@@ -161,10 +161,10 @@ const ExpensesReportForm: FC<Props> = (props) => {
     NewKmReadingPayload
   >(MUTATION_NEW_KM_READING)
 
-  const [updateReceiptImageUrl] = useMutation<
-    UpdateReceiptImageUrlRespone,
-    UpdateReceiptImageUrlPayload
-  >(MUTATION_UPDATE_RECEIPT_IMAGE_URL)
+  const [updateReceiptImageKey] = useMutation<
+    UpdateReceiptImageKeyResponse,
+    UpdateReceiptImageKeyPayload
+  >(MUTATION_UPDATE_RECEIPT_IMAGE_KEY)
 
   const [deleteExpenseReport, { loading: deleteLoading }] = useMutation<
     DeleteExpenseReportResponse,
@@ -249,7 +249,6 @@ const ExpensesReportForm: FC<Props> = (props) => {
           amount: toSnapshot(formData.expenseAmount),
           expense_id: formData.expense.id,
           expense_report_id: formData.id,
-          image_url: formData.imagePath ?? 'Emulator', //TODO: remove default value
           supplier: {
             tin: formData.supplierTin,
             name: formData.supplierName,
@@ -297,9 +296,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
             },
           })
 
-          const imageAwsS3 = await Storage.get(res.key)
-          await updateReceiptImageUrl({
-            variables: { receiptId, imageUrl: imageAwsS3 },
+          await updateReceiptImageKey({
+            variables: { receiptId, imageKey: res.key },
           })
         } catch (e) {
           console.log('upload failed', e)
@@ -312,7 +310,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
       insertExpenseReceipt,
       insertKmReading,
       isGas,
-      updateReceiptImageUrl,
+      updateReceiptImageKey,
     ],
   )
 
