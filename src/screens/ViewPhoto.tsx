@@ -26,7 +26,9 @@ type Props = {
 
 const ViewPhoto: FC<Props> = (props) => {
   const { route } = props
-  const imageKey = route?.params.imageKey
+  const imageKey = route?.params.imageKey.includes('public')
+    ? route?.params.imageKey.split('/')[1]
+    : route?.params.imageKey
 
   const asyncImageUrl = useAsync(() => Storage.get(imageKey), [])
 

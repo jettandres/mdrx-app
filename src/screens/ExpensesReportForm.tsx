@@ -297,8 +297,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
           })
 
           await updateReceiptImageKey({
-            variables: { receiptId, imageKey: res.key },
+            variables: { receiptId, imageKey: `public/${res.key}` },
           })
+          //TODO: remove imagePath route props
         } catch (e) {
           console.log('upload failed', e)
           setUploadLoading(false)
