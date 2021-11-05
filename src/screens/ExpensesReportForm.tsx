@@ -224,6 +224,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
     if (isSubmitSuccessful && data && !insertLoading) {
       reset()
       setValue('receiptSeriesNo', faker.datatype.uuid())
+      navigation.setParams({ imagePath: undefined })
       console.log('form reset!')
       setUploadLoading(false)
     } else if (error) {
@@ -238,6 +239,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
     data,
     error,
     insertLoading,
+    navigation,
   ])
 
   const isGas = watch('expense')?.name === 'Gas'
@@ -299,7 +301,6 @@ const ExpensesReportForm: FC<Props> = (props) => {
           await updateReceiptImageKey({
             variables: { receiptId, imageKey: `public/${res.key}` },
           })
-          //TODO: remove imagePath route props
         } catch (e) {
           console.log('upload failed', e)
           setUploadLoading(false)
