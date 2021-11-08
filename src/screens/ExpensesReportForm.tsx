@@ -291,7 +291,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
           const res = await Storage.put(`${receiptId}.jpg`, blob, {
             contentType: 'image/jpeg',
             level: 'public',
-            acl: 'public-read', //TODO: move acl to sst via sid prop
+            acl: 'public-read',
             progressCallback: ({ loaded, total }): void => {
               const perc = ((loaded / total) * 100).toFixed(1) + '%'
               setUploadPercentage(perc)
