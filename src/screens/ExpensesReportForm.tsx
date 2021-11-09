@@ -64,6 +64,7 @@ import {
   UpdateReceiptImageKeyPayload,
   UpdateReceiptImageKeyResponse,
 } from '@app/apollo/gql/receipts'
+import Supplier from '@app/types/Supplier'
 
 type ExpensesReportFormNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -367,6 +368,22 @@ const ExpensesReportForm: FC<Props> = (props) => {
     navigation.navigate('CapturePhoto')
   }, [navigation, route.params.id, route.params.reportNumber])
 
+  const onSuggestionPress = useCallback(
+    (_, index: number) => {
+      if (searchSupplierData) {
+        const { results } = searchSupplierData
+        const supplier: Supplier = results[index].supplier
+
+        setValue('supplierTin', supplier.tin)
+        setValue('supplierName', supplier.name)
+        setValue('supplierBuilding', supplier.bldg ?? '')
+        setValue('supplierAddress', supplier.address ?? '')
+        setValue('supplierStreetBrgy', supplier.streetBrgy ?? '')
+      }
+    },
+    [searchSupplierData, setValue],
+  )
+
   if (deleteLoading || insertLoading) {
     const message = deleteLoading ? 'Deleting Report' : 'Adding Receipt'
     return <LoadingScreen message={message} />
@@ -444,7 +461,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
             keyboardType="number-pad"
             suggestions={{
               list: supplierSuggestions,
-              onSuggestionPress: (s, i) => console.log('onPress', s, i),
+              onSuggestionPress,
               suggestionsLoading,
             }}
           />

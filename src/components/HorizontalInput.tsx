@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import {
   View,
   TextInput,
@@ -44,9 +44,27 @@ const HorizontalInput: FC<Props> = (props) => {
     name,
   })
 
+  const [isFocused, setIsFocused] = useState<boolean>(false)
+  const [hasPickedSuggestion, setHasPickedSuggestion] = useState<boolean>(false)
+
   const textInputStyle = error ? styles.textInputError : styles.textInput
   const hasSuggestions = suggestions && suggestions?.list.length > 0
   const loadingSuggestions = suggestions && suggestions?.suggestionsLoading
+
+  const onSuggestionPick = useCallback(
+    (selected: string, index: number) => {
+      suggestions?.onSuggestionPress(selected, index)
+    },
+    [suggestions],
+  )
+
+  useEffect(() => {
+    if (suggestions) {
+      const val = field.value as string
+      const hasSelected = !!val && suggestions.list.includes(val, 0)
+      setHasPickedSuggestion(hasSelected)
+    }
+  }, [field.value, suggestions])
 
   return (
     <View>
@@ -59,22 +77,23 @@ const HorizontalInput: FC<Props> = (props) => {
           placeholder={placeholder}
           keyboardType={keyboardType}
           placeholderTextColor="#D0D0D0"
+          onFocus={() => setIsFocused(true)}
         />
       </View>
       {error && <Text style={styles.errorLabel}>{error.message}</Text>}
-      {hasSuggestions && (
+      {isFocused && hasSuggestions && !hasPickedSuggestion && (
         <View style={styles.suggestionsContainer}>
           {suggestions?.list.map((s, index) => (
             <TouchableOpacity
               style={styles.suggestionItem}
-              onPress={() => suggestions?.onSuggestionPress(s, index)}
+              onPress={() => onSuggestionPick(s, index)}
               key={index}>
               <Text style={styles.suggestionItemLabel}>{s}</Text>
             </TouchableOpacity>
           ))}
         </View>
       )}
-      {loadingSuggestions && (
+      {isFocused && loadingSuggestions && !hasPickedSuggestion && (
         <View style={styles.suggestionsContainer}>
           <ActivityIndicator
             style={styles.suggestionsLoading}
@@ -113,6 +132,7 @@ const styles = EStyleSheet.create({
     width: '45%',
     right: 0,
     top: 50,
+    zIndex: 1,
     elevation: 3,
     backgroundColor: '$white',
   },
