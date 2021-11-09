@@ -116,7 +116,6 @@ const schema = z.object({
     id: z.string(),
     name: z.string(),
     birClass: z.string().optional(),
-    vatable: z.boolean(),
   }),
   receiptSeriesNo: z.string(),
   imagePath: z.string(),
@@ -373,12 +372,14 @@ const ExpensesReportForm: FC<Props> = (props) => {
       if (searchSupplierData) {
         const { results } = searchSupplierData
         const supplier: Supplier = results[index].supplier
+        const isVatable = results[index].vatable
 
         setValue('supplierTin', supplier.tin)
         setValue('supplierName', supplier.name)
         setValue('supplierBuilding', supplier.bldg ?? '')
         setValue('supplierAddress', supplier.address ?? '')
         setValue('supplierStreetBrgy', supplier.streetBrgy ?? '')
+        setValue('isVatable', isVatable)
       }
     },
     [searchSupplierData, setValue],

@@ -47,6 +47,7 @@ const QUERY_RECEIPT_SUPPLIERS = gql`
   query SearchReceiptSuppliers($tin: String!, $limit: Int) {
     results: search_receipt_suppliers(args: { tin: $tin }, limit: $limit) {
       supplier
+      vatable
     }
   }
 `
@@ -54,6 +55,7 @@ const QUERY_RECEIPT_SUPPLIERS = gql`
 export interface QueryReceiptSuppliersResponse {
   results: {
     supplier: Supplier
+    vatable: boolean
   }[]
 }
 

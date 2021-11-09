@@ -11,6 +11,7 @@ type Receipt = {
     address: string
     streetBrgy: string
   }
+  vatable: boolean
 }
 
 export default Receipt

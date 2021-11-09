@@ -9,7 +9,6 @@ const QUERY_EXPENSE = gql`
       id
       name
       birClass: bir_class
-      vatable
     }
   }
 `
