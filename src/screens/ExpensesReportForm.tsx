@@ -26,8 +26,9 @@ import HorizontalInput from '@components/HorizontalInput'
 import uploadIcon from '@images/outline_add_a_photo_black_24dp.png'
 
 import { currentDate } from '@utils/date'
+import useDebounce from '@utils/hooks/useDebounce'
 
-import { useReactiveVar, useMutation } from '@apollo/client'
+import { useReactiveVar, useMutation, useLazyQuery } from '@apollo/client'
 import {
   employeeInfo,
   viewedExpenseReport,
@@ -57,6 +58,9 @@ import DeleteButton from '@components/common/DeleteButton'
 import LoadingScreen from '@components/common/LoadingScreen'
 import {
   MUTATION_UPDATE_RECEIPT_IMAGE_KEY,
+  QueryReceiptSuppliersPayload,
+  QueryReceiptSuppliersResponse,
+  QUERY_RECEIPT_SUPPLIERS,
   UpdateReceiptImageKeyPayload,
   UpdateReceiptImageKeyResponse,
 } from '@app/apollo/gql/receipts'
@@ -133,6 +137,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
   const expenseReportId = route.params.id
   const [uploadLoading, setUploadLoading] = useState(false)
   const [uploadPercentage, setUploadPercentage] = useState('0.0%')
+  const [supplierSuggestions, setSupplierSuggestions] = useState<Array<string>>(
+    [],
+  )
 
   const {
     handleSubmit,
@@ -165,6 +172,13 @@ const ExpensesReportForm: FC<Props> = (props) => {
     UpdateReceiptImageKeyResponse,
     UpdateReceiptImageKeyPayload
   >(MUTATION_UPDATE_RECEIPT_IMAGE_KEY)
+
+  const [
+    searchReceiptSuppliers,
+    { data: searchSupplierData, loading: suggestionsLoading },
+  ] = useLazyQuery<QueryReceiptSuppliersResponse, QueryReceiptSuppliersPayload>(
+    QUERY_RECEIPT_SUPPLIERS,
+  )
 
   const [deleteExpenseReport, { loading: deleteLoading }] = useMutation<
     DeleteExpenseReportResponse,
@@ -241,6 +255,30 @@ const ExpensesReportForm: FC<Props> = (props) => {
     insertLoading,
     navigation,
   ])
+
+  const debouncedTin = useDebounce(watch('supplierTin'), 250)
+
+  useEffect(() => {
+    const hasLength = debouncedTin && (debouncedTin as string).length > 0
+    if (hasLength) {
+      searchReceiptSuppliers({
+        variables: {
+          tin: debouncedTin as string,
+          limit: 3,
+        },
+      })
+    } else {
+      setSupplierSuggestions([])
+    }
+  }, [debouncedTin, searchReceiptSuppliers])
+
+  useEffect(() => {
+    if (searchSupplierData) {
+      const { results } = searchSupplierData
+      const supplierTins = results.map((r) => r.supplier.tin)
+      setSupplierSuggestions(supplierTins)
+    }
+  }, [searchSupplierData])
 
   const isGas = watch('expense')?.name === 'Gas'
 
@@ -404,6 +442,11 @@ const ExpensesReportForm: FC<Props> = (props) => {
             control={control}
             error={errors.supplierTin}
             keyboardType="number-pad"
+            suggestions={{
+              list: supplierSuggestions,
+              onSuggestionPress: (s, i) => console.log('onPress', s, i),
+              suggestionsLoading,
+            }}
           />
           <HorizontalInput
             title="Supplier Name"

@@ -1,5 +1,11 @@
 import React from 'react'
-import { View, TextInput, Text } from 'react-native'
+import {
+  View,
+  TextInput,
+  Text,
+  TouchableOpacity,
+  ActivityIndicator,
+} from 'react-native'
 
 import type { FC } from 'react'
 import type { KeyboardTypeOptions } from 'react-native'
@@ -15,10 +21,23 @@ type Props = {
   control: Control<any>
   error?: FieldError
   keyboardType?: KeyboardTypeOptions
+  suggestions?: {
+    list: Array<string>
+    onSuggestionPress: (selected: string, index: number) => void
+    suggestionsLoading: boolean
+  }
 }
 
 const HorizontalInput: FC<Props> = (props) => {
-  const { title, placeholder, control, name, error, keyboardType } = props
+  const {
+    title,
+    placeholder,
+    control,
+    name,
+    error,
+    keyboardType,
+    suggestions,
+  } = props
   const { field } = useController({
     control,
     defaultValue: '',
@@ -26,6 +45,8 @@ const HorizontalInput: FC<Props> = (props) => {
   })
 
   const textInputStyle = error ? styles.textInputError : styles.textInput
+  const hasSuggestions = suggestions && suggestions?.list.length > 0
+  const loadingSuggestions = suggestions && suggestions?.suggestionsLoading
 
   return (
     <View>
@@ -41,6 +62,27 @@ const HorizontalInput: FC<Props> = (props) => {
         />
       </View>
       {error && <Text style={styles.errorLabel}>{error.message}</Text>}
+      {hasSuggestions && (
+        <View style={styles.suggestionsContainer}>
+          {suggestions?.list.map((s, index) => (
+            <TouchableOpacity
+              style={styles.suggestionItem}
+              onPress={() => suggestions?.onSuggestionPress(s, index)}
+              key={index}>
+              <Text style={styles.suggestionItemLabel}>{s}</Text>
+            </TouchableOpacity>
+          ))}
+        </View>
+      )}
+      {loadingSuggestions && (
+        <View style={styles.suggestionsContainer}>
+          <ActivityIndicator
+            style={styles.suggestionsLoading}
+            animating
+            color="#007aff"
+          />
+        </View>
+      )}
     </View>
   )
 }
@@ -65,6 +107,25 @@ const styles = EStyleSheet.create({
   errorLabel: {
     alignSelf: 'flex-end',
     color: '$red',
+  },
+  suggestionsContainer: {
+    position: 'absolute',
+    width: '45%',
+    right: 0,
+    top: 50,
+    elevation: 3,
+    backgroundColor: '$white',
+  },
+  suggestionItem: {
+    padding: '$spacingSm',
+  },
+  suggestionItemLabel: {
+    color: '$dark',
+  },
+  suggestionsLoading: {
+    padding: '$spacingSm',
+    alignSelf: 'center',
+    height: 50,
   },
 })
 

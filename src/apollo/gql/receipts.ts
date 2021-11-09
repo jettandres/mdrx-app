@@ -1,4 +1,5 @@
 import { gql } from '@apollo/client'
+import Supplier from '@app/types/Supplier'
 
 const DELETE_RECEIPT = gql`
   mutation DeleteReceipt($receiptId: uuid!) {
@@ -42,4 +43,27 @@ export interface UpdateReceiptImageKeyPayload {
   imageKey: string
 }
 
-export { DELETE_RECEIPT, MUTATION_UPDATE_RECEIPT_IMAGE_KEY }
+const QUERY_RECEIPT_SUPPLIERS = gql`
+  query SearchReceiptSuppliers($tin: String!, $limit: Int) {
+    results: search_receipt_suppliers(args: { tin: $tin }, limit: $limit) {
+      supplier
+    }
+  }
+`
+
+export interface QueryReceiptSuppliersResponse {
+  results: {
+    supplier: Supplier
+  }[]
+}
+
+export interface QueryReceiptSuppliersPayload {
+  tin: string
+  limit?: number
+}
+
+export {
+  DELETE_RECEIPT,
+  MUTATION_UPDATE_RECEIPT_IMAGE_KEY,
+  QUERY_RECEIPT_SUPPLIERS,
+}
