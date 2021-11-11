@@ -140,6 +140,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
   const [supplierSuggestions, setSupplierSuggestions] = useState<Array<string>>(
     [],
   )
+  const [isSuggestionPressed, setIsSuggestionPressed] = useState(false)
 
   const {
     handleSubmit,
@@ -367,6 +368,16 @@ const ExpensesReportForm: FC<Props> = (props) => {
     navigation.navigate('CapturePhoto')
   }, [navigation, route.params.id, route.params.reportNumber])
 
+  useEffect(() => {
+    if (searchSupplierData) {
+      const { results } = searchSupplierData
+      const selectedExisting = !!results
+        .map((r) => r.supplier)
+        .find((s) => s.tin === debouncedTin)
+      setIsSuggestionPressed(selectedExisting)
+    }
+  }, [debouncedTin, searchSupplierData])
+
   const onSuggestionPress = useCallback(
     (_, index: number) => {
       if (searchSupplierData) {
@@ -440,11 +451,19 @@ const ExpensesReportForm: FC<Props> = (props) => {
               />
             </>
           )}
-          <HorizontalSwitch
-            title="VATable"
-            name="isVatable"
-            control={control}
-          />
+          {!isSuggestionPressed && (
+            <HorizontalSwitch
+              title="Receipt VATable"
+              name="isVatable"
+              control={control}
+            />
+          )}
+          {isSuggestionPressed && (
+            <HorizontalLabel
+              title="Receipt VATable"
+              subtitle={watch('isVatable') ? 'VATable' : 'non-VATable'}
+            />
+          )}
           <HorizontalInput
             title="Expense Amount"
             placeholder="P100.00"
