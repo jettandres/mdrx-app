@@ -10,7 +10,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
-import { Dinero, toSnapshot } from 'dinero.js'
+import { Dinero, toSnapshot, allocate, toUnit, dinero } from 'dinero.js'
 import { Storage } from 'aws-amplify'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -141,6 +141,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
     [],
   )
   const [isSuggestionPressed, setIsSuggestionPressed] = useState(false)
+  const [netAmount, setNetAmount] = useState<string>('0.00')
+  const [vatAmount, setVatAmount] = useState<string>('0.00')
 
   const {
     handleSubmit,
@@ -396,6 +398,18 @@ const ExpensesReportForm: FC<Props> = (props) => {
     [searchSupplierData, setValue],
   )
 
+  const debouncedExpenseAmount = useDebounce(watch('expenseAmount'), 100)
+  useEffect(() => {
+    if (debouncedExpenseAmount) {
+      const floatAmount = parseFloat(debouncedExpenseAmount)
+      const tempNetAmount = floatAmount / 1.12
+      const tempVatAmount = tempNetAmount * 0.12
+
+      setNetAmount(tempNetAmount.toFixed(2))
+      setVatAmount(tempVatAmount.toFixed(2))
+    }
+  }, [debouncedExpenseAmount])
+
   if (deleteLoading || insertLoading) {
     const message = deleteLoading ? 'Deleting Report' : 'Adding Receipt'
     return <LoadingScreen message={message} />
@@ -472,6 +486,12 @@ const ExpensesReportForm: FC<Props> = (props) => {
             error={errors.expenseAmount}
             keyboardType="number-pad"
           />
+          {watch('isVatable') && (
+            <View style={styles.vatAmountsContainer}>
+              <HorizontalLabel title="Net Amount" subtitle={netAmount} />
+              <HorizontalLabel title="VAT Amount" subtitle={vatAmount} />
+            </View>
+          )}
           <HorizontalInput
             title="Supplier TIN #"
             placeholder="32125242-0000"
@@ -589,6 +609,9 @@ const styles = EStyleSheet.create({
   capturedImage: {
     height: 200,
     width: 150,
+  },
+  vatAmountsContainer: {
+    marginBottom: '$spacingSm',
   },
 })
 
