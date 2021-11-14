@@ -120,7 +120,7 @@ const ReviewReport: FC<Props> = (props) => {
           <SectionHeader
             onPress={onSectionHeaderPress}
             title={title.label}
-            itemCount={12}
+            itemCount={title.itemCount}
           />
         )}
         renderItem={({ item, section }) => {

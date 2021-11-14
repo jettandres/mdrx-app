@@ -8,6 +8,7 @@ type Sections = {
   title: {
     label: string
     total: DineroSnapshot<number>
+    itemCount: number
   }
   data: Array<SectionData>
 }
