@@ -407,6 +407,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
 
       setNetAmount(tempNetAmount.toFixed(2))
       setVatAmount(tempVatAmount.toFixed(2))
+    } else {
+      setNetAmount('0.00')
+      setVatAmount('0.00')
     }
   }, [debouncedExpenseAmount])
 
