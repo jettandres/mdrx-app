@@ -23,6 +23,7 @@ const ListItem: FC<Props> = (props) => {
     onDeletePress,
     id,
     netAmount,
+    litersAdded,
   } = props
 
   return (
@@ -30,6 +31,12 @@ const ListItem: FC<Props> = (props) => {
       <Text style={styles.sectionItemTitle}>{supplierName}</Text>
       <Text>TIN # {supplierTin}</Text>
       {kmReading && <Text>km reading: {kmReading.toString()}km</Text>}
+      {litersAdded && (
+        <Text>
+          liters added: {litersAdded.toString()} liter
+          {litersAdded > 1 ? 's' : ''}
+        </Text>
+      )}
       <View style={styles.itemButtonsContainer}>
         <TouchableOpacity onPress={() => onViewPhoto(imageKey)}>
           <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>

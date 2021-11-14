@@ -18,8 +18,9 @@ export type SectionData = {
   supplierName: string
   supplierTin: string
   netAmount: DineroSnapshot<number>
-  kmReading?: number
   imageKey: string
+  kmReading?: number
+  litersAdded?: number
 }
 
 type YearToDateData = {
