@@ -1,6 +1,13 @@
-import { dinero } from 'dinero.js'
+import { Currency, Dinero, dinero } from 'dinero.js'
 
-const dineroFromFloat = ({ amount: float, currency, scale }) => {
+type Payload = {
+  amount: number
+  currency: Currency<number>
+  scale: number
+}
+
+const dineroFromFloat = (props: Payload): Dinero<number> => {
+  const { amount: float, currency, scale } = props
   const factor = currency.base ** currency.exponent || scale
   const amount = Math.round(float * factor)
 
