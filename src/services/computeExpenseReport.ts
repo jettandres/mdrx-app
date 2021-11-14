@@ -18,6 +18,8 @@ export type SectionData = {
   supplierName: string
   supplierTin: string
   netAmount: DineroSnapshot<number>
+  vatAmount: DineroSnapshot<number>
+  grossAmount: DineroSnapshot<number>
   imageKey: string
   kmReading?: number
   litersAdded?: number

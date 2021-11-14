@@ -24,6 +24,8 @@ const ListItem: FC<Props> = (props) => {
     id,
     netAmount,
     litersAdded,
+    grossAmount,
+    vatAmount,
   } = props
 
   return (
@@ -47,12 +49,15 @@ const ListItem: FC<Props> = (props) => {
       </View>
       <View style={styles.itemAmountContainer}>
         <HorizontalLabel
-          title={`Gross`}
-          subtitle={formatCurrency(dinero(netAmount))}
+          title="Gross"
+          subtitle={formatCurrency(dinero(grossAmount))}
         />
-        <HorizontalLabel title={`VAT`} subtitle="12.32" />
         <HorizontalLabel
-          title={`Net`}
+          title="VAT"
+          subtitle={formatCurrency(dinero(vatAmount))}
+        />
+        <HorizontalLabel
+          title="Net"
           subtitle={formatCurrency(dinero(netAmount))}
         />
       </View>
