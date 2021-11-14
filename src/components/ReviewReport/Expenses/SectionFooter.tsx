@@ -19,15 +19,15 @@ const SectionFooter: FC<Props> = (props) => {
     <View style={rootStyle}>
       <View style={styles.container}>
         <Text>Gross</Text>
-        <Text>₱{grossAmount}</Text>
+        <Text>{grossAmount}</Text>
       </View>
       <View style={styles.container}>
         <Text>VAT</Text>
-        <Text>{vatAmount}</Text>
+        <Text>-{vatAmount}</Text>
       </View>
       <View style={styles.container}>
         <Text style={styles.title}>Net</Text>
-        <Text style={styles.title}>₱{netAmount}</Text>
+        <Text style={styles.title}>{netAmount}</Text>
       </View>
     </View>
   )

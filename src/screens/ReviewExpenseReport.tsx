@@ -8,7 +8,7 @@ import {
 } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { dinero } from 'dinero.js'
+import { dinero, toUnit } from 'dinero.js'
 
 import type { FC } from 'react'
 
@@ -147,9 +147,9 @@ const ReviewReport: FC<Props> = (props) => {
           const isCollapsed = collapsedHeaders.find((t) => t === title.label)
           return (
             <SectionFooter
-              netAmount="102.68"
-              vatAmount="12.32"
-              grossAmount="115.00"
+              netAmount={formatCurrency(dinero(title.total.netAmount))}
+              vatAmount={toUnit(dinero(title.total.vatAmount)).toFixed(2)}
+              grossAmount={formatCurrency(dinero(title.total.grossAmount))}
               isCollapsed={!!isCollapsed}
             />
           )

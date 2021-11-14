@@ -7,7 +7,11 @@ const url =
 type Sections = {
   title: {
     label: string
-    total: DineroSnapshot<number>
+    total: {
+      netAmount: DineroSnapshot<number>
+      vatAmount: DineroSnapshot<number>
+      grossAmount: DineroSnapshot<number>
+    }
     itemCount: number
   }
   data: Array<SectionData>

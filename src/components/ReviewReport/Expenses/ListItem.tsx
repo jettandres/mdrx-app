@@ -6,7 +6,7 @@ import type { FC } from 'react'
 import { SectionData } from '@app/services/computeExpenseReport'
 import HorizontalLabel from '@components/HorizontalLabel'
 import formatCurrency from '@utils/formatCurrency'
-import { dinero } from 'dinero.js'
+import { dinero, toUnit } from 'dinero.js'
 
 type Props = SectionData & {
   onViewPhoto: (imageKey: string) => void
@@ -27,6 +27,8 @@ const ListItem: FC<Props> = (props) => {
     grossAmount,
     vatAmount,
   } = props
+
+  const formattedVat = `-${toUnit(dinero(vatAmount)).toFixed(2)}`
 
   return (
     <View style={styles.sectionItemContainer}>
@@ -52,10 +54,7 @@ const ListItem: FC<Props> = (props) => {
           title="Gross"
           subtitle={formatCurrency(dinero(grossAmount))}
         />
-        <HorizontalLabel
-          title="VAT"
-          subtitle={formatCurrency(dinero(vatAmount))}
-        />
+        <HorizontalLabel title="VAT" subtitle={formattedVat} />
         <HorizontalLabel
           title="Net"
           subtitle={formatCurrency(dinero(netAmount))}
