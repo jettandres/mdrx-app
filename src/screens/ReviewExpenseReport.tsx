@@ -32,6 +32,7 @@ import {
   DELETE_RECEIPT,
 } from '@app/apollo/gql/receipts'
 import SectionFooter from '@components/ReviewReport/Expenses/SectionFooter'
+import ListItem from '@components/ReviewReport/Expenses/ListItem'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -118,7 +119,6 @@ const ReviewReport: FC<Props> = (props) => {
         }
         renderSectionHeader={({ section: { title } }) => {
           const isCollapsed = collapsedHeaders.find((t) => t === title.label)
-
           return (
             <SectionHeader
               onPress={onSectionHeaderPress}
@@ -135,34 +135,12 @@ const ReviewReport: FC<Props> = (props) => {
           if (isCollapsed) {
             return null
           }
-
           return (
-            <View style={styles.sectionItemContainer}>
-              <Text style={styles.sectionItemTitle}>{item.supplierName}</Text>
-              <Text>TIN # {item.supplierTin}</Text>
-              {item.kmReading && (
-                <Text>km reading: {item.kmReading.toString()}km</Text>
-              )}
-              <View style={styles.itemButtonsContainer}>
-                <TouchableOpacity onPress={() => onViewPhoto(item.imageKey)}>
-                  <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>
-                </TouchableOpacity>
-                <TouchableOpacity onPress={() => onDeletePress(item.id)}>
-                  <Text style={styles.deletePhotoLabel}>DELETE</Text>
-                </TouchableOpacity>
-              </View>
-              <View style={styles.itemAmountContainer}>
-                <HorizontalLabel
-                  title={`Gross`}
-                  subtitle={formatCurrency(dinero(item.netAmount))}
-                />
-                <HorizontalLabel title={`VAT`} subtitle="12.32" />
-                <HorizontalLabel
-                  title={`Net`}
-                  subtitle={formatCurrency(dinero(item.netAmount))}
-                />
-              </View>
-            </View>
+            <ListItem
+              {...item}
+              onViewPhoto={onViewPhoto}
+              onDeletePress={onDeletePress}
+            />
           )
         }}
         renderSectionFooter={({ section: { title } }) => {
@@ -204,15 +182,6 @@ const styles = EStyleSheet.create({
   header: {
     backgroundColor: '$darkGray',
   },
-  sectionItemContainer: {
-    padding: '$spacingSm',
-    borderBottomWidth: 1,
-    borderColor: '$borderColor',
-    paddingHorizontal: '$spacingSm',
-  },
-  sectionItemTitle: {
-    fontWeight: '700',
-  },
   listFooterTitle: {
     fontWeight: 'bold',
     alignSelf: 'flex-start',
@@ -221,23 +190,6 @@ const styles = EStyleSheet.create({
   },
   listFooterTotalYearContainer: {
     marginTop: '$spacingSm',
-  },
-  itemButtonsContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    marginTop: '$spacingXs',
-  },
-  itemAmountContainer: {
-    marginTop: '$spacingSm',
-  },
-  viewPhotoLabel: {
-    color: '$blue',
-    marginRight: '$spacingXs',
-    fontSize: '$xs',
-  },
-  deletePhotoLabel: {
-    color: '$red',
-    fontSize: '$xs',
   },
 })
 

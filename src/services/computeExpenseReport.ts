@@ -13,7 +13,7 @@ type Sections = {
   data: Array<SectionData>
 }
 
-type SectionData = {
+export type SectionData = {
   id: string
   supplierName: string
   supplierTin: string
