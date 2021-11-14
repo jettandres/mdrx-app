@@ -6,12 +6,12 @@ import type { FC } from 'react'
 
 type Props = {
   title: string
+  subtitle: string
   onPress: (title: string) => void
-  itemCount: number
 }
 
 const SectionHeader: FC<Props> = (props) => {
-  const { title, onPress, itemCount } = props
+  const { title, subtitle, onPress } = props
   const onHeaderPress = useCallback(() => onPress(title), [onPress, title])
 
   return (
@@ -19,9 +19,7 @@ const SectionHeader: FC<Props> = (props) => {
       onPress={onHeaderPress}
       style={styles.sectionHeaderContainer}>
       <Text style={styles.sectionHeaderTitle}>{title}</Text>
-      <Text style={styles.sectionHeaderSubtitle}>
-        {itemCount} item{itemCount > 1 ? 's' : ''}
-      </Text>
+      <Text style={styles.sectionHeaderTitle}>{subtitle}</Text>
     </TouchableOpacity>
   )
 }
@@ -32,16 +30,13 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    borderBottomWidth: 0,
+    borderBottomWidth: 1,
     borderColor: '$borderColor',
     padding: '$spacingSm',
     backgroundColor: '$white',
   },
   sectionHeaderTitle: {
     fontWeight: 'bold',
-  },
-  sectionHeaderSubtitle: {
-    fontSize: '$xs',
   },
 })
 

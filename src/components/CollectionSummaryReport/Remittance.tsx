@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react'
 import { View, Text, SectionList, TouchableOpacity } from 'react-native'
 
-import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
+import SectionHeader from '@components/common/SectionHeader'
 import HorizontalLabel from '@components/HorizontalLabel'
 
 import type { FC } from 'react'

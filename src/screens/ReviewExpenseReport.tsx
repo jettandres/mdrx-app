@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   View,
   Text,
@@ -31,6 +31,7 @@ import {
   DeleteReceiptResponse,
   DELETE_RECEIPT,
 } from '@app/apollo/gql/receipts'
+import SectionFooter from '@components/ReviewReport/Expenses/SectionFooter'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -119,7 +120,7 @@ const ReviewReport: FC<Props> = (props) => {
           <SectionHeader
             onPress={onSectionHeaderPress}
             title={title.label}
-            subtitle={formatCurrency(dinero(title.total))}
+            itemCount={12}
           />
         )}
         renderItem={({ item, section }) => {
@@ -133,10 +134,7 @@ const ReviewReport: FC<Props> = (props) => {
           return (
             <View style={styles.sectionItemContainer}>
               <Text style={styles.sectionItemTitle}>{item.supplierName}</Text>
-              <HorizontalLabel
-                title={`TIN # ${item.supplierTin}`}
-                subtitle={formatCurrency(dinero(item.netAmount))}
-              />
+              <Text>TIN # {item.supplierTin}</Text>
               {item.kmReading && (
                 <Text>km reading: {item.kmReading.toString()}km</Text>
               )}
@@ -148,7 +146,29 @@ const ReviewReport: FC<Props> = (props) => {
                   <Text style={styles.deletePhotoLabel}>DELETE</Text>
                 </TouchableOpacity>
               </View>
+              <View style={styles.itemAmountContainer}>
+                <HorizontalLabel
+                  title={`Gross`}
+                  subtitle={formatCurrency(dinero(item.netAmount))}
+                />
+                <HorizontalLabel title={`VAT`} subtitle="12.32" />
+                <HorizontalLabel
+                  title={`Net`}
+                  subtitle={formatCurrency(dinero(item.netAmount))}
+                />
+              </View>
             </View>
+          )
+        }}
+        renderSectionFooter={({ section: { title } }) => {
+          const isCollapsed = collapsedHeaders.find((t) => t === title.label)
+          return (
+            <SectionFooter
+              netAmount="102.68"
+              vatAmount="12.32"
+              grossAmount="115.00"
+              isCollapsed={!!isCollapsed}
+            />
           )
         }}
         ListFooterComponent={
@@ -183,6 +203,7 @@ const styles = EStyleSheet.create({
     padding: '$spacingSm',
     borderBottomWidth: 1,
     borderColor: '$borderColor',
+    paddingHorizontal: '$spacingSm',
   },
   sectionItemTitle: {
     fontWeight: '700',
@@ -200,6 +221,9 @@ const styles = EStyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     marginTop: '$spacingXs',
+  },
+  itemAmountContainer: {
+    marginTop: '$spacingSm',
   },
   viewPhotoLabel: {
     color: '$blue',

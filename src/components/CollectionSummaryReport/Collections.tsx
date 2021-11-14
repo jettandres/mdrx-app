@@ -13,7 +13,7 @@ import { RouteProp, useNavigation } from '@react-navigation/core'
 
 import CollectionType from '@app/types/CollectionType'
 import HorizontalLabel from '@components/HorizontalLabel'
-import SectionHeader from '@components/ReviewReport/Expenses/SectionHeader'
+import SectionHeader from '@components/common/SectionHeader'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 
 type SectionData = {
