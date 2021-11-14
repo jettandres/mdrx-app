@@ -36,7 +36,11 @@ type YearToDateData = {
 }
 
 export type ReportFooter = {
-  totalReplenishable: DineroSnapshot<number>
+  totalReplenishable: {
+    netAmount: DineroSnapshot<number>
+    grossAmount: DineroSnapshot<number>
+    vatAmount: DineroSnapshot<number>
+  }
   yearToDate: Array<YearToDateData>
   totalYearToDate: DineroSnapshot<number>
   totalKmReadingConsumption: number

@@ -7,7 +7,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 import type { FC } from 'react'
 import type { ReportFooter } from '@app/services/computeExpenseReport'
-import { dinero } from 'dinero.js'
+import { dinero, toUnit } from 'dinero.js'
 import formatCurrency from '@utils/formatCurrency'
 
 type Props = {
@@ -27,13 +27,25 @@ const ListFooterComponent: FC<Props> = (props) => {
     },
   } = props
 
+  const formattedVat = `-${toUnit(dinero(totalReplenishable.vatAmount)).toFixed(
+    2,
+  )}`
+
   return (
     <View style={styles.listFooter}>
-      <HorizontalLabel
-        title="Total Replenishable"
-        bold
-        subtitle={formatCurrency(dinero(totalReplenishable))}
-      />
+      <Text style={styles.totalReplenishableLable}>Total Replenishable</Text>
+      <View style={styles.totalReplenishableContainer}>
+        <HorizontalLabel
+          title="Gross"
+          bold
+          subtitle={formatCurrency(dinero(totalReplenishable.grossAmount))}
+        />
+        <HorizontalLabel title="VAT" subtitle={formattedVat} />
+        <HorizontalLabel
+          title="Net"
+          subtitle={formatCurrency(dinero(totalReplenishable.netAmount))}
+        />
+      </View>
       <View style={styles.kmReadingContainer}>
         <View style={styles.kmReadingSubContainer}>
           <Icon
@@ -129,6 +141,12 @@ const styles = EStyleSheet.create({
   listFooterTotalYearContainer: {
     marginTop: '$spacingSm',
     marginBottom: '$spacingXl',
+  },
+  totalReplenishableContainer: {
+    paddingTop: '$spacingSm',
+  },
+  totalReplenishableLable: {
+    fontWeight: 'bold',
   },
 })
 
