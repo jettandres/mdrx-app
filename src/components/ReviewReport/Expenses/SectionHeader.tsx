@@ -1,5 +1,6 @@
 import React, { useCallback } from 'react'
-import { Text, TouchableOpacity } from 'react-native'
+import { Text, TouchableOpacity, View } from 'react-native'
+import Icon from 'react-native-vector-icons/MaterialIcons'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -8,10 +9,11 @@ type Props = {
   title: string
   onPress: (title: string) => void
   itemCount: number
+  isCollapsed: boolean
 }
 
 const SectionHeader: FC<Props> = (props) => {
-  const { title, onPress, itemCount } = props
+  const { title, onPress, itemCount, isCollapsed } = props
   const onHeaderPress = useCallback(() => onPress(title), [onPress, title])
 
   return (
@@ -19,9 +21,16 @@ const SectionHeader: FC<Props> = (props) => {
       onPress={onHeaderPress}
       style={styles.sectionHeaderContainer}>
       <Text style={styles.sectionHeaderTitle}>{title}</Text>
-      <Text style={styles.sectionHeaderSubtitle}>
-        {itemCount} item{itemCount > 1 ? 's' : ''}
-      </Text>
+      <View style={styles.subtitleContainer}>
+        <Text style={styles.sectionHeaderSubtitle}>
+          {itemCount} item{itemCount > 1 ? 's' : ''}
+        </Text>
+        <Icon
+          name={isCollapsed ? 'keyboard-arrow-right' : 'keyboard-arrow-down'}
+          size={18}
+          color="#202020"
+        />
+      </View>
     </TouchableOpacity>
   )
 }
@@ -35,6 +44,7 @@ const styles = EStyleSheet.create({
     borderBottomWidth: 0,
     borderColor: '$borderColor',
     padding: '$spacingSm',
+    paddingRight: '$spacingXs',
     backgroundColor: '$white',
   },
   sectionHeaderTitle: {
@@ -42,6 +52,10 @@ const styles = EStyleSheet.create({
   },
   sectionHeaderSubtitle: {
     fontSize: '$xs',
+  },
+  subtitleContainer: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 })
 

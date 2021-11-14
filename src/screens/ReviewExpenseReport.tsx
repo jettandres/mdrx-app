@@ -116,13 +116,18 @@ const ReviewReport: FC<Props> = (props) => {
         ListHeaderComponent={
           <ListHeaderComponent reportCreatedAt={createdAt} />
         }
-        renderSectionHeader={({ section: { title } }) => (
-          <SectionHeader
-            onPress={onSectionHeaderPress}
-            title={title.label}
-            itemCount={title.itemCount}
-          />
-        )}
+        renderSectionHeader={({ section: { title } }) => {
+          const isCollapsed = collapsedHeaders.find((t) => t === title.label)
+
+          return (
+            <SectionHeader
+              onPress={onSectionHeaderPress}
+              title={title.label}
+              itemCount={title.itemCount}
+              isCollapsed={!!isCollapsed}
+            />
+          )
+        }}
         renderItem={({ item, section }) => {
           const isCollapsed = collapsedHeaders.find(
             (t) => t === section.title.label,
