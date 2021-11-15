@@ -10,7 +10,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
-import { Dinero, toSnapshot, allocate, toUnit, dinero } from 'dinero.js'
+import { Dinero, toSnapshot } from 'dinero.js'
 import { Storage } from 'aws-amplify'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -299,6 +299,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
             streetBrgy: formData.supplierStreetBrgy,
             bldg: formData.supplierBuilding,
           },
+          vatable: formData.isVatable,
         },
       }
 

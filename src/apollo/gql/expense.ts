@@ -92,6 +92,7 @@ export interface NewExpenseReceiptPayload {
       streetBrgy: string
       bldg: string
     }
+    vatable: boolean
   }
 }
 
