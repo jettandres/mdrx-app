@@ -10,7 +10,7 @@ import {
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
-import { Dinero, toSnapshot } from 'dinero.js'
+import { dinero, Dinero, toSnapshot } from 'dinero.js'
 import { Storage } from 'aws-amplify'
 
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
@@ -95,6 +95,8 @@ type FormData = {
   imagePath: string
   litersAdded?: number
   kmReading?: number
+  vatAmount: Dinero<number>
+  netAmount: Dinero<number>
 }
 
 const schema = z.object({
@@ -287,6 +289,26 @@ const ExpensesReportForm: FC<Props> = (props) => {
 
   const onNextPress = useCallback(
     async (formData: FormData) => {
+      const net = formData.isVatable
+        ? toSnapshot(
+            dineroFromFloat({
+              amount: parseFloat(netAmount),
+              currency: PHP,
+              scale: 2,
+            }),
+          )
+        : toSnapshot(formData.expenseAmount)
+
+      const vat = formData.isVatable
+        ? toSnapshot(
+            dineroFromFloat({
+              amount: parseFloat(vatAmount),
+              currency: PHP,
+              scale: 2,
+            }),
+          )
+        : toSnapshot(dinero({ amount: 0, currency: PHP, scale: 2 }))
+
       const payload: NewExpenseReceiptPayload = {
         receipt: {
           amount: toSnapshot(formData.expenseAmount),
@@ -300,6 +322,8 @@ const ExpensesReportForm: FC<Props> = (props) => {
             bldg: formData.supplierBuilding,
           },
           vatable: formData.isVatable,
+          net,
+          vat,
         },
       }
 
@@ -354,7 +378,9 @@ const ExpensesReportForm: FC<Props> = (props) => {
       insertExpenseReceipt,
       insertKmReading,
       isGas,
+      netAmount,
       updateReceiptImageKey,
+      vatAmount,
     ],
   )
 

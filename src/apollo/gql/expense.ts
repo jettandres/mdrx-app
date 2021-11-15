@@ -93,6 +93,8 @@ export interface NewExpenseReceiptPayload {
       bldg: string
     }
     vatable: boolean
+    net: DineroSnapshot<number>
+    vat: DineroSnapshot<number>
   }
 }
 
