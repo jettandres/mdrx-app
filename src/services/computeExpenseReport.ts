@@ -32,7 +32,9 @@ export type SectionData = {
 type YearToDateData = {
   id: string
   name: string
-  amount: DineroSnapshot<number>
+  gross: DineroSnapshot<number>
+  net: DineroSnapshot<number>
+  vat: DineroSnapshot<number>
 }
 
 export type ReportFooter = {
@@ -42,7 +44,11 @@ export type ReportFooter = {
     vatAmount: DineroSnapshot<number>
   }
   yearToDate: Array<YearToDateData>
-  totalYearToDate: DineroSnapshot<number>
+  totalYearToDate: {
+    netAmount: DineroSnapshot<number>
+    grossAmount: DineroSnapshot<number>
+    vatAmount: DineroSnapshot<number>
+  }
   totalKmReadingConsumption: number
   avgKmPerLiter: string
 }

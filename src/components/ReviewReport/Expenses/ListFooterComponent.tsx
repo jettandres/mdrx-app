@@ -21,7 +21,7 @@ const ListFooterComponent: FC<Props> = (props) => {
     reportFooter: {
       totalReplenishable,
       yearToDate,
-      totalYearToDate,
+      totalYearToDate: { netAmount, grossAmount, vatAmount },
       avgKmPerLiter,
       totalKmReadingConsumption,
     },
@@ -82,15 +82,24 @@ const ListFooterComponent: FC<Props> = (props) => {
         <HorizontalLabel
           key={ytd.id}
           title={ytd.name}
-          subtitle={formatCurrency(dinero(ytd.amount))}
+          subtitle={formatCurrency(dinero(ytd.gross))}
         />
       ))}
 
       <View style={styles.listFooterTotalYearContainer}>
+        <Text style={styles.totalYearLabel}>Total Year</Text>
         <HorizontalLabel
-          title="Total Year"
-          subtitle={formatCurrency(dinero(totalYearToDate))}
+          title="Gross"
+          subtitle={formatCurrency(dinero(grossAmount))}
           bold
+        />
+        <HorizontalLabel
+          title="Vat"
+          subtitle={`-${toUnit(dinero(vatAmount))}`}
+        />
+        <HorizontalLabel
+          title="Net"
+          subtitle={formatCurrency(dinero(netAmount))}
         />
       </View>
 
@@ -147,6 +156,10 @@ const styles = EStyleSheet.create({
   },
   totalReplenishableLable: {
     fontWeight: 'bold',
+  },
+  totalYearLabel: {
+    fontWeight: 'bold',
+    marginBottom: '$spacingSm',
   },
 })
 
