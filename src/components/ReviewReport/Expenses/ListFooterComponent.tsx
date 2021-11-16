@@ -23,6 +23,15 @@ type CarouselDataItem = {
   net: string
 }
 
+type CarouselDataYtdItem = {
+  title: string
+  subtitle: string
+  items: Array<{
+    name: string
+    amount: string
+  }>
+}
+
 const ListFooterComponent: FC<Props> = (props) => {
   const {
     onSubmit,
@@ -51,6 +60,42 @@ const ListFooterComponent: FC<Props> = (props) => {
       gross: formatCurrency(dinero(grossAmount)),
       vat: `-${toUnit(dinero(vatAmount))}`,
       net: formatCurrency(dinero(netAmount)),
+    },
+  ]
+
+  const carouselDataYtd: Array<CarouselDataYtdItem> = [
+    {
+      title: 'Year to Date',
+      subtitle: 'Gross',
+      items: yearToDate.map((ytd) => {
+        const item = {
+          name: ytd.name,
+          amount: formatCurrency(dinero(ytd.gross)),
+        }
+        return item
+      }),
+    },
+    {
+      title: 'Year to Date',
+      subtitle: 'VAT',
+      items: yearToDate.map((ytd) => {
+        const item = {
+          name: ytd.name,
+          amount: `-${toUnit(dinero(ytd.vat))}`,
+        }
+        return item
+      }),
+    },
+    {
+      title: 'Year to Date',
+      subtitle: 'Net',
+      items: yearToDate.map((ytd) => {
+        const item = {
+          name: ytd.name,
+          amount: formatCurrency(dinero(ytd.net)),
+        }
+        return item
+      }),
     },
   ]
 
@@ -102,16 +147,26 @@ const ListFooterComponent: FC<Props> = (props) => {
           </View>
         </View>
       </View>
-      <View style={styles.yearToDateContainer}>
-        <Text style={styles.listFooterTitle}>Year to Date</Text>
-        {yearToDate.map((ytd) => (
-          <HorizontalLabel
-            key={ytd.id}
-            title={ytd.name}
-            subtitle={formatCurrency(dinero(ytd.gross))}
-          />
-        ))}
-      </View>
+      <CarouselSection
+        renderItem={({ item }) => {
+          const { title, items, subtitle } = item as CarouselDataYtdItem
+          return (
+            <View style={styles.yearToDateContainer}>
+              <View style={styles.yearToDateTitleContainer}>
+                <HorizontalLabel title={title} subtitle={subtitle} bold />
+              </View>
+              {items.map(({ name, amount }, i) => (
+                <HorizontalLabel
+                  key={i.toString()}
+                  title={name}
+                  subtitle={amount}
+                />
+              ))}
+            </View>
+          )
+        }}
+        carouselData={carouselDataYtd}
+      />
       <Button onPress={onSubmit} title="Submit Report" />
     </View>
   )
@@ -162,8 +217,11 @@ const styles = EStyleSheet.create({
     fontWeight: 'bold',
   },
   yearToDateContainer: {
-    paddingBottom: '$spacingLg',
+    marginTop: '$spacingMd',
     marginBottom: '$spacingLg',
+  },
+  yearToDateTitleContainer: {
+    marginBottom: '$spacingMd',
   },
 })
 
