@@ -9,10 +9,18 @@ import type { FC } from 'react'
 import type { ReportFooter } from '@app/services/computeExpenseReport'
 import { dinero, toUnit } from 'dinero.js'
 import formatCurrency from '@utils/formatCurrency'
+import CarouselSection from '@components/common/CarouselSection'
 
 type Props = {
   onSubmit: () => void
   reportFooter: ReportFooter
+}
+
+type CarouselDataItem = {
+  title: string
+  gross: string
+  vat: string
+  net: string
 }
 
 const ListFooterComponent: FC<Props> = (props) => {
@@ -31,21 +39,39 @@ const ListFooterComponent: FC<Props> = (props) => {
     2,
   )}`
 
+  const carouselData: Array<CarouselDataItem> = [
+    {
+      title: 'Total Replenishable',
+      gross: formatCurrency(dinero(totalReplenishable.grossAmount)),
+      vat: formattedVat,
+      net: formatCurrency(dinero(totalReplenishable.netAmount)),
+    },
+    {
+      title: 'Total Year',
+      gross: formatCurrency(dinero(grossAmount)),
+      vat: `-${toUnit(dinero(vatAmount))}`,
+      net: formatCurrency(dinero(netAmount)),
+    },
+  ]
+
   return (
     <View style={styles.listFooter}>
-      <Text style={styles.totalReplenishableLable}>Total Replenishable</Text>
-      <View style={styles.totalReplenishableContainer}>
-        <HorizontalLabel
-          title="Gross"
-          bold
-          subtitle={formatCurrency(dinero(totalReplenishable.grossAmount))}
-        />
-        <HorizontalLabel title="VAT" subtitle={formattedVat} />
-        <HorizontalLabel
-          title="Net"
-          subtitle={formatCurrency(dinero(totalReplenishable.netAmount))}
-        />
-      </View>
+      <CarouselSection
+        renderItem={({ item }) => {
+          const { title, gross, vat, net } = item as CarouselDataItem
+          return (
+            <View>
+              <Text style={styles.totalReplenishableLable}>{title}</Text>
+              <View style={styles.totalReplenishableContainer}>
+                <HorizontalLabel title="Gross" bold subtitle={gross} />
+                <HorizontalLabel title="VAT" subtitle={vat} />
+                <HorizontalLabel title="Net" subtitle={net} />
+              </View>
+            </View>
+          )
+        }}
+        carouselData={carouselData}
+      />
       <View style={styles.kmReadingContainer}>
         <View style={styles.kmReadingSubContainer}>
           <Icon
@@ -76,33 +102,16 @@ const ListFooterComponent: FC<Props> = (props) => {
           </View>
         </View>
       </View>
-
-      <Text style={styles.listFooterTitle}>Year to Date</Text>
-      {yearToDate.map((ytd) => (
-        <HorizontalLabel
-          key={ytd.id}
-          title={ytd.name}
-          subtitle={formatCurrency(dinero(ytd.gross))}
-        />
-      ))}
-
-      <View style={styles.listFooterTotalYearContainer}>
-        <Text style={styles.totalYearLabel}>Total Year</Text>
-        <HorizontalLabel
-          title="Gross"
-          subtitle={formatCurrency(dinero(grossAmount))}
-          bold
-        />
-        <HorizontalLabel
-          title="Vat"
-          subtitle={`-${toUnit(dinero(vatAmount))}`}
-        />
-        <HorizontalLabel
-          title="Net"
-          subtitle={formatCurrency(dinero(netAmount))}
-        />
+      <View style={styles.yearToDateContainer}>
+        <Text style={styles.listFooterTitle}>Year to Date</Text>
+        {yearToDate.map((ytd) => (
+          <HorizontalLabel
+            key={ytd.id}
+            title={ytd.name}
+            subtitle={formatCurrency(dinero(ytd.gross))}
+          />
+        ))}
       </View>
-
       <Button onPress={onSubmit} title="Submit Report" />
     </View>
   )
@@ -147,19 +156,15 @@ const styles = EStyleSheet.create({
     marginTop: '$spacingMd',
     marginBottom: '$spacingMd',
   },
-  listFooterTotalYearContainer: {
-    marginTop: '$spacingSm',
-    marginBottom: '$spacingXl',
-  },
   totalReplenishableContainer: {
     paddingTop: '$spacingSm',
   },
   totalReplenishableLable: {
     fontWeight: 'bold',
   },
-  totalYearLabel: {
-    fontWeight: 'bold',
-    marginBottom: '$spacingSm',
+  yearToDateContainer: {
+    paddingBottom: '$spacingLg',
+    marginBottom: '$spacingLg',
   },
 })
 
