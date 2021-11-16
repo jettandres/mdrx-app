@@ -129,7 +129,6 @@ const styles = EStyleSheet.create({
     alignSelf: 'flex-start',
     flexDirection: 'column',
     alignItems: 'flex-start',
-    paddingTop: '$spacingMd',
     paddingBottom: '$spacingXs',
   },
   kmReadingSubContainer: {
