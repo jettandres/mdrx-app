@@ -84,7 +84,7 @@ type FormData = {
   id: string
   reportNumber: string
   expenseAmount: Dinero<number>
-  supplierTin: string
+  supplierTin?: string
   supplierName: string
   supplierAddress: string
   supplierStreetBrgy: string
@@ -108,7 +108,7 @@ const schema = z.object({
     .regex(/^[0-9|.]*$/, 'should not contain special characters')
     .transform((v) => parseFloat(v))
     .transform((f) => dineroFromFloat({ amount: f, currency: PHP, scale: 2 })),
-  supplierTin: z.string().nonempty('should not be empty'),
+  supplierTin: z.string().optional(),
   supplierName: z.string().nonempty('should not be empty'),
   supplierAddress: z.string().optional(),
   supplierStreetBrgy: z.string().optional(),

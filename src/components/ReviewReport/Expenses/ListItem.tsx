@@ -33,7 +33,7 @@ const ListItem: FC<Props> = (props) => {
   return (
     <View style={styles.sectionItemContainer}>
       <Text style={styles.sectionItemTitle}>{supplierName}</Text>
-      <Text>TIN # {supplierTin}</Text>
+      {!!supplierTin && <Text>TIN # {supplierTin}</Text>}
       {kmReading && <Text>km reading: {kmReading.toString()}km</Text>}
       {litersAdded && (
         <Text>
