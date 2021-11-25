@@ -1,12 +1,5 @@
 import React, { useCallback, useState, useEffect } from 'react'
-import {
-  View,
-  Text,
-  TextInput,
-  ActivityIndicator,
-  TouchableOpacity,
-  Image,
-} from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -29,6 +22,7 @@ import {
 
 import { Auth } from 'aws-amplify'
 import LoadingScreen from '@components/common/LoadingScreen'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -42,19 +36,23 @@ type Props = {
 }
 
 enum WizardStep {
-  InputCustodianCode,
+  InputUsernameAndPassword,
   ConfirmCustodianCode,
+  VerificationCode,
 }
 
 const Login: FC<Props> = (props) => {
   const { navigation } = props
-  const [custodianCode, setCustodianCode] = useState<string | undefined>()
+
+  const [email, setEmail] = useState<string | undefined>()
+  const [password, setPassword] = useState<string | undefined>()
+
   const [errorLabel, setErrorLabel] = useState<string | undefined>()
   const [employee, setEmployee] = useState<Employee | undefined>()
   const [loginLoading, setLoginLoading] = useState(false)
 
   const [currentStep, setCurrentStep] = useState<WizardStep>(
-    WizardStep.InputCustodianCode,
+    WizardStep.InputUsernameAndPassword,
   )
 
   const [nextButtonCopy, setNextButtonCopy] = useState('Search')
@@ -66,9 +64,9 @@ const Login: FC<Props> = (props) => {
   >(GET_EMPLOYEES, { fetchPolicy: 'no-cache' })
 
   useEffect(() => {
-    if (currentStep === WizardStep.InputCustodianCode) {
+    if (currentStep === WizardStep.InputUsernameAndPassword) {
       setNextButtonCopy('LOGIN')
-      setTitleCopy('Custodian Code')
+      setTitleCopy('Employee Login')
     } else if (currentStep === WizardStep.ConfirmCustodianCode) {
       setNextButtonCopy('CONFIRM')
       setTitleCopy('Employee Info')
@@ -76,25 +74,45 @@ const Login: FC<Props> = (props) => {
   }, [currentStep])
 
   const onNextButtonPress = useCallback(async () => {
-    if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
+    if (
+      currentStep === WizardStep.InputUsernameAndPassword &&
+      email &&
+      password
+    ) {
+      setLoginLoading(true)
+      setErrorLabel(undefined)
       try {
-        setLoginLoading(true)
-        await Auth.signIn('jettrobin.andres@gmail.com', 'Passw0rd!')
+        //const resp = await Auth.signIn('jettrobin.andres@gmail.com', 'Passw0rd!')
+        const resp = await Auth.signIn(email, password)
+        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const token = resp.signInUserSession.idToken.jwtToken as string
+        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const userId = resp.attributes.sub as string
         setLoginLoading(false)
+
+        await AsyncStorage.setItem('@token', token)
+        getEmployee({ variables: { id: userId } })
+      } catch (e) {
+        setLoginLoading(false)
+        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
+        const code = e?.code
+        console.log('error', JSON.stringify(e))
+
+        if (code === 'UserNotConfirmedException') {
+          setCurrentStep(WizardStep.VerificationCode)
+        } else if (code === 'UserNotFoundException') {
+          setErrorLabel('Incorrect username/password')
+        }
+      }
+    } else if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
+      try {
         employeeInfo(employee)
         navigation.navigate('HomeDrawer')
       } catch (e) {
         console.log('error logging in', e)
       }
-    } else if (currentStep === WizardStep.InputCustodianCode) {
-      if (custodianCode === undefined) {
-        setErrorLabel('Field is required')
-      } else {
-        setErrorLabel(undefined)
-        getEmployee({ variables: { code: custodianCode } })
-      }
     }
-  }, [navigation, currentStep, custodianCode, getEmployee, employee])
+  }, [currentStep, email, password, employee, getEmployee, navigation])
 
   useEffect(() => {
     if (data && data.employees.length) {
@@ -114,13 +132,20 @@ const Login: FC<Props> = (props) => {
 
   const onPrevButtonPress = useCallback(() => {
     setEmployee(undefined)
-    setCustodianCode(undefined)
-    setCurrentStep(WizardStep.InputCustodianCode)
+    setCurrentStep(WizardStep.InputUsernameAndPassword)
   }, [])
 
-  const onChangeCustodianInput = useCallback((value: string | undefined) => {
-    setCustodianCode(value)
+  const onChangeEmailInput = useCallback((value: string | undefined) => {
+    setEmail(value)
   }, [])
+
+  const onChangePasswordInput = useCallback((value: string | undefined) => {
+    setPassword(value)
+  }, [])
+
+  const onSignUpButtonPress = useCallback(() => {
+    navigation.navigate('SignUp')
+  }, [navigation])
 
   if (loading || loginLoading) {
     const message = loading ? 'Processing' : 'Logging in'
@@ -131,13 +156,20 @@ const Login: FC<Props> = (props) => {
     <View style={styles.container}>
       <Image source={mdrxLogo} style={styles.logo} />
       <Text style={styles.titleLabel}>{titleCopy}</Text>
-      {currentStep === WizardStep.InputCustodianCode && (
-        <View style={styles.textInputContaienr}>
+      {currentStep === WizardStep.InputUsernameAndPassword && (
+        <View style={styles.textInputContainer}>
+          <TextInput
+            style={styles.loginInput}
+            placeholder="Email"
+            value={email}
+            onChangeText={onChangeEmailInput}
+          />
           <TextInput
             style={styles.textInput}
-            placeholder="Custodian Code"
-            value={custodianCode}
-            onChangeText={onChangeCustodianInput}
+            placeholder="Password"
+            secureTextEntry
+            value={password}
+            onChangeText={onChangePasswordInput}
           />
           {!!errorLabel && <Text style={styles.errorLabel}>{errorLabel}</Text>}
         </View>
@@ -169,6 +201,13 @@ const Login: FC<Props> = (props) => {
         <TouchableOpacity style={styles.nextButton} onPress={onNextButtonPress}>
           <Text style={styles.nextButtonLabel}>{nextButtonCopy}</Text>
         </TouchableOpacity>
+        {currentStep === WizardStep.InputUsernameAndPassword && (
+          <TouchableOpacity
+            style={styles.signUpButton}
+            onPress={onSignUpButtonPress}>
+            <Text style={styles.signUpButtonLabel}>SIGN UP</Text>
+          </TouchableOpacity>
+        )}
       </View>
     </View>
   )
@@ -199,7 +238,7 @@ const styles = EStyleSheet.create({
     borderRadius: 8,
     paddingHorizontal: '$spacingSm',
   },
-  textInputContaienr: {
+  textInputContainer: {
     marginTop: '$spacingXs',
     marginBottom: '$spacingSm',
     width: '100%',
@@ -230,8 +269,23 @@ const styles = EStyleSheet.create({
   nextButtonLabel: {
     color: '$blue',
   },
+  signUpButton: {
+    marginLeft: '$spacingSm',
+    flexDirection: 'row',
+  },
+  signUpButtonLabel: {
+    color: '$red',
+  },
   loading: {
     marginRight: '$spacingSm',
+  },
+  loginInput: {
+    marginBottom: '$spacingXs',
+    color: '$dark',
+    borderWidth: 1,
+    borderColor: '$borderColor',
+    borderRadius: 8,
+    paddingHorizontal: '$spacingSm',
   },
 })
 

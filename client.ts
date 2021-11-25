@@ -3,7 +3,12 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   HttpLink,
+  useReactiveVar,
 } from '@apollo/client'
+
+import { setContext } from '@apollo/client/link/context'
+
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 // TODO: update migrate HASURA_SECRET
 import Config from 'react-native-config'
@@ -20,11 +25,30 @@ const createApolloCLient = (): ClientType => {
     fetch,
     headers: {
       // Authorization: `Bearer ${process.env.USER_TOKEN}`,
-      'x-hasura-admin-secret': 'mBsfACIirPjmFNOsyqyD', // TODO: add env
+      //'x-hasura-admin-secret': 'mBsfACIirPjmFNOsyqyD', // TODO: add env
     },
   })
+
+  const withToken = setContext(async (req, { headers }) => {
+    try {
+      const token = await AsyncStorage.getItem('@token')
+      return {
+        ...headers,
+        headers: {
+          Authorization: token ? token : null,
+        },
+      }
+    } catch (e) {
+      console.log('token retrieval error', e)
+    }
+
+    return {
+      ...headers,
+    }
+  })
+
   const client = new ApolloClient({
-    link: httpLink,
+    link: withToken.concat(httpLink),
     cache: new InMemoryCache(),
   })
   return client

@@ -2,8 +2,8 @@ import { gql } from '@apollo/client'
 import Employee from '@app/types/Employee'
 
 const GET_EMPLOYEES = gql`
-  query getEmployees($code: String!) {
-    employees(where: { code: { _eq: $code } }) {
+  query getEmployees($id: uuid!) {
+    employees(where: { id: { _eq: $id } }) {
       id
       name
       custodianAssignment: custodian_assignment
@@ -16,7 +16,7 @@ const GET_EMPLOYEES = gql`
 `
 
 export interface GetEmployeesPayload {
-  code: string
+  id: string
 }
 
 export interface GetEmployeeResponse {

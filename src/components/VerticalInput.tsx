@@ -29,7 +29,7 @@ type Props = {
   secureTextEntry?: boolean
 }
 
-const HorizontalInput: FC<Props> = (props) => {
+const VerticalInput: FC<Props> = (props) => {
   const {
     title,
     placeholder,
@@ -71,7 +71,7 @@ const HorizontalInput: FC<Props> = (props) => {
   return (
     <View>
       <View style={styles.container}>
-        <Text>{title}</Text>
+        <Text style={styles.title}>{title.toUpperCase()}</Text>
         <TextInput
           secureTextEntry={secureTextEntry}
           value={field.value}
@@ -111,23 +111,28 @@ const HorizontalInput: FC<Props> = (props) => {
 
 const styles = EStyleSheet.create({
   container: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
+    flexDirection: 'column',
+    justifyContent: 'center',
+    alignItems: 'flex-start',
   },
   textInput: {
-    borderBottomWidth: 1,
-    borderColor: '$borderColor',
-    width: '45%',
     color: '$dark',
+    borderWidth: 1,
+    borderColor: '$borderColor',
+    borderRadius: 8,
+    paddingHorizontal: '$spacingSm',
+    width: '100%',
   },
   textInputError: {
-    borderBottomWidth: 1,
+    color: '$dark',
+    borderWidth: 1,
     borderColor: '$red',
-    width: '45%',
+    borderRadius: 8,
+    paddingHorizontal: '$spacingSm',
+    width: '100%',
   },
   errorLabel: {
-    alignSelf: 'flex-end',
+    alignSelf: 'flex-start',
     color: '$red',
   },
   suggestionsContainer: {
@@ -150,6 +155,9 @@ const styles = EStyleSheet.create({
     alignSelf: 'center',
     height: 50,
   },
+  title: {
+    fontSize: '$xs',
+  },
 })
 
-export default HorizontalInput
+export default VerticalInput

@@ -10,6 +10,7 @@ import SalesReportForm from '@screens/SalesReportForm'
 import ReviewSalesReport from '@screens/ReviewSalesReport'
 import CapturePhoto from '@screens/CapturePhoto'
 import ConfirmPhoto from '@screens/ConfirmPhoto'
+import SignUp from '@screens/SignUp'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -26,6 +27,11 @@ const EntryRoute: FC = () => {
         name="Login"
         options={{ headerShown: false }}
         component={Login}
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        component={SignUp}
+        name="SignUp"
       />
       <Stack.Screen
         name="HomeDrawer"

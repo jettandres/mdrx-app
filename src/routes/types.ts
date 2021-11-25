@@ -13,6 +13,7 @@ export type RootStackParamList = {
     path: string
   }
   ViewPhoto: { imageKey: string }
+  SignUp: undefined
 }
 
 export type HomeStackParamList = {
