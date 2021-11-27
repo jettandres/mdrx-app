@@ -14,6 +14,7 @@ export type RootStackParamList = {
   }
   ViewPhoto: { imageKey: string }
   SignUp: undefined
+  VerificationCode: { email: string; password: string }
 }
 
 export type HomeStackParamList = {

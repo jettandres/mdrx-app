@@ -67,14 +67,8 @@ const schema = z.object({
     ),
 })
 
-enum WizardStep {
-  SignUp,
-  Success,
-}
-
 const SignUp: FC<Props> = (props) => {
   const { navigation } = props
-  const [currentStep, setCurrentStep] = useState<WizardStep>(WizardStep.SignUp)
 
   const {
     handleSubmit,
@@ -101,32 +95,34 @@ const SignUp: FC<Props> = (props) => {
     }
   }, [password, confirmPassword])
 
-  const onSubmitButtonPress = useCallback(async (formData: FormData) => {
-    try {
-      setLoading(true)
-      const resp = await Auth.signUp({
-        username: formData.email,
-        password: formData.password,
-        attributes: {
+  const onSubmitButtonPress = useCallback(
+    async (formData: FormData) => {
+      try {
+        setLoading(true)
+        const resp = await Auth.signUp({
+          username: formData.email,
+          password: formData.password,
+          attributes: {
+            email: formData.email,
+            name: formData.name,
+            phone_number: formData.contactNumber,
+          },
+        })
+
+        console.log('signup', resp)
+        setLoading(false)
+
+        navigation.navigate('VerificationCode', {
           email: formData.email,
-          name: formData.name,
-          phone_number: formData.contactNumber,
-        },
-      })
-
-      console.log('signup', resp)
-      setLoading(false)
-      setCurrentStep(WizardStep.Success)
-    } catch (e) {
-      setLoading(false)
-      setErrorLabel(
-        `Signup error. Please contact admin for the ff: ${JSON.stringify(e)}`,
-      )
-    }
-  }, [])
-
-  const onBackToLoginPress = useCallback(
-    () => navigation.navigate('Login'),
+          password: formData.password,
+        })
+      } catch (e) {
+        setLoading(false)
+        setErrorLabel(
+          `Signup error. Please contact admin for the ff: ${JSON.stringify(e)}`,
+        )
+      }
+    },
     [navigation],
   )
 
@@ -137,75 +133,55 @@ const SignUp: FC<Props> = (props) => {
   return (
     <View style={styles.container}>
       <Image source={mdrxLogo} style={styles.logo} />
-      {currentStep === WizardStep.SignUp && (
-        <>
-          <Text style={styles.titleLabel}>SIGN UP TO MDRX</Text>
-          <View style={styles.textInputContainer}>
-            <VerticalInput
-              title="Name"
-              placeholder="Full Name"
-              control={control}
-              name="name"
-              error={errors.name}
-            />
-            <View style={styles.divider} />
-            <VerticalInput
-              title="Contact Number"
-              placeholder="0906123456"
-              keyboardType="phone-pad"
-              control={control}
-              name="contactNumber"
-              error={errors.contactNumber}
-            />
-            <VerticalInput
-              title="Email"
-              placeholder="employee@mdrx.net"
-              control={control}
-              name="email"
-              error={errors.email}
-            />
-            <View style={styles.divider} />
-            <VerticalInput
-              title="Password"
-              secureTextEntry
-              control={control}
-              name="password"
-              error={errors.password}
-            />
-            <VerticalInput
-              title="Confirm Password"
-              secureTextEntry
-              control={control}
-              name="confirmPassword"
-              error={errors.confirmPassword}
-            />
-            {!!errorLabel && (
-              <Text style={styles.errorLabel}>{errorLabel}</Text>
-            )}
-          </View>
-          <View style={styles.buttonsContainer}>
-            <TouchableOpacity
-              disabled={!!errorLabel}
-              onPress={handleSubmit(onSubmitButtonPress)}>
-              <Text style={styles.submitButtonLabel}>SUBMIT</Text>
-            </TouchableOpacity>
-          </View>
-        </>
-      )}
-      {currentStep === WizardStep.Success && (
-        <View>
-          <Text style={styles.successMessage}>Signup Successful!</Text>
-          <Text style={styles.successMessage}>
-            Please login and check your email for the verification code.
-          </Text>
-
-          <TouchableOpacity
-            style={styles.loginButton}
-            onPress={onBackToLoginPress}>
-            <Text style={styles.submitButtonLabel}>LOGIN</Text>
-          </TouchableOpacity>
-        </View>
-      )}
+      <Text style={styles.titleLabel}>SIGN UP TO MDRX</Text>
+      <View style={styles.textInputContainer}>
+        <VerticalInput
+          title="Name"
+          placeholder="Full Name"
+          control={control}
+          name="name"
+          error={errors.name}
+        />
+        <View style={styles.divider} />
+        <VerticalInput
+          title="Contact Number"
+          placeholder="0906123456"
+          keyboardType="phone-pad"
+          control={control}
+          name="contactNumber"
+          error={errors.contactNumber}
+        />
+        <VerticalInput
+          title="Email"
+          placeholder="employee@mdrx.net"
+          control={control}
+          name="email"
+          error={errors.email}
+        />
+        <View style={styles.divider} />
+        <VerticalInput
+          title="Password"
+          secureTextEntry
+          control={control}
+          name="password"
+          error={errors.password}
+        />
+        <VerticalInput
+          title="Confirm Password"
+          secureTextEntry
+          control={control}
+          name="confirmPassword"
+          error={errors.confirmPassword}
+        />
+        {!!errorLabel && <Text style={styles.errorLabel}>{errorLabel}</Text>}
+      </View>
+      <View style={styles.buttonsContainer}>
+        <TouchableOpacity
+          disabled={!!errorLabel}
+          onPress={handleSubmit(onSubmitButtonPress)}>
+          <Text style={styles.submitButtonLabel}>SUBMIT</Text>
+        </TouchableOpacity>
+      </View>
     </View>
   )
 }

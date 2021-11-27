@@ -11,6 +11,7 @@ import ReviewSalesReport from '@screens/ReviewSalesReport'
 import CapturePhoto from '@screens/CapturePhoto'
 import ConfirmPhoto from '@screens/ConfirmPhoto'
 import SignUp from '@screens/SignUp'
+import VerificationCode from '@screens/VerificationCode'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -32,6 +33,11 @@ const EntryRoute: FC = () => {
         options={{ headerShown: false }}
         component={SignUp}
         name="SignUp"
+      />
+      <Stack.Screen
+        options={{ headerShown: false }}
+        component={VerificationCode}
+        name="VerificationCode"
       />
       <Stack.Screen
         name="HomeDrawer"

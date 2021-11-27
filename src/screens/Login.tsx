@@ -38,7 +38,6 @@ type Props = {
 enum WizardStep {
   InputUsernameAndPassword,
   ConfirmCustodianCode,
-  VerificationCode,
 }
 
 const Login: FC<Props> = (props) => {
@@ -96,10 +95,8 @@ const Login: FC<Props> = (props) => {
         setLoginLoading(false)
         //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
         const code = e?.code
-        console.log('error', JSON.stringify(e))
-
         if (code === 'UserNotConfirmedException') {
-          setCurrentStep(WizardStep.VerificationCode)
+          navigation.navigate('VerificationCode', { email, password })
         } else if (code === 'UserNotFoundException') {
           setErrorLabel('Incorrect username/password')
         }
