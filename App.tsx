@@ -1,6 +1,7 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import Amplify from 'aws-amplify'
+import { withAuthenticator } from 'aws-amplify-react-native'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 import appTheme from './appTheme'
@@ -20,6 +21,9 @@ Amplify.configure({
       region: 'us-east-2',
       bucket: 'prod-mdrx-sst-storage-uploadsbucketc4b27cc7-1x13z9ge6o5pa',
     },
+  },
+  Analytics: {
+    disabled: true,
   },
 })
 
@@ -46,4 +50,4 @@ const App: FC = () => {
   )
 }
 
-export default App
+export default withAuthenticator(App)
