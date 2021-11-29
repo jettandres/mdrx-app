@@ -1,7 +1,6 @@
 import React from 'react'
 import { NavigationContainer } from '@react-navigation/native'
 import Amplify from 'aws-amplify'
-import { withAuthenticator } from 'aws-amplify-react-native'
 
 import EStyleSheet from 'react-native-extended-stylesheet'
 import appTheme from './appTheme'
@@ -50,4 +49,4 @@ const App: FC = () => {
   )
 }
 
-export default withAuthenticator(App)
+export default App
