@@ -21,6 +21,9 @@ Amplify.configure({
       bucket: 'prod-mdrx-sst-storage-uploadsbucketc4b27cc7-1x13z9ge6o5pa',
     },
   },
+  Analytics: {
+    disabled: true,
+  },
 })
 
 EStyleSheet.build({
