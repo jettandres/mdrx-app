@@ -50,7 +50,13 @@ const schema = z.object({
       'Invalid number format. Please follow 09XX-XXX-XXXX without the dash',
     )
     .transform((n) => '+63' + n.substring(1)),
-  email: z.string().nonempty('should not be empty'),
+  email: z
+    .string()
+    .nonempty('should not be empty')
+    .regex(
+      /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
+      'Not a valid email',
+    ),
   password: z
     .string()
     .nonempty('should not be empty')
@@ -118,9 +124,17 @@ const SignUp: FC<Props> = (props) => {
         })
       } catch (e) {
         setLoading(false)
-        setErrorLabel(
-          `Signup error. Please contact admin for the ff: ${JSON.stringify(e)}`,
-        )
+        if (e?.name === 'UsernameExistsException') {
+          setErrorLabel(
+            'Email is already registered. Please login or contact admin for assistance.',
+          )
+        } else {
+          setErrorLabel(
+            `Signup error. Please contact admin for the ff: ${JSON.stringify(
+              e,
+            )}`,
+          )
+        }
       }
     },
     [navigation],
