@@ -115,7 +115,10 @@ const ReviewReport: FC<Props> = (props) => {
         sections={data}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <ListHeaderComponent reportCreatedAt={createdAt} />
+          <ListHeaderComponent
+            reportCreatedAt={createdAt}
+            reportFooter={reportFooter}
+          />
         }
         renderSectionHeader={({ section: { title } }) => {
           const isCollapsed = collapsedHeaders.find((t) => t === title.label)
