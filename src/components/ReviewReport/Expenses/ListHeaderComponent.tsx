@@ -17,9 +17,7 @@ type Props = {
 const ListHeaderComponent: FC<Props> = (props) => {
   const { reportCreatedAt } = props
 
-  const { code, name, custodianAssignment } = useReactiveVar(
-    employeeInfo,
-  ) as Employee
+  const { name, custodianAssignment } = useReactiveVar(employeeInfo) as Employee
 
   const dateReported = DateTime.fromISO(reportCreatedAt).toLocaleString(
     DateTime.DATE_FULL,
@@ -28,7 +26,6 @@ const ListHeaderComponent: FC<Props> = (props) => {
 
   return (
     <View style={styles.listHeader}>
-      <HorizontalLabel title="Custodian Code" subtitle={code} />
       <HorizontalLabel title="Name" subtitle={name} />
       <HorizontalLabel title="Date Reported" subtitle={dateReported} />
       <HorizontalLabel title="Assignment" subtitle={custodianAssignment} />

@@ -74,7 +74,7 @@ const Home: FC<Props> = () => {
       if (name === 'expenses') {
         const epochTime: string = DateTime.now().toSeconds().toFixed(0)
         const employeeId = employeeData?.id ?? ''
-        const employeeCode: string = employeeData?.code ?? ''
+        const employeeCode: string = employeeId.split('-')[4]
         const reportNumber = `${employeeCode}-${epochTime}`
         const payload: NewExpenseReportPayload = {
           expenseReport: {
@@ -99,7 +99,7 @@ const Home: FC<Props> = () => {
         navigation.navigate('SalesReportForm')
       }
     },
-    [employeeData?.code, employeeData?.id, navigation, newExpense],
+    [employeeData?.id, navigation, newExpense],
   )
 
   return (
