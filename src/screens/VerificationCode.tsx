@@ -41,11 +41,11 @@ const schema = z.object({
 })
 
 const VerificationCode: FC<Props> = (props) => {
-  const { route } = props
+  const { route, navigation } = props
   const [error, setError] = useState<string | undefined>()
 
   const {
-    params: { email, password },
+    params: { email, source },
   } = route
 
   const {
@@ -59,28 +59,39 @@ const VerificationCode: FC<Props> = (props) => {
 
   const [loading, setLoading] = useState(false)
 
-  const onConfirmVerificationCode = useCallback((value: unknown) => {
-    console.log('verification code confirmed!', value)
-    setError(undefined)
-    setLoading(false)
-  }, [])
+  const onConfirmVerificationCode = useCallback(
+    (value: unknown) => {
+      setError(undefined)
+      setLoading(false)
+
+      if (value === 'SUCCESS') {
+        Alert.alert(
+          'Email verification successful',
+          `Please ${source === 'Login' ? 're' : ''}login with your account`,
+          [
+            {
+              text: 'Login',
+              onPress: () => navigation.navigate('Login'),
+            },
+          ],
+        )
+        navigation.navigate('Login')
+      }
+    },
+    [navigation, source],
+  )
 
   const onRejectVerificationCode = useCallback((reason: unknown) => {
-    console.log('verification code rejected', reason)
+    console.log('verificatoin code failed', reason)
     setError('Invalid verification code provided. Please try again.')
     setLoading(false)
   }, [])
 
   const onSubmitButtonPress = useCallback(
-    async (formData: FormData) => {
+    (formData: FormData) => {
       try {
         setLoading(true)
-        const userInfo = await Auth.currentUserInfo()
-        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const username = userInfo?.username
-        console.log('userInfo hehe', username)
-
-        Auth.confirmSignUp(username, formData.verificationCode).then(
+        Auth.confirmSignUp(email, formData.verificationCode).then(
           onConfirmVerificationCode,
           onRejectVerificationCode,
         )
@@ -89,7 +100,7 @@ const VerificationCode: FC<Props> = (props) => {
         reset()
       }
     },
-    [onConfirmVerificationCode, onRejectVerificationCode, reset],
+    [email, onConfirmVerificationCode, onRejectVerificationCode, reset],
   )
 
   const onResendCodePress = useCallback(async () => {
@@ -117,6 +128,7 @@ const VerificationCode: FC<Props> = (props) => {
       <Image source={mdrxLogo} style={styles.logo} />
       <Text style={styles.titleLabel}>
         A verification code has been sent to your registered email address.
+        Please also contact MDRx Admin for your Area and Custodian Assignment.
       </Text>
       <View style={styles.textInputContainer}>
         <VerticalInput

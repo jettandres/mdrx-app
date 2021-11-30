@@ -1,5 +1,12 @@
-import React, { useCallback, useState, useEffect } from 'react'
-import { View, Text, TextInput, TouchableOpacity, Image } from 'react-native'
+import React, { useCallback, useState, useEffect, useMemo } from 'react'
+import {
+  View,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  Image,
+  Alert,
+} from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 
 import type { FC } from 'react'
@@ -62,6 +69,10 @@ const Login: FC<Props> = (props) => {
     GetEmployeesPayload
   >(GET_EMPLOYEES, { fetchPolicy: 'no-cache' })
 
+  const hasNoAreaAssignment = useMemo(() => {
+    return !employee?.custodianAssignment && !employee?.area
+  }, [employee])
+
   useEffect(() => {
     if (currentStep === WizardStep.InputUsernameAndPassword) {
       setNextButtonCopy('LOGIN')
@@ -93,23 +104,42 @@ const Login: FC<Props> = (props) => {
         getEmployee({ variables: { id: userId } })
       } catch (e) {
         setLoginLoading(false)
-        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access
-        const code = e?.code
+        //eslint-disable-next-line @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-explicit-any
+        const code = (e as any)?.code
         if (code === 'UserNotConfirmedException') {
-          navigation.navigate('VerificationCode', { email, password })
+          navigation.navigate('VerificationCode', {
+            email,
+            password,
+            source: 'Login',
+          })
         } else if (code === 'UserNotFoundException') {
           setErrorLabel('Incorrect username/password')
         }
       }
     } else if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
-      try {
-        employeeInfo(employee)
-        navigation.navigate('HomeDrawer')
-      } catch (e) {
-        console.log('error logging in', e)
+      if (!hasNoAreaAssignment) {
+        try {
+          employeeInfo(employee)
+          navigation.navigate('HomeDrawer')
+        } catch (e) {
+          console.log('error logging in', e)
+        }
+      } else {
+        Alert.alert(
+          'Employee Verification Required',
+          'Please contact MDRx Admin for your Area and Custodian Assignment.',
+        )
       }
     }
-  }, [currentStep, email, password, employee, getEmployee, navigation])
+  }, [
+    currentStep,
+    email,
+    password,
+    employee,
+    getEmployee,
+    navigation,
+    hasNoAreaAssignment,
+  ])
 
   useEffect(() => {
     if (data && data.employees.length) {
@@ -145,7 +175,7 @@ const Login: FC<Props> = (props) => {
   }, [navigation])
 
   if (loading || loginLoading) {
-    const message = loading ? 'Processing' : 'Logging in'
+    const message = loading ? 'Retrieving employee details' : 'Logging in'
     return <LoadingScreen message={message} />
   }
 
@@ -175,7 +205,7 @@ const Login: FC<Props> = (props) => {
         <View style={styles.userInfoContainer}>
           <HorizontalLabel title="Name" subtitle={employee.name} />
           <HorizontalLabel
-            title="Assignment"
+            title="Custodian Assignment"
             subtitle={employee.custodianAssignment}
           />
           <HorizontalLabel title="Area" subtitle={employee.area} />
@@ -185,6 +215,11 @@ const Login: FC<Props> = (props) => {
           />
 
           <HorizontalLabel title="Email" subtitle={employee.email} />
+          {hasNoAreaAssignment && (
+            <Text style={styles.errorLabelVerif}>
+              Please contact MDRx Admin for your Area and Custodian Assignment
+            </Text>
+          )}
         </View>
       )}
       <View style={styles.buttonsContainer}>
@@ -259,6 +294,10 @@ const styles = EStyleSheet.create({
   },
   errorLabel: {
     color: '$red',
+  },
+  errorLabelVerif: {
+    color: '$red',
+    marginTop: '$spacingSm',
   },
   nextButton: {
     flexDirection: 'row',

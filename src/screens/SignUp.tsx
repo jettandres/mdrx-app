@@ -121,6 +121,7 @@ const SignUp: FC<Props> = (props) => {
         navigation.navigate('VerificationCode', {
           email: formData.email,
           password: formData.password,
+          source: 'SignUp',
         })
       } catch (e) {
         setLoading(false)

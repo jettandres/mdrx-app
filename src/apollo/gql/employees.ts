@@ -10,7 +10,6 @@ const GET_EMPLOYEES = gql`
       email
       contactNumber: contact_number
       area
-      code
     }
   }
 `

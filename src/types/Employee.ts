@@ -5,7 +5,6 @@ type Employee = {
   email: string
   contactNumber: string
   area: string
-  code: string
 }
 
 export default Employee
