@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { View, Text } from 'react-native'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import HorizontalLabel from '@components/HorizontalLabel'
@@ -9,52 +9,23 @@ import type { FC } from 'react'
 import type Employee from '@app/types/Employee'
 import { useReactiveVar } from '@apollo/client'
 import { employeeInfo } from '@app/apollo/reactiveVariables'
-import formatCurrency from '@utils/formatCurrency'
-import { dinero, subtract } from 'dinero.js'
-import { ReportFooter } from '@app/services/computeExpenseReport'
+import EmployeeFunds from '@app/types/EmployeeFunds'
 
 type Props = {
   reportCreatedAt: string
-  reportFooter: ReportFooter
-}
-
-type FormattedFunds = {
-  revolvingFundAmount: string
-  replenishableAmount: string
-  unusedAmount: string
+  funds: EmployeeFunds
 }
 
 const ListHeaderComponent: FC<Props> = (props) => {
-  const { reportCreatedAt, reportFooter } = props
+  const { reportCreatedAt, funds } = props
 
-  const { name, custodianAssignment, funds } = useReactiveVar(
-    employeeInfo,
-  ) as Employee
+  const { name, custodianAssignment } = useReactiveVar(employeeInfo) as Employee
 
   const dateReported = DateTime.fromISO(reportCreatedAt).toLocaleString(
     DateTime.DATE_FULL,
   )
 
   const monthOf = DateTime.fromISO(reportCreatedAt).toFormat('LLLL yyyy')
-
-  const formattedFunds: FormattedFunds = useMemo(() => {
-    if (!funds) {
-      return {
-        revolvingFundAmount: 'P0.00',
-        replenishableAmount: '-P0.00',
-        unusedAmount: 'P0.00',
-      }
-    } else {
-      const revFundAmount = dinero(funds)
-      const repAmount = dinero(reportFooter.totalReplenishable.grossAmount)
-      const unusedAmount = subtract(revFundAmount, repAmount)
-      return {
-        revolvingFundAmount: formatCurrency(revFundAmount),
-        replenishableAmount: `-${formatCurrency(repAmount)}`,
-        unusedAmount: formatCurrency(unusedAmount),
-      }
-    }
-  }, [funds, reportFooter.totalReplenishable.grossAmount])
 
   return (
     <View style={styles.listHeader}>
@@ -65,16 +36,13 @@ const ListHeaderComponent: FC<Props> = (props) => {
       <View style={styles.listSubHeader}>
         <HorizontalLabel
           title="Revolving Fund Amount"
-          subtitle={formattedFunds.revolvingFundAmount}
+          subtitle={funds.revolvingFundAmount}
         />
         <HorizontalLabel
           title="Replenishable Amount"
-          subtitle={formattedFunds.replenishableAmount}
+          subtitle={funds.replenishableAmount}
         />
-        <HorizontalLabel
-          title="Unused Amount"
-          subtitle={formattedFunds.unusedAmount}
-        />
+        <HorizontalLabel title="Unused Amount" subtitle={funds.unusedAmount} />
       </View>
 
       <HorizontalLabel title="Month of" subtitle={monthOf} />
