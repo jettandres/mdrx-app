@@ -1,3 +1,5 @@
+import { DineroSnapshot } from 'dinero.js'
+
 type Employee = {
   id: string
   name: string
@@ -5,6 +7,7 @@ type Employee = {
   email: string
   contactNumber: string
   area: string
+  funds?: DineroSnapshot<number>
 }
 
 export default Employee

@@ -30,6 +30,8 @@ import {
 import { Auth } from 'aws-amplify'
 import LoadingScreen from '@components/common/LoadingScreen'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import formatCurrency from '@utils/formatCurrency'
+import { dinero } from 'dinero.js'
 
 type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -70,7 +72,7 @@ const Login: FC<Props> = (props) => {
   >(GET_EMPLOYEES, { fetchPolicy: 'no-cache' })
 
   const hasNoAreaAssignment = useMemo(() => {
-    return !employee?.custodianAssignment && !employee?.area
+    return !employee?.custodianAssignment || !employee?.area || !employee?.funds
   }, [employee])
 
   useEffect(() => {
@@ -127,7 +129,7 @@ const Login: FC<Props> = (props) => {
       } else {
         Alert.alert(
           'Employee Verification Required',
-          'Please contact MDRx Admin for your Area and Custodian Assignment.',
+          'Please contact MDRx Admin to update your Funds, Area and Custodian Assignment.',
         )
       }
     }
@@ -215,9 +217,16 @@ const Login: FC<Props> = (props) => {
           />
 
           <HorizontalLabel title="Email" subtitle={employee.email} />
+          {employee?.funds && (
+            <HorizontalLabel
+              title="Funds"
+              subtitle={formatCurrency(dinero(employee.funds))}
+            />
+          )}
           {hasNoAreaAssignment && (
             <Text style={styles.errorLabelVerif}>
-              Please contact MDRx Admin for your Area and Custodian Assignment
+              Please contact MDRx Admin to update your Funds, Area, and
+              Custodian Assignment
             </Text>
           )}
         </View>
