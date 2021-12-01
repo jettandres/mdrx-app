@@ -47,8 +47,16 @@ type Props = {
   route: ReviewExpenseReportRouteProp
 }
 
+const defaultFunds: EmployeeFunds = {
+  revolvingFundAmount: 'P0.00',
+  replenishableAmount: 'P0.00',
+  unusedAmount: 'P0.00',
+}
+
 const ReviewReport: FC<Props> = (props) => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
+  const [funds, setFunds] = useState<EmployeeFunds | undefined>()
+
   const { route, navigation } = props
   const expenseReportId = route.params.expenseReportId
   const employeeData = useReactiveVar(employeeInfo) as Employee
@@ -108,24 +116,16 @@ const ReviewReport: FC<Props> = (props) => {
 
   const reportFooter = asyncReport.result?.reportFooter as ReportFooter
 
-  let funds: EmployeeFunds
-
-  if (employeeData.funds) {
+  if (employeeData.funds && !funds) {
     const revAmount = dinero(employeeData.funds)
     const replAmount = dinero(reportFooter.totalReplenishable.grossAmount)
     const unusedAmount = subtract(revAmount, replAmount)
 
-    funds = {
+    setFunds({
       revolvingFundAmount: formatCurrency(revAmount),
       replenishableAmount: `-${formatCurrency(replAmount)}`,
       unusedAmount: formatCurrency(unusedAmount),
-    }
-  } else {
-    funds = {
-      revolvingFundAmount: 'P0.00',
-      replenishableAmount: 'P0.00',
-      unusedAmount: 'P0.00',
-    }
+    })
   }
 
   return (
@@ -134,7 +134,10 @@ const ReviewReport: FC<Props> = (props) => {
         sections={data}
         keyExtractor={(item) => item.id}
         ListHeaderComponent={
-          <ListHeaderComponent reportCreatedAt={createdAt} funds={funds} />
+          <ListHeaderComponent
+            reportCreatedAt={createdAt}
+            funds={funds ?? defaultFunds}
+          />
         }
         renderSectionHeader={({ section: { title } }) => {
           const isCollapsed = collapsedHeaders.find((t) => t === title.label)
