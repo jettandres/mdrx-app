@@ -1,6 +1,7 @@
 import { gql } from '@apollo/client'
 import Expense from '@app/types/Expense'
 import ExpenseReport from '@app/types/ExpenseReport'
+import ReportStatus from '@app/types/ReportStatus'
 import { DineroSnapshot } from 'dinero.js'
 
 const QUERY_EXPENSE = gql`
@@ -141,6 +142,57 @@ export interface DeleteExpenseReportResponse {
   expenseReport: { id: string }
 }
 
+const MUTATION_SUBMIT_EXPENSE_REPORT = gql`
+  mutation SubmitExpenseReport(
+    $expenseReportId: uuid!
+    $revAmount: jsonb!
+    $replAmount: jsonb!
+    $unusedAmount: jsonb!
+  ) {
+    expenseReport: update_expense_report_by_pk(
+      _set: { status: SUBMITTED }
+      pk_columns: { id: $expenseReportId }
+    ) {
+      id
+      status
+    }
+
+    expenseReportFunds: insert_expense_report_funds_one(
+      object: {
+        expense_report_id: $expenseReportId
+        revolving_fund_amount: $revAmount
+        replenishable_amount: $replAmount
+        unused_amount: $unusedAmount
+      }
+    ) {
+      expenseReportId: expense_report_id
+      revolvingFundAmount: revolving_fund_amount
+      replenishableAmount: replenishable_amount
+      unusedAmount: unused_amount
+    }
+  }
+`
+
+export interface SubmitExpenseReportResponse {
+  expenseReport: {
+    id: string
+    status: ReportStatus
+  }
+  expenseReportFunds: {
+    expenseReportId: string
+    revolvingFundAmount: DineroSnapshot<number>
+    replenishableAmount: DineroSnapshot<number>
+    unusedAmount: DineroSnapshot<number>
+  }
+}
+
+export interface SubmitExpenseReportPayload {
+  expenseReportId: string
+  revAmount: DineroSnapshot<number>
+  replAmount: DineroSnapshot<number>
+  unusedAmount: DineroSnapshot<number>
+}
+
 export {
   QUERY_EXPENSE,
   MUTATION_NEW_EXPENSE_REPORT,
@@ -148,4 +200,5 @@ export {
   MUTATION_NEW_EXPENSE_RECEIPT,
   MUTATION_NEW_KM_READING,
   MUTATION_DELETE_EXPENSE_REPORT,
+  MUTATION_SUBMIT_EXPENSE_REPORT,
 }

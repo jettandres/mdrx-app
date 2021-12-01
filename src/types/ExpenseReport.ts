@@ -1,8 +1,10 @@
+import ReportStatus from './ReportStatus'
+
 type ExpenseReport = {
   id: string
   reportNumber: string
   createdAt: string
-  status: 'DRAFT' | 'SUBMITTED'
+  status: ReportStatus
 }
 
 export default ExpenseReport

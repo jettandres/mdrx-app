@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import { View, Text, SectionList, ActivityIndicator } from 'react-native'
+import React, { useCallback, useState } from 'react'
+import { View, SectionList } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
-import { dinero, subtract, toUnit } from 'dinero.js'
+import { dinero, DineroSnapshot, subtract, toUnit, toSnapshot } from 'dinero.js'
 
 import type { FC } from 'react'
 
@@ -31,6 +31,12 @@ import SectionFooter from '@components/ReviewReport/Expenses/SectionFooter'
 import ListItem from '@components/ReviewReport/Expenses/ListItem'
 import EmployeeFunds from '@app/types/EmployeeFunds'
 import Employee from '@app/types/Employee'
+import {
+  MUTATION_SUBMIT_EXPENSE_REPORT,
+  SubmitExpenseReportPayload,
+  SubmitExpenseReportResponse,
+} from '@app/apollo/gql/expense'
+import LoadingScreen from '@components/common/LoadingScreen'
 
 type ReviewExpenseReportNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -47,6 +53,12 @@ type Props = {
   route: ReviewExpenseReportRouteProp
 }
 
+type DineroFunds = {
+  revolvingFundAmount: DineroSnapshot<number>
+  replenishableAmount: DineroSnapshot<number>
+  unusedAmount: DineroSnapshot<number>
+}
+
 const defaultFunds: EmployeeFunds = {
   revolvingFundAmount: 'P0.00',
   replenishableAmount: 'P0.00',
@@ -56,6 +68,7 @@ const defaultFunds: EmployeeFunds = {
 const ReviewReport: FC<Props> = (props) => {
   const [collapsedHeaders, setCollapsedHeaders] = useState<Array<string>>([])
   const [funds, setFunds] = useState<EmployeeFunds | undefined>()
+  const [dineroFunds, setDineroFunds] = useState<DineroFunds | undefined>()
 
   const { route, navigation } = props
   const expenseReportId = route.params.expenseReportId
@@ -65,6 +78,11 @@ const ReviewReport: FC<Props> = (props) => {
     DeleteReceiptResponse,
     DeleteReceiptPayload
   >(DELETE_RECEIPT)
+
+  const [submitReport, { loading: submitReportLoading }] = useMutation<
+    SubmitExpenseReportResponse,
+    SubmitExpenseReportPayload
+  >(MUTATION_SUBMIT_EXPENSE_REPORT)
 
   const asyncReport = useAsync(
     () => computeExpenseReport(expenseReportId),
@@ -100,15 +118,27 @@ const ReviewReport: FC<Props> = (props) => {
     [navigation],
   )
 
-  const onSubmitReport = useCallback(() => {}, [])
+  const onSubmitReport = useCallback(async () => {
+    if (dineroFunds) {
+      const resp = await submitReport({
+        variables: {
+          expenseReportId,
+          revAmount: dineroFunds.revolvingFundAmount,
+          replAmount: dineroFunds.replenishableAmount,
+          unusedAmount: dineroFunds.unusedAmount,
+        },
+      })
+
+      console.log('submit report', resp)
+    }
+  }, [dineroFunds, expenseReportId, submitReport])
 
   if (asyncReport.loading && !asyncReport.result) {
-    return (
-      <View style={styles.loadingContainer}>
-        <ActivityIndicator animating color="#007aff" />
-        <Text style={styles.loadingLabel}>Loading Report</Text>
-      </View>
-    )
+    return <LoadingScreen message="Loading Report" />
+  }
+
+  if (submitReportLoading) {
+    return <LoadingScreen message="Submitting Report" />
   }
 
   const data = asyncReport.result?.reportBody ?? []
@@ -116,7 +146,7 @@ const ReviewReport: FC<Props> = (props) => {
 
   const reportFooter = asyncReport.result?.reportFooter as ReportFooter
 
-  if (employeeData.funds && !funds) {
+  if (employeeData.funds && !funds && !dineroFunds) {
     const revAmount = dinero(employeeData.funds)
     const replAmount = dinero(reportFooter.totalReplenishable.grossAmount)
     const unusedAmount = subtract(revAmount, replAmount)
@@ -125,6 +155,12 @@ const ReviewReport: FC<Props> = (props) => {
       revolvingFundAmount: formatCurrency(revAmount),
       replenishableAmount: `-${formatCurrency(replAmount)}`,
       unusedAmount: formatCurrency(unusedAmount),
+    })
+
+    setDineroFunds({
+      revolvingFundAmount: toSnapshot(revAmount),
+      replenishableAmount: toSnapshot(replAmount),
+      unusedAmount: toSnapshot(unusedAmount),
     })
   }
 
@@ -190,16 +226,6 @@ const ReviewReport: FC<Props> = (props) => {
 const styles = EStyleSheet.create({
   container: {
     flex: 1,
-  },
-  loadingContainer: {
-    backgroundColor: '$white',
-    flex: 1,
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  loadingLabel: {
-    color: '$darkGray',
-    marginTop: '$spacingSm',
   },
   header: {
     backgroundColor: '$darkGray',
