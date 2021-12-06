@@ -34,7 +34,7 @@ import {
   viewedExpenseReport,
 } from '@app/apollo/reactiveVariables'
 
-import { useForm } from 'react-hook-form'
+import { FieldError, useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
 import * as faker from 'faker'
@@ -472,7 +472,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
           />
           <ExpensePicker
             name="expense"
-            error={errors.expense}
+            error={errors.expense as FieldError}
             control={control}
           />
           {isGas && (
@@ -513,7 +513,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
             placeholder="P100.00"
             name="expenseAmount"
             control={control}
-            error={errors.expenseAmount}
+            error={errors.expenseAmount as FieldError}
             keyboardType="number-pad"
           />
           {watch('isVatable') && (
