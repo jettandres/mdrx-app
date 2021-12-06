@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState, useCallback } from 'react'
 import { View, Text } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 
@@ -25,12 +25,21 @@ type Props = {
 
 const HorizontalPicker: FC<Props> = (props) => {
   const { items, title, borderless = false, control, name } = props
+  const [value, setValue] = useState<PickerItem | undefined>()
 
   const { field } = useController({
     control,
     defaultValue: items[0].value,
     name,
   })
+
+  const onPickerValueChange = useCallback(
+    (v: PickerItem) => {
+      field.onChange(v)
+      setValue(v)
+    },
+    [field],
+  )
 
   return (
     <View style={styles.container}>
@@ -40,8 +49,8 @@ const HorizontalPicker: FC<Props> = (props) => {
           borderless ? styles.pickerContainerBorderless : styles.pickerContainer
         }>
         <Picker
-          onValueChange={(v: PickerItem) => field.onChange(v.value)}
-          selectedValue={items.find((i) => i.value === field.value)}>
+          onValueChange={onPickerValueChange}
+          selectedValue={value ?? field.value}>
           {items.map((i) => (
             <Picker.Item key={i.label} label={i.label} value={i.value} />
           ))}

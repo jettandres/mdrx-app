@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useCallback, useState } from 'react'
 import { View, Text } from 'react-native'
 import { Picker } from '@react-native-picker/picker'
 import HorizontalLabel from '@components/HorizontalLabel'
@@ -23,11 +23,20 @@ type Props = {
 
 const ExpensePicker: FC<Props> = (props) => {
   const { control, name, error } = props
+  const [selectedExpense, setSelectedExpense] = useState<Expense | undefined>()
   const { data } = useQuery<QueryExpenseResponse>(QUERY_EXPENSE)
   const { field } = useController({
     control,
     name,
   })
+
+  const onPickerValueChange = useCallback(
+    (v: Expense) => {
+      field.onChange(v)
+      setSelectedExpense(v)
+    },
+    [field],
+  )
 
   const pickerStyle = error
     ? styles.pickerContainerError
@@ -43,8 +52,8 @@ const ExpensePicker: FC<Props> = (props) => {
         <Text>Expense</Text>
         <View style={pickerStyle}>
           <Picker
-            onValueChange={(v: Expense) => field.onChange(v)}
-            selectedValue={field.value}>
+            onValueChange={onPickerValueChange}
+            selectedValue={selectedExpense ?? field.value}>
             <Picker.Item label="Select Expense" value="" />
             {data.expense.map((e) => (
               <Picker.Item key={e.id} label={e.name} value={e} />
