@@ -12,6 +12,7 @@ import CapturePhoto from '@screens/CapturePhoto'
 import ConfirmPhoto from '@screens/ConfirmPhoto'
 import SignUp from '@screens/SignUp'
 import VerificationCode from '@screens/VerificationCode'
+import UnderConstruction from '@screens/UnderConstruction'
 
 import { RootStackParamList } from '@routes/types'
 
@@ -52,7 +53,7 @@ const EntryRoute: FC = () => {
       <Stack.Screen
         name="ReviewSalesReport"
         options={{ title: 'Review Report' }}
-        component={ReviewSalesReport}
+        component={UnderConstruction}
       />
       <Stack.Screen
         name="ExpensesReportForm"
@@ -62,12 +63,12 @@ const EntryRoute: FC = () => {
       <Stack.Screen
         name="SalesReportForm"
         options={{ title: 'Sales Recording' }}
-        component={SalesReportForm}
+        component={UnderConstruction}
       />
       <Stack.Screen
         name="SalesCollectionForm"
         options={{ title: 'Sales Collection Form' }}
-        component={SalesCollectionForm}
+        component={UnderConstruction}
       />
       <Stack.Screen
         name="CapturePhoto"

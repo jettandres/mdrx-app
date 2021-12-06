@@ -24,6 +24,7 @@ import {
 } from '@app/apollo/gql/expense'
 import { DateTime } from 'luxon'
 import { employeeInfo } from '@app/apollo/reactiveVariables'
+import UnderConstruction from './UnderConstruction'
 
 type HomeNavigationProp = DrawerNavigationProp<HomeDrawerParamList, 'Home'>
 type HomeRouteProp = RouteProp<HomeDrawerParamList, 'Home'>
@@ -108,7 +109,7 @@ const Home: FC<Props> = () => {
         <Tab.Screen name="Expenses" component={ExpensesReportsList} />
         <Tab.Screen
           name="Sales"
-          component={SalesReportsList}
+          component={UnderConstruction}
           options={{ title: 'Sales' }}
         />
       </Tab.Navigator>

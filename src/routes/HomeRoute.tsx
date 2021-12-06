@@ -23,6 +23,7 @@ const Drawer = createDrawerNavigator<HomeDrawerParamList>()
 
 import mdrxLogo from '@images/mdrx-logo.png'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
+import UnderConstruction from '@screens/UnderConstruction'
 
 export type HomeRouteNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -43,17 +44,17 @@ const HomeRoute: FC<Props> = () => {
         <Drawer.Screen name="Home" component={Home} />
         <Drawer.Screen
           name="ExpenseReport"
-          component={ExpenseReport}
+          component={UnderConstruction}
           options={{ headerTitle: 'Expense Report' }}
         />
         <Drawer.Screen
           name="SalesAndIncomeReport"
-          component={SalesAndIncomeReport}
+          component={UnderConstruction}
           options={{ headerTitle: 'Sales and Income Report' }}
         />
         <Drawer.Screen
           name="CollectionSummaryReport"
-          component={CollectionSummaryReport}
+          component={UnderConstruction}
           options={{ headerTitle: 'Collection Summary Report' }}
         />
       </Drawer.Navigator>
