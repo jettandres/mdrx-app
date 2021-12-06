@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { View, Image } from 'react-native'
 
 import {
@@ -24,6 +24,10 @@ const Drawer = createDrawerNavigator<HomeDrawerParamList>()
 import mdrxLogo from '@images/mdrx-logo.png'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import UnderConstruction from '@screens/UnderConstruction'
+
+import { Auth } from 'aws-amplify'
+import { employeeInfo } from '@app/apollo/reactiveVariables'
+import AsyncStorage from '@react-native-async-storage/async-storage'
 
 export type HomeRouteNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
@@ -66,6 +70,13 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
   const [selectedIndex, setSelectedIndex] = useState<number>(0)
   const { navigation } = props
 
+  const onLogout = useCallback(async () => {
+    await Auth.signOut()
+    await AsyncStorage.removeItem('@token')
+    employeeInfo(undefined)
+    navigation.navigate('Login')
+  }, [navigation])
+
   return (
     <DrawerContentScrollView {...props}>
       <Image source={mdrxLogo} style={styles.logo} />
@@ -104,7 +115,7 @@ const CustomDrawerContent = (props: DrawerContentComponentProps) => {
           }}
         />
       </View>
-      <DrawerItem label="Logout" onPress={() => navigation.goBack()} />
+      <DrawerItem label="Logout" onPress={onLogout} />
     </DrawerContentScrollView>
   )
 }

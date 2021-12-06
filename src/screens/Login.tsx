@@ -85,6 +85,13 @@ const Login: FC<Props> = (props) => {
     }
   }, [currentStep])
 
+  const resetFormState = useCallback(() => {
+    setEmail(undefined)
+    setPassword(undefined)
+    setErrorLabel(undefined)
+    setCurrentStep(WizardStep.InputUsernameAndPassword)
+  }, [])
+
   const onNextButtonPress = useCallback(async () => {
     if (
       currentStep === WizardStep.InputUsernameAndPassword &&
@@ -123,6 +130,7 @@ const Login: FC<Props> = (props) => {
         try {
           employeeInfo(employee)
           navigation.navigate('HomeDrawer')
+          resetFormState()
         } catch (e) {
           console.log('error logging in', e)
         }
@@ -141,6 +149,7 @@ const Login: FC<Props> = (props) => {
     getEmployee,
     navigation,
     hasNoAreaAssignment,
+    resetFormState,
   ])
 
   useEffect(() => {
