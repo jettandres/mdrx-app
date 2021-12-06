@@ -315,7 +315,7 @@ const ExpensesReportForm: FC<Props> = (props) => {
           expense_id: formData.expense.id,
           expense_report_id: formData.id,
           supplier: {
-            tin: formData.supplierTin,
+            tin: formData.isVatable ? formData.supplierTin : undefined,
             name: formData.supplierName,
             address: formData.supplierAddress,
             streetBrgy: formData.supplierStreetBrgy,
@@ -517,24 +517,26 @@ const ExpensesReportForm: FC<Props> = (props) => {
             keyboardType="number-pad"
           />
           {watch('isVatable') && (
-            <View style={styles.vatAmountsContainer}>
-              <HorizontalLabel title="Net Amount" subtitle={netAmount} />
-              <HorizontalLabel title="VAT Amount" subtitle={vatAmount} />
-            </View>
+            <>
+              <View style={styles.vatAmountsContainer}>
+                <HorizontalLabel title="Net Amount" subtitle={netAmount} />
+                <HorizontalLabel title="VAT Amount" subtitle={vatAmount} />
+              </View>
+              <HorizontalInput
+                title="Supplier TIN #"
+                placeholder="32125242-0000"
+                name="supplierTin"
+                control={control}
+                error={errors.supplierTin}
+                keyboardType="number-pad"
+                suggestions={{
+                  list: supplierSuggestions,
+                  onSuggestionPress,
+                  suggestionsLoading,
+                }}
+              />
+            </>
           )}
-          <HorizontalInput
-            title="Supplier TIN #"
-            placeholder="32125242-0000"
-            name="supplierTin"
-            control={control}
-            error={errors.supplierTin}
-            keyboardType="number-pad"
-            suggestions={{
-              list: supplierSuggestions,
-              onSuggestionPress,
-              suggestionsLoading,
-            }}
-          />
           <HorizontalInput
             title="Supplier Name"
             placeholder="HPG Securities"

@@ -87,7 +87,7 @@ export interface NewExpenseReceiptPayload {
     expense_id: string
     expense_report_id: string
     supplier: {
-      tin: string
+      tin?: string
       name: string
       address: string
       streetBrgy: string
