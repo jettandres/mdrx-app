@@ -8,6 +8,7 @@ import ExpenseReport from '@app/types/ExpenseReport'
 import { DateTime } from 'luxon'
 import { useNavigation } from '@react-navigation/native'
 import { HomeRouteNavigationProp } from '@routes/HomeRoute'
+import ReportStatus from '@app/types/ReportStatus'
 
 type Props = {
   data: Array<ExpenseReport>
@@ -18,8 +19,16 @@ const ReportsList: FC<Props> = (props) => {
   const navigation = useNavigation<HomeRouteNavigationProp>()
 
   const onItemPress = useCallback(
-    (id: string, reportNumber: string) =>
-      navigation.navigate('ExpensesReportForm', { id, reportNumber }),
+    (id: string, reportNumber: string, status: ReportStatus) => {
+      if (status === 'DRAFT') {
+        navigation.navigate('ExpensesReportForm', { id, reportNumber })
+      } else if (status === 'SUBMITTED') {
+        navigation.navigate('ReviewExpenseReport', {
+          expenseReportId: id,
+          reviewOnly: true,
+        })
+      }
+    },
     [navigation],
   )
 
@@ -30,7 +39,7 @@ const ReportsList: FC<Props> = (props) => {
       renderItem={({ item: { id, reportNumber, createdAt, status } }) => (
         <TouchableOpacity
           style={styles.itemContainer}
-          onPress={() => onItemPress(id, reportNumber)}>
+          onPress={() => onItemPress(id, reportNumber, status)}>
           <Text style={styles.titleLabel}>Report {reportNumber}</Text>
           <View style={styles.subtitleContainer}>
             <Text style={styles.dateLabel}>

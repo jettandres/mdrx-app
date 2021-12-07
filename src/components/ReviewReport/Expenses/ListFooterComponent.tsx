@@ -14,6 +14,7 @@ import CarouselSection from '@components/common/CarouselSection'
 type Props = {
   onSubmit: () => void
   reportFooter: ReportFooter
+  reviewOnly?: boolean
 }
 
 type CarouselDataItem = {
@@ -42,6 +43,7 @@ const ListFooterComponent: FC<Props> = (props) => {
       avgKmPerLiter,
       totalKmReadingConsumption,
     },
+    reviewOnly,
   } = props
 
   const formattedVat = `-${toUnit(dinero(totalReplenishable.vatAmount)).toFixed(
@@ -167,7 +169,7 @@ const ListFooterComponent: FC<Props> = (props) => {
         }}
         carouselData={carouselDataYtd}
       />
-      <Button onPress={onSubmit} title="Submit Report" />
+      {!reviewOnly && <Button onPress={onSubmit} title="Submit Report" />}
     </View>
   )
 }

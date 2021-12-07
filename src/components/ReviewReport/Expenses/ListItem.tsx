@@ -11,6 +11,7 @@ import { dinero, toUnit } from 'dinero.js'
 type Props = SectionData & {
   onViewPhoto: (imageKey: string) => void
   onDeletePress: (id: string) => void
+  reviewOnly?: boolean
 }
 
 const ListItem: FC<Props> = (props) => {
@@ -26,6 +27,7 @@ const ListItem: FC<Props> = (props) => {
     litersAdded,
     grossAmount,
     vatAmount,
+    reviewOnly,
   } = props
 
   const formattedVat = `-${toUnit(dinero(vatAmount)).toFixed(2)}`
@@ -45,9 +47,11 @@ const ListItem: FC<Props> = (props) => {
         <TouchableOpacity onPress={() => onViewPhoto(imageKey)}>
           <Text style={styles.viewPhotoLabel}>VIEW PHOTO</Text>
         </TouchableOpacity>
-        <TouchableOpacity onPress={() => onDeletePress(id)}>
-          <Text style={styles.deletePhotoLabel}>DELETE</Text>
-        </TouchableOpacity>
+        {!reviewOnly && (
+          <TouchableOpacity onPress={() => onDeletePress(id)}>
+            <Text style={styles.deletePhotoLabel}>DELETE</Text>
+          </TouchableOpacity>
+        )}
       </View>
       <View style={styles.itemAmountContainer}>
         <HorizontalLabel

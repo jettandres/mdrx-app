@@ -220,6 +220,7 @@ const ReviewReport: FC<Props> = (props) => {
               {...item}
               onViewPhoto={onViewPhoto}
               onDeletePress={onDeletePress}
+              reviewOnly={route.params.reviewOnly}
             />
           )
         }}
@@ -238,6 +239,7 @@ const ReviewReport: FC<Props> = (props) => {
           <ListFooterComponent
             reportFooter={reportFooter}
             onSubmit={onSubmitReport}
+            reviewOnly={route.params.reviewOnly}
           />
         }
       />
