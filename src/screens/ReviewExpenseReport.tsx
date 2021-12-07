@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { View, SectionList } from 'react-native'
+import { View, SectionList, Alert } from 'react-native'
 import { useAsync } from 'react-async-hook'
 import EStyleSheet from 'react-native-extended-stylesheet'
 import { dinero, DineroSnapshot, subtract, toUnit, toSnapshot } from 'dinero.js'
@@ -33,6 +33,7 @@ import EmployeeFunds from '@app/types/EmployeeFunds'
 import Employee from '@app/types/Employee'
 import {
   MUTATION_SUBMIT_EXPENSE_REPORT,
+  QUERY_EXPENSE_REPORTS,
   SubmitExpenseReportPayload,
   SubmitExpenseReportResponse,
 } from '@app/apollo/gql/expense'
@@ -120,18 +121,39 @@ const ReviewReport: FC<Props> = (props) => {
 
   const onSubmitReport = useCallback(async () => {
     if (dineroFunds) {
-      const resp = await submitReport({
-        variables: {
-          expenseReportId,
-          revAmount: dineroFunds.revolvingFundAmount,
-          replAmount: dineroFunds.replenishableAmount,
-          unusedAmount: dineroFunds.unusedAmount,
-        },
-      })
+      try {
+        await submitReport({
+          variables: {
+            expenseReportId,
+            revAmount: dineroFunds.revolvingFundAmount,
+            replAmount: dineroFunds.replenishableAmount,
+            unusedAmount: dineroFunds.unusedAmount,
+          },
+          refetchQueries: [
+            {
+              query: QUERY_EXPENSE_REPORTS,
+              variables: {
+                employeeId: employeeData?.id,
+              },
+            },
+          ],
+        })
 
-      console.log('submit report', resp)
+        Alert.alert(
+          'Report Submitted',
+          'Your expense report has been recorded',
+          [{ text: 'Ok', onPress: () => navigation.navigate('HomeDrawer') }],
+        )
+      } catch (e) {
+        Alert.alert(
+          'Submission failed',
+          `Please check your internet connection and try again.${JSON.stringify(
+            e,
+          )}`,
+        )
+      }
     }
-  }, [dineroFunds, expenseReportId, submitReport])
+  }, [dineroFunds, employeeData?.id, expenseReportId, navigation, submitReport])
 
   if (asyncReport.loading && !asyncReport.result) {
     return <LoadingScreen message="Loading Report" />
