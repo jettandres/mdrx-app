@@ -7,7 +7,7 @@ type Employee = {
   email: string
   contactNumber: string
   area: string
-  funds?: DineroSnapshot<number>
+  funds?: DineroSnapshot<number> | null
 }
 
 export default Employee

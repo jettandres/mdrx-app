@@ -123,6 +123,10 @@ const Login: FC<Props> = (props) => {
           })
         } else if (code === 'UserNotFoundException') {
           setErrorLabel('Incorrect username/password')
+        } else {
+          setErrorLabel(
+            `Something went wrong. Please try again. ${JSON.stringify(e)}`,
+          )
         }
       }
     } else if (currentStep === WizardStep.ConfirmCustodianCode && employee) {
@@ -217,9 +221,9 @@ const Login: FC<Props> = (props) => {
           <HorizontalLabel title="Name" subtitle={employee.name} />
           <HorizontalLabel
             title="Custodian Assignment"
-            subtitle={employee.custodianAssignment}
+            subtitle={employee.custodianAssignment ?? 'N/A'}
           />
-          <HorizontalLabel title="Area" subtitle={employee.area} />
+          <HorizontalLabel title="Area" subtitle={employee.area ?? 'N/A'} />
           <HorizontalLabel
             title="Contact No."
             subtitle={employee.contactNumber}
