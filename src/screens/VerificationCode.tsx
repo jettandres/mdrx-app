@@ -128,7 +128,8 @@ const VerificationCode: FC<Props> = (props) => {
       <Image source={mdrxLogo} style={styles.logo} />
       <Text style={styles.titleLabel}>
         A verification code has been sent to your registered email address.
-        Please also contact MDRx Admin for your Area and Custodian Assignment.
+        Please also contact MDRx Admin for your Fund Allocation, Area, and
+        Custodian Assignment.
       </Text>
       <View style={styles.textInputContainer}>
         <VerticalInput
