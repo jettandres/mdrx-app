@@ -7,7 +7,7 @@ import appTheme from './appTheme'
 
 import { ApolloProvider } from '@apollo/client'
 
-import codePush from 'react-native-code-push'
+import codePush, { CodePushOptions } from 'react-native-code-push'
 
 Amplify.configure({
   Auth: {
@@ -51,6 +51,10 @@ const App: FC = () => {
   )
 }
 
-const codePushifiedApp = codePush(App)
+const codePushOptions: CodePushOptions = {
+  checkFrequency: codePush.CheckFrequency.ON_APP_RESUME,
+}
+
+const codePushifiedApp = codePush(codePushOptions)(App)
 
 export default codePushifiedApp
