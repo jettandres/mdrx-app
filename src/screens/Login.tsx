@@ -269,7 +269,7 @@ const Login: FC<Props> = (props) => {
       </View>
       <View style={styles.versionContainer}>
         <Text>{versionCopy}</Text>
-        <Text>© MDRx IT 2021</Text>
+        <Text>© MDRx 2021</Text>
       </View>
     </View>
   )
