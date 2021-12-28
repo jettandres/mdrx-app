@@ -33,6 +33,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage'
 import formatCurrency from '@utils/formatCurrency'
 import { dinero } from 'dinero.js'
 
+import { getVersion, getBuildNumber } from 'react-native-device-info'
+
 type LoginNavigationProp = NativeStackNavigationProp<
   RootStackParamList,
   'Login'
@@ -189,6 +191,8 @@ const Login: FC<Props> = (props) => {
     navigation.navigate('SignUp')
   }, [navigation])
 
+  const versionCopy = `v${getVersion().split('-')[0]} (${getBuildNumber()})`
+
   if (loading || loginLoading) {
     const message = loading ? 'Retrieving employee details' : 'Logging in'
     return <LoadingScreen message={message} />
@@ -262,6 +266,10 @@ const Login: FC<Props> = (props) => {
             <Text style={styles.signUpButtonLabel}>SIGN UP</Text>
           </TouchableOpacity>
         )}
+      </View>
+      <View style={styles.versionContainer}>
+        <Text>{versionCopy}</Text>
+        <Text>© MDRx IT 2021</Text>
       </View>
     </View>
   )
@@ -344,6 +352,11 @@ const styles = EStyleSheet.create({
     borderColor: '$borderColor',
     borderRadius: 8,
     paddingHorizontal: '$spacingSm',
+  },
+  versionContainer: {
+    position: 'absolute',
+    bottom: 16,
+    alignItems: 'center',
   },
 })
 
