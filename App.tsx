@@ -7,6 +7,8 @@ import appTheme from './appTheme'
 
 import { ApolloProvider } from '@apollo/client'
 
+import codePush from 'react-native-code-push'
+
 Amplify.configure({
   Auth: {
     mandatorySignIn: true,
@@ -49,4 +51,6 @@ const App: FC = () => {
   )
 }
 
-export default App
+const codePushifiedApp = codePush(App)
+
+export default codePushifiedApp
