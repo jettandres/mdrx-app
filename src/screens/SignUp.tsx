@@ -6,7 +6,7 @@ import type { FC } from 'react'
 import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 
-import mdrxLogo from '@images/mdrx-logo.png'
+import mdrxLogo from '@images/mdrx_logo.png'
 
 import { RootStackParamList } from '@routes/types'
 

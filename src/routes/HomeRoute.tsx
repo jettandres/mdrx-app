@@ -21,7 +21,7 @@ import EStyleSheet from 'react-native-extended-stylesheet'
 
 const Drawer = createDrawerNavigator<HomeDrawerParamList>()
 
-import mdrxLogo from '@images/mdrx-logo.png'
+import mdrxLogo from '@images/mdrx_logo.png'
 import { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import UnderConstruction from '@screens/UnderConstruction'
 

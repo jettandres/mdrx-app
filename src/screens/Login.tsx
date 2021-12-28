@@ -14,7 +14,7 @@ import type { NativeStackNavigationProp } from '@react-navigation/native-stack'
 import type { RouteProp } from '@react-navigation/native'
 import type Employee from '@app/types/Employee'
 
-import mdrxLogo from '@images/mdrx-logo.png'
+import mdrxLogo from '@images/mdrx_logo.png'
 
 import { RootStackParamList } from '@routes/types'
 import HorizontalLabel from '@components/HorizontalLabel'
