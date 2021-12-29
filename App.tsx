@@ -16,7 +16,7 @@ Amplify.configure({
     userPoolId: 'us-east-2_US3vdbubx',
     identityPoolId: 'us-east-2:d4083231-4208-455e-805b-3ea69381f31c',
     userPoolWebClientId: '6d7cn2cc1d8vv9jvq8h2npk137',
-    authenticationFlowType: 'USER_PASSWORD_AUTH',
+    authenticationFlowType: 'USER_SRP_AUTH',
   },
   Storage: {
     AWSS3: {
